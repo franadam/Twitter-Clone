@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "server": "env-cmd -f ./config/dev.env nodemon app.js",
+    "server:debug": "env-cmd -f ./config/dev.env nodemon --inspect app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
