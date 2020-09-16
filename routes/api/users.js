@@ -21,15 +21,16 @@ router.post('/register', async (req, res) => {
     if (!isValid) {
       throw new Error(JSON.stringify(errors));
     }
-    const user = await User.findOne({ handle: req.body.handle });
+    const user = await User.findOne({ username: req.body.username });
     if (user) {
-      errors.handle = 'User already exists';
-      throw new Error(errors.handle);
+      errors.username = 'User already exists';
+      throw new Error(errors.username);
     } else {
       const newUser = new User({
-        handle: req.body.handle,
+        username: req.body.username,
         email: req.body.email,
         password: req.body.password,
+        birth_date: req.body.birth_date,
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -37,7 +38,7 @@ router.post('/register', async (req, res) => {
           if (err) throw err;
           newUser.password = hash;
           await newUser.save();
-          const payload = { id: newUser.id, handle: newUser.handle };
+          const payload = { id: newUser.id, username: newUser.username };
 
           jwt.sign(
             payload,
@@ -45,6 +46,7 @@ router.post('/register', async (req, res) => {
             { expiresIn: 3600 },
             (err, token) => {
               res.json({
+                user: newUser,
                 success: true,
                 token: 'Bearer ' + token,
               });
@@ -53,6 +55,7 @@ router.post('/register', async (req, res) => {
         });
       });
     }
+    //res.redirect('/');
   } catch (error) {
     res.status(400).json(errors);
   }
@@ -66,17 +69,17 @@ router.post('/login', async (req, res) => {
     if (!isValid) {
       throw new Error(JSON.stringify(errors));
     }
-    const handle = req.body.handle;
+    const email = req.body.email;
     const password = req.body.password;
-    const user = await User.findOne({ handle });
+    const user = await User.findOne({ email });
     if (!user) {
-      errors.handle = 'This user does not exist';
-      throw new Error(errors.handle);
+      errors.email = 'This user does not exist';
+      throw new Error(errors.email);
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      const payload = { id: user.id, handle: user.handle };
+      const payload = { id: user.id, username: user.username };
 
       jwt.sign(
         payload,
@@ -84,6 +87,7 @@ router.post('/login', async (req, res) => {
         { expiresIn: 3600 },
         (err, token) => {
           res.json({
+            user,
             success: true,
             token: 'Bearer ' + token,
           });
@@ -104,7 +108,7 @@ router.get(
   (req, res) => {
     res.json({
       id: req.user.id,
-      handle: req.user.handle,
+      username: req.user.username,
       email: req.user.email,
     });
   }

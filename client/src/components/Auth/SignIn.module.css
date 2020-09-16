@@ -1,0 +1,22 @@
+.main {
+  color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+  padding: 1rem;
+  position: relative;
+}
+
+.link {
+  color: rgb(25, 97, 143);
+  text-decoration: none;
+  font-weight: bold;
+}

@@ -1,0 +1,61 @@
+.main {
+  text-align: center;
+}
+
+.form {
+  width: 100%;
+}
+
+.btn {
+  background-color: rgb(25, 97, 143);
+  color: aliceblue;
+  border-radius: 40px;
+  border:none;
+  width: 100%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem;
+  margin: 1rem 0;
+  cursor: pointer;
+}
+
+.field {
+  background-color: rgb(42, 63, 83);
+  margin: 1rem 0;
+}
+
+.field:hover .fInput::placeholder,
+.field:hover .label  {
+  color: #0091ff;
+}
+
+.label {
+  padding: .5rem;
+  color: #c5e0f5;
+  text-transform: capitalize;
+}
+
+.fInput {
+  padding: .5rem;
+  color: #ffffff;
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(42, 63, 83);
+  outline: none;
+  font-size: 1.3rem;
+}
+
+.fInput::placeholder {
+  color: #c5e0f5;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.empty {
+  background-color: rgb(255, 221, 221);
+}
