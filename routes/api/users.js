@@ -28,6 +28,7 @@ router.post('/register', async (req, res) => {
     } else {
       const newUser = new User({
         username: req.body.username,
+        fullname: req.body.fullname,
         email: req.body.email,
         password: req.body.password,
         birth_date: req.body.birth_date,
@@ -107,10 +108,28 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     res.json({
-      id: req.user.id,
-      username: req.user.username,
-      email: req.user.email,
+      user: {
+        id: req.user.id,
+        fullname: req.user.fullname,
+        username: req.user.username,
+        email: req.user.email,
+        password: req.user.password,
+        birth_date: req.user.birth_date,
+      },
     });
+  }
+);
+
+router.delete(
+  '/current',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    try {
+      await req.user.remove();
+      res.send(req.user);
+    } catch (error) {
+      res.status(500).send();
+    }
   }
 );
 

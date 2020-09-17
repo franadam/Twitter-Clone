@@ -1,5 +1,8 @@
-export const USER_CURRENT = 'USER_CURRENT';
+export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
 export const USER_AUTH_FAIL = 'USER_AUTH_FAIL';
+export const USER_AUTH = 'USER_AUTH';
 export const USER_LOGOUT = 'USER_LOGOUT';
-export const USER_SIGN_IN = 'USER_SIGN_IN';
-export const USER_SIGN_UP = 'USER_SIGN_UP';
+export const USER_TOKEN = 'USER_TOKEN';
+export const FETCH_TWEETS = 'FETCH_TWEETS';
+export const FETCH_USER_TWEETS = 'FETCH_USER_TWEETS';
+export const CREATE_NEW_TWEET = 'CREATE_NEW_TWEET';

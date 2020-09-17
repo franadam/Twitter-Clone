@@ -1,17 +1,19 @@
 import {
-  USER_CURRENT,
-  USER_SIGN_UP,
-  USER_SIGN_IN,
+  FETCH_CURRENT_USER,
+  USER_AUTH,
+  USER_TOKEN,
   USER_AUTH_FAIL,
   USER_LOGOUT,
 } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
+
 const initialState = {
   isAuthenticated: false,
   user: {},
   error: {},
   token: '',
+  userID: '',
 };
 
 export default function (state = initialState, action) {
@@ -21,23 +23,23 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         user: undefined,
       });
-    case USER_CURRENT:
+    case USER_TOKEN:
       return updateObject(state, {
         isAuthenticated: true,
         token: action.token,
         userID: action.userID,
       });
-    case USER_SIGN_UP:
+    case USER_AUTH:
       return updateObject(state, {
-        isAuthenticated: false,
+        isAuthenticated: action.isSigned,
         user: action.user,
+        userID: action.user._id,
         token: action.token,
       });
-    case USER_SIGN_IN:
+    case FETCH_CURRENT_USER:
       return updateObject(state, {
         isAuthenticated: true,
         user: action.user,
-        token: action.token,
       });
     case USER_AUTH_FAIL:
       return updateObject(state, {

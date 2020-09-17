@@ -93,10 +93,12 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const tweet = await Tweet.findOneAndDelete({
+      const tweet = await Tweet.findOne({
         _id: req.params.id,
         user: req.user.id,
       });
+      await tweet.deleteOne();
+      //console.log('delete tweet :>> ', tweet);
       if (!tweet) {
         return res.status(404).send();
       }

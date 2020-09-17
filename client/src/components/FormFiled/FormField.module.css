@@ -10,6 +10,7 @@
   background-color: rgb(25, 97, 143);
   color: aliceblue;
   border-radius: 40px;
+  outline: none;
   border:none;
   width: 100%;
   font-size: 1.2rem;
@@ -17,6 +18,10 @@
   padding: 1rem;
   margin: 1rem 0;
   cursor: pointer;
+}
+
+.btn:hover {
+  background-color: rgb(0, 157, 255);
 }
 
 .field {
@@ -35,7 +40,7 @@
   text-transform: capitalize;
 }
 
-.fInput {
+.fInput, input {
   padding: .5rem;
   color: #ffffff;
   display: block;
@@ -51,6 +56,9 @@
   color: #c5e0f5;
 }
 
+input[type='textarea'] {
+  height: 100px;
+}
 .error {
   color: red;
   font-weight: bold;

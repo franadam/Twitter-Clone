@@ -17,6 +17,18 @@ class SignUp extends React.Component {
     formValid: false,
     error: null,
     formData: {
+      fullname: {
+        element: 'input',
+        value: '',
+        config: {
+          name: 'fullname',
+          type: 'text',
+          placeholder: 'Enter your fullname',
+        },
+        validation: {
+          required: true,
+        },
+      },
       email: {
         element: 'input',
         value: '',
@@ -93,15 +105,6 @@ class SignUp extends React.Component {
   componentDidMount = () => {
     console.log('signUp :>> ', 'signUp');
   };
-  // Once the user has been authenticated, redirect to the Tweets page
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.currentUser === true) {
-      this.props.history.push('/tweets');
-    }
-
-    // Set or clear error
-    this.setState({ error: nextProps.error });
-  };
 
   createForm = (formData) => {
     const formElementsArray = [];
@@ -176,6 +179,7 @@ class SignUp extends React.Component {
     }
 
     this.props.signup(dataToSubmit);
+    this.props.history.push('/signin');
     //this.setState({ formError: true });
   };
 

@@ -5,6 +5,7 @@ module.exports = function validateRegisterInput(data) {
   let errors = {};
 
   data.username = validText(data.username) ? data.username : '';
+  data.fullname = validText(data.fullname) ? data.fullname : '';
   data.email = validText(data.email) ? data.email : '';
   data.password = validText(data.password) ? data.password : '';
   data.password_confirmation = validText(data.password_confirmation)
@@ -12,12 +13,16 @@ module.exports = function validateRegisterInput(data) {
     : '';
   data.birth_date = new Date(data.birth_date).toISOString().substring(0, 10);
 
+  if (Validator.isEmpty(data.fullname)) {
+    errors.fullname = 'Fullname field is required';
+  }
+
   if (!Validator.isLength(data.username, { min: 2, max: 30 })) {
     errors.username = 'Handle must be between 2 and 30 characters';
   }
 
   if (Validator.isEmpty(data.username)) {
-    errors.username = 'Handle field is required';
+    errors.username = 'Username field is required';
   }
 
   if (Validator.isEmpty(data.email)) {
@@ -42,6 +47,10 @@ module.exports = function validateRegisterInput(data) {
 
   if (!Validator.equals(data.password, data.password_confirmation)) {
     errors.password_confirmation = 'Passwords must match';
+  }
+
+  if (!data.birth_date) {
+    errors.birth_date = 'birth_date field is required';
   }
 
   if (

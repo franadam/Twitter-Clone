@@ -45,7 +45,9 @@ class SignIn extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log('signin :>> ', 'signin');
+    console.log('signin: ');
+    console.log('token: ', this.props.token);
+    console.log('token Storage: ', this.props);
   };
   // Once the user has been authenticated, redirect to the Tweets page
   componentWillReceiveProps = (nextProps) => {
@@ -178,6 +180,7 @@ class SignIn extends React.Component {
 const mapStateToProps = ({ user }) => {
   return {
     error: user.error,
+    token: user.token,
   };
 };
 

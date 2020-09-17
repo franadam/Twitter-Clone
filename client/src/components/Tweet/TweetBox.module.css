@@ -1,0 +1,55 @@
+.main {
+  color: aliceblue;
+  display: flex;
+  align-items: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  border: 1px aliceblue solid;
+  width: 100%;
+}
+
+.name, .username {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.text {
+  font-size: 1.1rem;
+}
+
+.activity {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: .9rem;
+  align-items: center;
+}
+
+.comment {
+cursor: pointer;
+display: flex;
+justify-content: space-evenly;
+}
+
+.like {
+cursor: pointer;
+}
+
+.comment:hover {
+  color: green;
+}
+
+.like:hover {
+  color: red;
+}
+
+.link {
+  color: rgb(25, 97, 143);
+  text-decoration: none;
+  font-weight: bold;
+}
