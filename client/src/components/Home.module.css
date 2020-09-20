@@ -1,0 +1,9 @@
+.avatar {
+  height: 3rem;
+  border-radius: 50%;
+  background-color: aliceblue;
+}
+
+.createTweet {
+  display: flex;
+}

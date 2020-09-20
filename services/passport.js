@@ -12,7 +12,9 @@ module.exports = (passport) => {
   passport.use(
     new JwtStrategy(options, async (jwt_payload, done) => {
       try {
-        const user = await User.findById(jwt_payload.id);
+        const user =
+          (await User.findById(jwt_payload.id)) ||
+          (await User.findOne({ username: jwt_payload.id }));
         if (user) {
           // return the user to the frontend
           return done(null, user);

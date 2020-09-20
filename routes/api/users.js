@@ -2,16 +2,128 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const sharp = require('sharp');
 
 const User = require('../../models/User');
 
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
-
+const uploadImage = require('../../services/loader');
 const router = express.Router();
 
-router.get('/test', async (req, res) =>
-  res.json({ msg: 'This is the users route' })
+router.get('/:username', async (req, res) => {
+  //const user = await User.findOne({ username: req.params.username });
+
+  const user =
+    (await User.findOne({ username: req.params.username })) ||
+    (await User.findById(req.params.username));
+  const { _id, fullname, username, avatar, cover, createdAt } = user;
+  res.json({
+    _id,
+    fullname,
+    username,
+    avatar,
+    cover,
+    createdAt,
+  });
+});
+
+router.get('/:id/avatar', async (req, res) => {
+  const username = req.params.id;
+  try {
+    const user =
+      (await User.findOne({ username })) || (await User.findById(username));
+
+    if (!user || !user.avatar) {
+      throw new Error();
+    }
+
+    res.set('Content-Type', 'image/png');
+    res.send(user.avatar);
+  } catch (error) {
+    res.status(404).send();
+  }
+});
+
+router.post(
+  '/:id/avatar',
+  passport.authenticate('jwt', { session: false }),
+  uploadImage.single('avatar'),
+  async (req, res) => {
+    const buffer = await sharp(req.file.buffer)
+      .resize({ width: 250, height: 250 })
+      .png()
+      .toBuffer();
+    req.user.avatar = buffer;
+    await req.user.save();
+    res.send();
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
+
+router.delete(
+  '/:id/avatar',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    try {
+      req.user.avatar = null;
+      await req.user.save();
+      res.send();
+    } catch (error) {
+      res.status(500).send();
+    }
+  }
+);
+
+router.get('/:id/cover', async (req, res) => {
+  const username = req.params.id;
+  try {
+    const user =
+      (await User.findOne({ username })) || (await User.findById(username));
+
+    if (!user || !user.cover) {
+      throw new Error();
+    }
+
+    res.set('Content-Type', 'image/png');
+    res.send(user.cover);
+  } catch (error) {
+    res.status(404).send();
+  }
+});
+
+router.post(
+  '/:id/cover',
+  passport.authenticate('jwt', { session: false }),
+  uploadImage.single('cover'),
+  async (req, res) => {
+    const buffer = await sharp(req.file.buffer)
+      .resize({ width: 500, height: 250 })
+      .png()
+      .toBuffer();
+    req.user.cover = buffer;
+    await req.user.save();
+    res.send();
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
+
+router.delete(
+  '/:id/cover',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    try {
+      req.user.cover = null;
+      await req.user.save();
+      res.send();
+    } catch (error) {
+      res.status(500).send();
+    }
+  }
 );
 
 router.post('/register', async (req, res) => {
@@ -94,6 +206,10 @@ router.post('/login', async (req, res) => {
           });
         }
       );
+      //      await user.save();
+
+      //res.redirect('/home');
+      //req.session.redirectTo = '/home';
     } else {
       errors.password = 'Incorrect password';
       throw new Error(errors.password);
@@ -107,6 +223,7 @@ router.get(
   '/current',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
+    console.log('req :>> ', JSON.stringify(req));
     res.json({
       user: {
         id: req.user.id,

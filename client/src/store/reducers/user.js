@@ -4,6 +4,7 @@ import {
   USER_TOKEN,
   USER_AUTH_FAIL,
   USER_LOGOUT,
+  FETCH_USER_BY_NAME,
 } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
@@ -20,8 +21,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case USER_LOGOUT:
       return updateObject(state, {
-        isAuthenticated: false,
-        user: undefined,
+        ...initialState,
       });
     case USER_TOKEN:
       return updateObject(state, {
@@ -39,6 +39,11 @@ export default function (state = initialState, action) {
     case FETCH_CURRENT_USER:
       return updateObject(state, {
         isAuthenticated: true,
+        user: action.user,
+      });
+
+    case FETCH_USER_BY_NAME:
+      return updateObject(state, {
         user: action.user,
       });
     case USER_AUTH_FAIL:

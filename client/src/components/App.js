@@ -4,15 +4,15 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { authCheckState } from '../store/actions';
 
-import MainPage from './MainPage';
+import Home from './Home';
 import SignIn from './Auth/SignIn';
 import SignUp from './Auth/SignUp';
 
 import './App.css';
 import Navbar from './Navbar/Navbar';
 import Tweet from './Tweet/Tweet';
-import TweetBox from './Tweet/TweetBox';
 import Profile from './Profile/Profile';
+import Picture from './Picture/Picture';
 import CreateTweet from './Tweet/CreateTweet';
 
 export class App extends Component {
@@ -24,24 +24,25 @@ export class App extends Component {
   };
 
   render() {
+    //<Redirect to="/login" />
     let routes = (
       <Switch>
         <Route exact path="/signup" component={SignUp} />
         <Route path="/login" component={SignIn} />
-        <Route exact path="/home" component={MainPage} />
-        <Redirect to="/login" />
+        <Route exact path="/users/:username/avatar" component={Picture} />
       </Switch>
     );
 
     if (this.props.isAuthenticated) {
+      //<Redirect to="/home" />
       routes = (
         <Switch>
-          <Route exact path="/profile" component={Profile} />
+          <Route path="/users/:username" component={Profile} />
+          <Route exact path="/users/:username/avatar" component={Picture} />
           <Route path="/tweets" component={Tweet} />
           <Route exact path="/compose/tweet" component={CreateTweet} />
           <Route path="/setting" component={SignIn} />
-          <Route exact path="/home" component={MainPage} />
-          <Redirect to="/home" />
+          <Route exact path="/home" component={Home} />
         </Switch>
       );
     }

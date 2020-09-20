@@ -1,7 +1,20 @@
 .main {
   color: aliceblue;
   display: flex;
+  border-top: 1px aliceblue solid;
   align-items: center;
+  padding: .5rem;
+}
+
+.logo {
+  align-self: flex-start;
+  height: 2rem;
+}
+
+.logo img {
+  height: 100%;
+  background-color: aliceblue;
+  border-radius: 50%;
 }
 
 .wrapper {
@@ -9,18 +22,38 @@
   flex-direction: column;
   justify-content: center;
   padding: 1rem;
-  border: 1px aliceblue solid;
   width: 100%;
 }
 
-.name, .username {
+
+.identifier{
+  display: flex;
+  align-items: center;
+}
+
+.name {
   display: flex;
   justify-content: start;
   align-items: center;
+  padding-right: .5rem;
+  text-decoration: none;
+  color: aliceblue;
+}
+
+.username {
+  padding-left: .5rem;
+  font-size: .8rem;
+  color: rgba(240, 248, 255, 0.7);
+}
+
+.date {
+color: rgba(240, 248, 255, 0.7);
+font-size: .8rem;
 }
 
 .text {
   font-size: 1.1rem;
+  padding: .5rem;
 }
 
 .activity {
@@ -34,20 +67,26 @@
 cursor: pointer;
 display: flex;
 justify-content: space-evenly;
+color: rgba(240, 248, 255, 0.7);
 }
 
 .like {
+display: flex;
 cursor: pointer;
+color: rgba(240, 248, 255, 0.7);
 }
 
 .comment:hover {
-  color: green;
+  color: rgb(0, 162, 255);
 }
 
 .like:hover {
   color: red;
 }
 
+.count {
+  padding-left: .5rem;
+}
 .link {
   color: rgb(25, 97, 143);
   text-decoration: none;

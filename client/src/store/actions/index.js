@@ -4,5 +4,13 @@ export {
   login,
   authCheckState,
   fetchCurrentUser,
+  fetchUserByName,
 } from './user';
-export { fetchTweets, fetchUserTweets, createNewTweet } from './tweet';
+export {
+  fetchTweets,
+  fetchUserTweets,
+  createNewTweet,
+  fetchTweetLikes,
+  likeATweet,
+  unlikeATweet,
+} from './tweet';

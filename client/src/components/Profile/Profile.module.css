@@ -1,0 +1,53 @@
+.header {
+  position: relative;
+}
+
+.images {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.cover {
+  height: 250px;
+  max-height: 40vh;
+  background-color: rgb(25, 97, 143);
+  min-width: 100%;
+}
+
+.avatar {
+  display: flex;
+  position: absolute;
+  bottom: -3rem;
+  height: 8rem;
+  width: 8rem;
+  border-radius: 50%;
+  border: 5px solid #15202b;
+  background-color: aliceblue;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  color: #15202b;
+}
+
+.avatar img {
+  height: 100%;
+}
+
+.info {
+  color: rgba(240, 248, 255, 0.7);
+  padding: .5rem;
+}
+
+.info h1 {
+  color:aliceblue ;
+  text-transform: capitalize;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.tweet {
+  border: 1px aliceblue solid;
+}

@@ -3,22 +3,27 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 
+const User = require('../../models/User');
 const Tweet = require('../../models/Tweet');
 const Like = require('../../models/Like');
 const validateTweetInput = require('../../validation/tweets');
 
 router.get('/', async (req, res) => {
   try {
-    const tweets = await Tweet.find().sort({ date: -1 });
+    const tweets = await Tweet.find().sort({ updatedAt: -1 });
     res.json(tweets);
   } catch (error) {
     res.status(404).json({ notweetsfound: 'No tweets found' });
   }
 });
 
-router.get('/user/:user_id', async (req, res) => {
+router.get('/user/:username', async (req, res) => {
   try {
-    const tweets = await Tweet.find({ user: req.params.user_id });
+    const user =
+      (await User.findOne({ username: req.params.username })) ||
+      (await User.findById(req.params.username));
+
+    const tweets = await Tweet.find({ user: user._id }).sort({ updatedAt: -1 });
     res.json(tweets);
   } catch (error) {
     res.status(404).json({ notweetsfound: 'No tweets found from that user' });
@@ -109,19 +114,37 @@ router.delete(
   }
 );
 
+router.get('/:id/likes', async (req, res) => {
+  try {
+    const likes = await Like.find({ tweet: req.params.id });
+    res.send(likes);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
 router.post(
   '/:id/likes',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const newLike = new Like({
+      const like = await Like.findOne({
         tweet: req.params.id,
         user: req.user.id,
       });
+      console.log('like :>> ', like);
+      if (like) {
+        return res.status(401).send('You already like this tweet');
+      } else {
+        const newLike = new Like({
+          tweet: req.params.id,
+          user: req.user.id,
+        });
 
-      await newLike.save();
+        await newLike.save();
 
-      res.send(newLike);
+        res.send(newLike);
+      }
     } catch (error) {
       res.status(500).send();
     }

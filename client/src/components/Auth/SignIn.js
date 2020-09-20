@@ -45,18 +45,7 @@ class SignIn extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log('signin: ');
-    console.log('token: ', this.props.token);
-    console.log('token Storage: ', this.props);
-  };
-  // Once the user has been authenticated, redirect to the Tweets page
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.currentUser === true) {
-      this.props.history.push('/tweets');
-    }
-
-    // Set or clear error
-    this.setState({ error: nextProps.error });
+    if (this.props.token) this.props.history.push('/home');
   };
 
   createForm = (formData) => {

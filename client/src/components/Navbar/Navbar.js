@@ -20,7 +20,7 @@ class NavBar extends React.Component {
           <Link className={classes.link1} to={'/tweets'}>
             All Tweets
           </Link>
-          <Link className={classes.link1} to={'/profile'}>
+          <Link className={classes.link1} to={`/users/${this.props.userID}`}>
             Profile
           </Link>
           <Link className={classes.link1} to={'/compose/tweet'}>
@@ -46,13 +46,7 @@ class NavBar extends React.Component {
   render() {
     return (
       <div className={classes.main}>
-        <a
-          href="https://innoloft.com/public/en/"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Twitter
-        </a>
+        <Link to="/home">Twitter</Link>
         {this.getLinks()}
       </div>
     );
@@ -60,6 +54,7 @@ class NavBar extends React.Component {
 }
 
 const mapStateToProps = ({ user }) => ({
+  userID: user.userID,
   loggedIn: user.isAuthenticated,
 });
 

@@ -7,6 +7,7 @@ import {
   USER_AUTH_FAIL,
   USER_LOGOUT,
   USER_TOKEN,
+  FETCH_USER_BY_NAME,
 } from './types';
 
 const checkUserToken = (userID, token) => ({
@@ -25,6 +26,11 @@ const userAuth = (user, token, isSigned) => ({
 
 const currentUser = (user) => ({
   type: FETCH_CURRENT_USER,
+  user,
+});
+
+const getUserByName = (user) => ({
+  type: FETCH_USER_BY_NAME,
   user,
 });
 
@@ -53,12 +59,29 @@ export const checkAuthTimeout = (expTime) => {
   };
 };
 
+export const fetchUserByName = (username) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/users/${username}`);
+    const { token, user } = res.data;
+    console.log('fetchUserByName user :>> ', res);
+    dispatch(getUserByName(res.data));
+  } catch (error) {
+    console.log('fetchUserByName error', error);
+    dispatch(userAuthFail(error));
+  }
+};
+
 export const fetchCurrentUser = () => async (dispatch) => {
-  const res = await axios.get('/api/users/current');
-  const { token, user } = res.data;
-  console.log('fetchCurrentUser user :>> ', res);
-  setAuthToken(token);
-  dispatch(currentUser(user));
+  try {
+    const res = await axios.get('/api/users/current');
+    const { token, user } = res.data;
+    console.log('fetchCurrentUser user :>> ', res);
+    setAuthToken(token);
+    dispatch(currentUser(user));
+  } catch (error) {
+    console.log('fetchCurrentUser error', error);
+    dispatch(userAuthFail(error));
+  }
 };
 
 export const logout = () => async (dispatch) => {
@@ -109,13 +132,7 @@ export const authCheckState = () => {
     if (!token) {
       dispatch(logout());
     } else {
-      console.log(
-        'expirationTime :>> ',
-        localStorage.getItem('expirationDate')
-      );
       const expirationDate = new Date(localStorage.getItem('expirationDate'));
-      console.log('expirationDate :>> ', expirationDate);
-      console.log('now :>> ', new Date());
       if (expirationDate <= new Date()) {
         dispatch(logout());
       } else {

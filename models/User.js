@@ -9,14 +9,17 @@ const UserSchema = new Schema(
     fullname: {
       type: String,
       required: true,
+      trim: true,
     },
     username: {
       type: String,
       required: true,
+      trim: true,
     },
     email: {
       type: String,
       required: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -25,6 +28,14 @@ const UserSchema = new Schema(
     birth_date: {
       type: Date,
       required: true,
+    },
+    avatar: {
+      type: Buffer,
+      default: null,
+    },
+    cover: {
+      type: Buffer,
+      default: null,
     },
   },
   {

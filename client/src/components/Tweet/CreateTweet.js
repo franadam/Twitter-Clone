@@ -49,12 +49,19 @@ class CreateTweet extends React.Component {
         {this.state.error ? this.renderError() : null}
       </form>
     );
-
+    const tweet = this.state.newTweet;
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
           {form}
-          <TweetBox text={this.state.newTweet.text} />
+          {tweet._id ? (
+            <TweetBox
+              id={tweet._id}
+              text={tweet.text}
+              userID={tweet.user}
+              date={tweet.updatedAt || ''}
+            />
+          ) : null}
         </div>
       </div>
     );
