@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import {
+  FaTwitter,
+  FaRegUser,
+  FaFeatherAlt,
+  FaDoorOpen,
+} from 'react-icons/all';
 
 import { logout } from '../../store/actions';
 
@@ -17,25 +23,25 @@ class NavBar extends React.Component {
     if (this.props.loggedIn) {
       return (
         <div className={classes.links}>
-          <Link className={classes.link1} to={'/tweets'}>
-            All Tweets
+          <Link className={classes.link1} to={'/home'}>
+            <FaTwitter size="2rem" />
           </Link>
           <Link className={classes.link1} to={`/users/${this.props.userID}`}>
-            Profile
+            <FaRegUser size="2rem" />
           </Link>
           <Link className={classes.link1} to={'/compose/tweet'}>
-            Write a Tweet
+            <FaFeatherAlt size="2rem" />
           </Link>
-          <button onClick={this.logoutUser}>Logout</button>
+          <FaDoorOpen size="2rem" color="red" onClick={this.logoutUser} />
         </div>
       );
     } else {
       return (
         <div className={classes.links}>
-          <Link className={classes.link2} to={'/signup'}>
+          <Link className={classes.signup} to={'/signup'}>
             Signup
           </Link>
-          <Link className={classes.link2} to={'/login'}>
+          <Link className={classes.signin} to={'/login'}>
             Login
           </Link>
         </div>
@@ -44,12 +50,7 @@ class NavBar extends React.Component {
   };
 
   render() {
-    return (
-      <div className={classes.main}>
-        <Link to="/home">Twitter</Link>
-        {this.getLinks()}
-      </div>
-    );
+    return <div className={classes.main}>{this.getLinks()}</div>;
   }
 }
 

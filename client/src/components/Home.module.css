@@ -1,3 +1,7 @@
+.header {
+  text-align: center;
+}
+
 .avatar {
   height: 3rem;
   border-radius: 50%;
@@ -6,4 +10,5 @@
 
 .createTweet {
   display: flex;
+  padding: 1rem;
 }

@@ -34,12 +34,11 @@ class Tweet extends React.Component {
 
     return (
       <div>
-        <h1>A Twitter Clone</h1>
+        <h1 className={classes.header}>A Twitter Clone</h1>
         <div className={classes.createTweet}>
           <Link to={`/users/${user.username || userID}`}>{logo}</Link>
           <CreateTweet />
         </div>
-        <h2>All Tweets</h2>
         <TweetsList tweets={tweets} message={'Nobody has Tweeted yet !'} />
       </div>
     );

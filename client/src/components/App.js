@@ -8,12 +8,11 @@ import Home from './Home';
 import SignIn from './Auth/SignIn';
 import SignUp from './Auth/SignUp';
 
-import './App.css';
-import Navbar from './Navbar/Navbar';
 import Tweet from './Tweet/Tweet';
 import Profile from './Profile/Profile';
 import Picture from './Picture/Picture';
 import CreateTweet from './Tweet/CreateTweet';
+import Layout from '../hoc/Layout/Layout';
 
 export class App extends Component {
   componentDidMount = () => {
@@ -56,12 +55,7 @@ export class App extends Component {
         </Switch>
       );
     }
-    return (
-      <div>
-        <Navbar />
-        {routes}
-      </div>
-    );
+    return <Layout>{routes}</Layout>;
   }
 }
 
