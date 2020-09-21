@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+  align-items: flex-start;
+}
+
+.children {
+  flex-grow: 1;
+  border-left: 2px solid aliceblue;
+}
