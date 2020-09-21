@@ -39,17 +39,29 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const tweets = await Tweet.find({ tweet: req.params.id }).sort({
+      updatedAt: -1,
+    });
+    res.json(tweets);
+  } catch (error) {
+    res.status(404).json({ notweetfound: 'No tweet found with that ID' });
+  }
+});
+
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const { errors, isValid } = validateTweetInput(req.body);
-
+    console.log('errors, isValid :>> ', errors, isValid);
     if (!isValid) {
       return res.status(400).json(errors);
     }
 
     const newTweet = new Tweet({
+      tweet: req.body.tweet || null,
       text: req.body.text,
       user: req.user.id,
     });

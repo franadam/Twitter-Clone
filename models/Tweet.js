@@ -13,6 +13,11 @@ const TweetSchema = new Schema(
       type: String,
       required: true,
     },
+    tweet: {
+      type: Schema.Types.ObjectId,
+      ref: 'Tweet',
+      default: null,
+    },
   },
   {
     timestamps: true,

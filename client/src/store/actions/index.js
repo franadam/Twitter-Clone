@@ -10,6 +10,7 @@ export {
   fetchTweets,
   fetchUserTweets,
   createNewTweet,
+  fetchTweetComments,
   fetchTweetLikes,
   likeATweet,
   unlikeATweet,

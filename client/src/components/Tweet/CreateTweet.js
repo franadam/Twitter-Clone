@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
 import TweetBox from './TweetBox';
+
+import axios from 'axios';
 
 import { createNewTweet } from '../../store/actions';
 
@@ -9,19 +12,46 @@ import formStyle from '../FormFiled/FormField.module.css';
 
 class CreateTweet extends React.Component {
   state = {
+    tweet: null,
+    tweetID: '',
     text: '',
     newTweet: {},
+  };
+
+  componentDidMount = () => {
+    console.log('this.props :>> ', this.props);
+    console.log('this.state :>> ', this.state);
+    const { state } = this.props.location;
+    if (state) {
+      const { tweet: tweetID } = state;
+      this.setState({ tweetID });
+      this.getTweet(tweetID);
+    }
+  };
+
+  getTweet = async (tweetID) => {
+    try {
+      const res = await axios.get(`/api/tweets/${tweetID}`);
+      console.log('res :>> ', res);
+      const tweet = res.data;
+      this.setState({ tweet });
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     const tweet = {
+      tweet: this.state.tweetID || null,
       text: this.state.text,
       user: this.props.userID,
     };
 
     this.props.onCreateNewTweet(tweet);
     this.setState({ text: '', newTweet: tweet });
+    console.log('this.state :>> ', tweet, this.state);
+    this.props.history.goBack();
   };
 
   changeHandler = (e) => {
@@ -49,17 +79,27 @@ class CreateTweet extends React.Component {
         {this.state.error ? this.renderError() : null}
       </form>
     );
-    const tweet = this.state.newTweet;
+    const { tweet, newTweet } = this.state;
+
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
-          {form}
-          {tweet._id ? (
+          {tweet ? (
             <TweetBox
               id={tweet._id}
-              text={tweet.text}
               userID={tweet.user}
+              text={tweet.text}
               date={tweet.updatedAt || ''}
+            />
+          ) : null}
+          {form}
+          {newTweet._id ? (
+            <TweetBox
+              key={newTweet._id}
+              id={newTweet._id}
+              userID={newTweet.user}
+              text={newTweet.text}
+              date={newTweet.updatedAt || ''}
             />
           ) : null}
         </div>
@@ -81,4 +121,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateTweet);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(CreateTweet));

@@ -8,13 +8,14 @@ import CreateTweet from './Tweet/CreateTweet';
 import { FaUser } from 'react-icons/all';
 
 import classes from './Home.module.css';
+import TweetsList from './Tweet/TweetsList';
 class Tweet extends React.Component {
   state = {
     tweets: [],
   };
 
   componentDidMount() {
-    this.props.fetchTweets();
+    //this.props.fetchTweets();
     //    this.props.fetchCurrentUser();
   }
 
@@ -30,31 +31,18 @@ class Tweet extends React.Component {
     ) : (
       <FaUser size="2rem" />
     );
-    if (tweets.length === 0) {
-      return <div>There are no Tweets</div>;
-    } else {
-      return (
-        <div>
-          <h1>A Twitter Clone</h1>
-          <div className={classes.createTweet}>
-            <Link to={`/users/${user.username || this.props.userID}`}>
-              {logo}
-            </Link>
-            <CreateTweet />
-          </div>
-          <h2>All Tweets</h2>
-          {tweets.map((tweet) => (
-            <TweetBox
-              key={tweet._id}
-              id={tweet._id}
-              userID={tweet.user}
-              text={tweet.text}
-              date={tweet.updatedAt || ''}
-            />
-          ))}
+
+    return (
+      <div>
+        <h1>A Twitter Clone</h1>
+        <div className={classes.createTweet}>
+          <Link to={`/users/${user.username || userID}`}>{logo}</Link>
+          <CreateTweet />
         </div>
-      );
-    }
+        <h2>All Tweets</h2>
+        <TweetsList tweets={tweets} message={'Nobody has Tweeted yet !'} />
+      </div>
+    );
   }
 }
 

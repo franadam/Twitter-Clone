@@ -122,6 +122,7 @@ class SignIn extends React.Component {
     }
 
     this.props.login(dataToSubmit);
+    this.props.history.push('/home');
 
     //this.setState({ formError: true });
   };
@@ -179,4 +180,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignIn));

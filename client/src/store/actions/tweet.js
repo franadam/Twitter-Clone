@@ -4,6 +4,7 @@ import {
   FETCH_TWEETS,
   FETCH_USER_TWEETS,
   CREATE_NEW_TWEET,
+  FETCH_TWEET_COMMENTS,
   FETCH_TWEET_LIKES,
   LIKE_A_TWEET,
   UNLIKE_A_TWEET,
@@ -13,6 +14,11 @@ import { setAuthToken } from './user';
 const getTweets = (tweets) => ({
   type: FETCH_TWEETS,
   tweets,
+});
+
+const getTweetComments = (comments) => ({
+  type: FETCH_TWEET_COMMENTS,
+  comments,
 });
 
 const getTweetLikes = (likes) => ({
@@ -66,6 +72,17 @@ export const createNewTweet = (data) => async (dispatch) => {
     setAuthToken(token);
     const tweet = await axios.post('/api/tweets/', data);
     dispatch(postNewTweet(tweet.data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchTweetComments = (id) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem('jwtToken');
+    setAuthToken(token);
+    const comments = await axios.get(`/api/tweets/${id}/comments`);
+    dispatch(getTweetComments(comments.data));
   } catch (error) {
     console.log(error);
   }

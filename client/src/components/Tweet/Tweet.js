@@ -2,40 +2,62 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import TweetBox from './TweetBox';
+import axios from 'axios';
 
 import { fetchTweets } from '../../store/actions';
+import TweetsList from './TweetsList';
+import classes from './Tweet.module.css';
 
 class Tweet extends React.Component {
   state = {
     tweets: [],
   };
 
-  componentWillMount() {
-    this.props.fetchTweets();
+  componentDidMount() {
+    console.log('this.props :>> ', this.props);
+    console.log('this.state :>> ', this.state);
+    const { tweetID } = this.props.match.params;
+    if (tweetID) {
+      this.setState({ tweetID });
+      this.getTweet(tweetID);
+    }
   }
 
-  componentWillReceiveProps(newState) {
-    this.setState({ tweets: newState.tweets });
-  }
+  getTweet = async (tweetID) => {
+    try {
+      const res = await axios.get(`/api/tweets/${tweetID}`);
+      console.log('res :>> ', res);
+      const tweet = res.data;
+      this.setState({ tweet });
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
+  };
 
   render() {
-    if (this.state.tweets.length === 0) {
-      return <div>There are no Tweets</div>;
-    } else {
-      return (
-        <div>
-          <h2>All Tweets</h2>
-          {this.state.tweets.map((tweet) => (
-            <TweetBox
-              key={tweet._id}
-              id={tweet._id}
-              text={tweet.text}
-              date={tweet.updatedAt || ''}
-            />
-          ))}
+    const { tweet } = this.state;
+    if (!tweet) return null;
+    const tweets = this.props.tweets.filter((tw) => tw.tweet === tweet._id);
+
+    return (
+      <div className={classes.main}>
+        <div className={classes.wrapper}>
+          <div className={classes.mainTweet}>
+            {tweet ? (
+              <TweetBox
+                id={tweet._id}
+                userID={tweet.user}
+                text={tweet.text}
+                date={tweet.updatedAt || ''}
+              />
+            ) : null}
+          </div>
+          <div className={classes.comments}>
+            <TweetsList tweets={tweets} message={'Be the first to comment'} />
+          </div>
         </div>
-      );
-    }
+      </div>
+    );
   }
 }
 

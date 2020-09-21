@@ -1,0 +1,31 @@
+.main {
+  color: #f0f8ff;
+  display: flex;
+  border-top: 1px aliceblue solid;
+  align-items: center;
+  padding: .5rem;
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.mainTweet {
+  display: block;
+  justify-content: start;
+  align-items: center;
+  padding-right: .5rem;
+  background-color:  rgb(25, 97, 143);
+  text-decoration: none;
+  color: aliceblue;
+  font-size: 1.4rem;
+}
+
+.mainTweet .logo {
+  height: 3rem;
+}

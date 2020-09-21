@@ -11,6 +11,7 @@ import {
 
 import classes from './Profile.module.css';
 import { Link } from 'react-router-dom';
+import TweetsList from '../Tweet/TweetsList';
 
 class Profile extends React.Component {
   state = {
@@ -19,18 +20,19 @@ class Profile extends React.Component {
 
   componentDidMount = () => {
     const { username } = this.props.match.params;
-    this.props.onFetchUserTweets(username);
+    //this.props.onFetchUserTweets(username);
     this.props.onFetchUserByName(username);
     //this.props.onFetchCurrentUser();
+    const tweets = this.props.tweets.filter((tw) => tw.user === username);
   };
 
-  getTweet = () => {
-    if (this.props.tweets.length === 0) {
+  getTweet = (tweets) => {
+    if (tweets.length === 0) {
       return <div>This user has no Tweets</div>;
     } else {
       return (
         <div className={classes.tweets}>
-          {this.props.tweets.map((tweet) => (
+          {tweets.map((tweet) => (
             <TweetBox
               key={tweet._id}
               id={tweet._id}
@@ -45,13 +47,16 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { user, userID } = this.props;
-    if (!user.createdAt || !userID) {
+    const { user } = this.props;
+    if (!user.createdAt) {
       return null;
     }
+
+    const tweets = this.props.tweets.filter((tw) => tw.user === user._id);
+
     const logo = user.avatar ? (
       <a className={classes.avatar} href={`/api/users/${user.username}/avatar`}>
-        <img src={`/api/users/${userID}/avatar`} alt="logo" />
+        <img src={`/api/users/${user.username}/avatar`} alt="logo" />
       </a>
     ) : (
       <FaUser className={classes.avatar} size="5rem" />
@@ -88,7 +93,10 @@ class Profile extends React.Component {
           <h2>Tweets</h2>
           <h2>Likes</h2>
         </div>
-        {this.getTweet()}
+        <TweetsList
+          tweets={tweets}
+          message={`${user.fullname} has not tweeted yet`}
+        />
       </div>
     );
   }
@@ -97,7 +105,7 @@ class Profile extends React.Component {
 const mapStateToProps = (state) => {
   console.log('state :>> ', state);
   return {
-    tweets: state.tweet.user,
+    tweets: state.tweet.all,
     user: state.user.user,
     userID: state.user.userID,
   };

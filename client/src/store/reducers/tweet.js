@@ -3,12 +3,19 @@ import {
   FETCH_TWEETS,
   FETCH_USER_TWEETS,
   CREATE_NEW_TWEET,
+  FETCH_TWEET_COMMENTS,
   FETCH_TWEET_LIKES,
   LIKE_A_TWEET,
   UNLIKE_A_TWEET,
 } from '../actions/types';
 
-const initialState = { all: [], user: [], new: undefined, likes: [] };
+const initialState = {
+  all: [],
+  user: [],
+  comments: [],
+  new: undefined,
+  likes: [],
+};
 
 const likeATweet = (state, action) => {
   const likes = state.likes.slice();
@@ -34,6 +41,10 @@ const reducer = (state = initialState, action) => {
     case CREATE_NEW_TWEET:
       return updateObject(state, {
         new: action.tweet,
+      });
+    case FETCH_TWEET_COMMENTS:
+      return updateObject(state, {
+        comments: action.comments,
       });
     case FETCH_TWEET_LIKES:
       return updateObject(state, {

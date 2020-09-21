@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import { authCheckState } from '../store/actions';
+import { authCheckState, fetchTweets } from '../store/actions';
 
 import Home from './Home';
 import SignIn from './Auth/SignIn';
@@ -21,28 +21,38 @@ export class App extends Component {
     console.log('token Storage: ', this.props);
     console.log('isAuthenticated: ', this.props.isAuthenticated);
     this.props.authCheckState();
+    this.props.fetchTweets();
+    this.intervalID = setInterval(this.fetchTweets, 5000);
+  };
+
+  componentWillUnmount = () => {
+    clearInterval(this.intervalID);
   };
 
   render() {
-    //<Redirect to="/login" />
     let routes = (
       <Switch>
         <Route exact path="/signup" component={SignUp} />
         <Route path="/login" component={SignIn} />
+        <Route path="/users/:username" component={Profile} />
         <Route exact path="/users/:username/avatar" component={Picture} />
+        <Route path="/tweets/:tweetID" component={Tweet} />
+        <Redirect to="/login" />
       </Switch>
     );
 
     if (this.props.isAuthenticated) {
-      //<Redirect to="/home" />
+      //
       routes = (
         <Switch>
           <Route path="/users/:username" component={Profile} />
           <Route exact path="/users/:username/avatar" component={Picture} />
-          <Route path="/tweets" component={Tweet} />
+          <Route path="/tweets/:tweetID" component={Tweet} />
+          <Route path="/compose/tweet/:tweetID" component={CreateTweet} />
           <Route exact path="/compose/tweet" component={CreateTweet} />
           <Route path="/setting" component={SignIn} />
           <Route exact path="/home" component={Home} />
+          <Redirect to="/home" />
         </Switch>
       );
     }
@@ -63,4 +73,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { authCheckState })(App);
+export default connect(mapStateToProps, { authCheckState, fetchTweets })(App);
