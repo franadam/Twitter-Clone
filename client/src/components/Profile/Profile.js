@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
-import { FaCalendarAlt, FaUser, GiClawSlashes } from 'react-icons/all';
-import TweetBox from '../Tweet/TweetBox';
+import { FaCalendarAlt, FaUser } from 'react-icons/all';
+import axios from 'axios';
 import {
   fetchUserTweets,
   fetchCurrentUser,
@@ -10,12 +10,12 @@ import {
 } from '../../store/actions';
 
 import classes from './Profile.module.css';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import TweetsList from '../Tweet/TweetsList';
 
 class Profile extends React.Component {
   state = {
-    tweets: [],
+    likes: [],
   };
 
   componentDidMount = () => {
@@ -23,36 +23,47 @@ class Profile extends React.Component {
     //this.props.onFetchUserTweets(username);
     this.props.onFetchUserByName(username);
     //this.props.onFetchCurrentUser();
-    const tweets = this.props.tweets.filter((tw) => tw.user === username);
+
+    //this.fetchLikes();
   };
 
-  getTweet = (tweets) => {
-    if (tweets.length === 0) {
-      return <div>This user has no Tweets</div>;
-    } else {
-      return (
-        <div className={classes.tweets}>
-          {tweets.map((tweet) => (
-            <TweetBox
-              key={tweet._id}
-              id={tweet._id}
-              text={tweet.text}
-              userID={tweet.user}
-              date={tweet.updatedAt || ''}
-            />
-          ))}
-        </div>
-      );
+  //fetchLikes = async () => {
+  //  const res = await axios.get(`/api/users/$//{this.props.userID}/likes`);
+  //  const likes = res.data;
+  //  this.setState({ likes });
+  //};
+
+  showTab = (event, tab) => {
+    const tabs = document.getElementsByClassName(`${classes.tab__header}`);
+    const contents = document.getElementsByClassName(`${classes.tab__content}`);
+
+    if (!this.props.loggedIn) {
+      this.props.history.push('/login');
     }
+
+    let i;
+    for (i = 0; i < tabs.length; i++) {
+      tabs[i].classList.remove(`${classes.tab__header__active}`);
+    }
+    for (i = 0; i < contents.length; i++) {
+      contents[i].style.display = 'none';
+    }
+    event.target.classList.add(`${classes.tab__header__active}`);
+    contents[tab].style.display = 'block';
   };
 
   render() {
     const { user } = this.props;
+    //    const { likes } = this.state;
+
     if (!user.createdAt) {
       return null;
     }
 
-    const tweets = this.props.tweets.filter((tw) => tw.user === user._id);
+    const tweets = this.props.user.tweets; //.filter((tw) => tw.user === user._id);
+    const likes = this.props.user.likes; //.map((l) => l.tweets);
+    console.log('tweets :>> ', tweets);
+    console.log('likes :>> ', likes);
 
     const logo = user.avatar ? (
       <a className={classes.avatar} href={`/api/users/${user.username}/avatar`}>
@@ -90,24 +101,49 @@ class Profile extends React.Component {
           </div>
         </div>
         <div className={classes.tabs}>
-          <h2>Tweets</h2>
-          <h2>Likes</h2>
+          <h2
+            className={`${classes.tab__header} ${classes.tab__header__active}`}
+            onClick={(event) => this.showTab(event, 0)}
+          >
+            Tweets
+          </h2>
+          <h2
+            className={classes.tab__header}
+            onClick={(event) => this.showTab(event, 1)}
+          >
+            Likes
+          </h2>
         </div>
-        <TweetsList
-          tweets={tweets}
-          message={`${user.fullname} has not tweeted yet`}
-        />
+        <div
+          className={classes.tab__content}
+          style={{ display: 'block' }}
+          id="tweets"
+        >
+          <TweetsList
+            key="tweet"
+            tweets={tweets}
+            message={`${user.fullname} has not tweeted yet`}
+          />
+        </div>
+        <div className={classes.tab__content} id="likes">
+          <TweetsList
+            key="like"
+            tweets={likes}
+            message={`${user.fullname} has not liked anything yet`}
+          />
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log('state :>> ', state);
+const mapStateToProps = ({ user, tweet }) => {
+  console.log('state :>> ', { user, tweet });
   return {
-    tweets: state.tweet.all,
-    user: state.user.user,
-    userID: state.user.userID,
+    tweets: tweet.all,
+    user: user.user,
+    loggedIn: user.isAuthenticated,
+    userID: user.userID,
   };
 };
 
@@ -119,4 +155,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Profile));

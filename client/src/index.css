@@ -12,3 +12,7 @@ body {
   background-color: rgb(21, 32, 43);
   color:aliceblue ;
 }
+
+svg {
+  color: aliceblue;
+}

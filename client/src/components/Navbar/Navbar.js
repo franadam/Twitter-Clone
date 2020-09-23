@@ -18,18 +18,39 @@ class NavBar extends React.Component {
     this.props.logout();
   };
 
-  // Selectively render links dependent on whether the user is logged in
+  activateLink = (event) => {
+    const links = document.getElementsByTagName(`svg`);
+    let i;
+    console.log('activateLink :>> ', links, event.target);
+    for (i = 0; i < links.length; i++) {
+      links[i].classList.remove(`${classes.active}`);
+    }
+    event.target.parentElement.classList.add(`${classes.active}`);
+  };
+
   getLinks = () => {
     if (this.props.loggedIn) {
       return (
         <div className={classes.links}>
-          <Link className={classes.link1} to={'/home'}>
-            <FaTwitter size="2rem" />
+          <Link
+            onClick={(event) => this.activateLink(event)}
+            className={`${classes.link}`}
+            to={'/home'}
+          >
+            <FaTwitter className={classes.active} size="2rem" />
           </Link>
-          <Link className={classes.link1} to={`/users/${this.props.userID}`}>
+          <Link
+            onClick={(event) => this.activateLink(event)}
+            className={classes.link}
+            to={`/users/${this.props.userID}`}
+          >
             <FaRegUser size="2rem" />
           </Link>
-          <Link className={classes.link1} to={'/compose/tweet'}>
+          <Link
+            onClick={(event) => this.activateLink(event)}
+            className={classes.link}
+            to={'/compose/tweet'}
+          >
             <FaFeatherAlt size="2rem" />
           </Link>
           <FaDoorOpen size="2rem" color="red" onClick={this.logoutUser} />
@@ -38,10 +59,10 @@ class NavBar extends React.Component {
     } else {
       return (
         <div className={classes.links}>
-          <Link className={classes.signup} to={'/signup'}>
+          <Link className={`${classes.link} ${classes.signup}`} to={'/signup'}>
             Signup
           </Link>
-          <Link className={classes.signin} to={'/login'}>
+          <Link className={`${classes.link} ${classes.signin}`} to={'/login'}>
             Login
           </Link>
         </div>

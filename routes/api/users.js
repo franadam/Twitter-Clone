@@ -3,8 +3,11 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
-
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const User = require('../../models/User');
+const Tweet = require('../../models/Tweet');
+const Like = require('../../models/Like');
 
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
@@ -12,8 +15,70 @@ const uploadImage = require('../../services/loader');
 const router = express.Router();
 
 router.get('/:username', async (req, res) => {
-  //const user = await User.findOne({ username: req.params.username });
+  const username = req.params.username;
+  console.log(
+    'aggregate username :>> ',
+    username,
+    mongoose.isValidObjectId(username)
+  );
+  //{ $match: { username } },
+  try {
+    const users = await User.aggregate([
+      {
+        $lookup: {
+          from: 'likes',
+          let: { userID: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$userID', '$user'] } } },
+            {
+              $lookup: {
+                from: 'tweets',
+                let: { tweet: '$tweet' },
+                pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$tweet'] } } }],
+                as: 'tweets',
+              },
+            },
+            { $unwind: '$tweets' },
+            { $project: { _id: 0, tweets: 1 } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'tweets',
+          let: { userID: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$userID', '$user'] } } },
+            {
+              $lookup: {
+                from: 'tweets',
+                let: { tweetID: '$_id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$tweet', '$$tweetID'] } } },
+                ],
+                as: 'comments',
+              },
+            },
+          ],
+          as: 'tweets',
+        },
+      },
+    ]);
 
+    let user;
+    if (mongoose.isValidObjectId(username)) {
+      user = users.find((u) => u._id == username);
+    } else {
+      user = users.find((u) => u.username === username);
+    }
+    console.log('user', user);
+    res.send(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+  /*
   const user =
     (await User.findOne({ username: req.params.username })) ||
     (await User.findById(req.params.username));
@@ -26,6 +91,7 @@ router.get('/:username', async (req, res) => {
     cover,
     createdAt,
   });
+  */
 });
 
 router.get('/:id/avatar', async (req, res) => {
@@ -249,5 +315,49 @@ router.delete(
     }
   }
 );
+
+router.get('/:id/likes', async (req, res) => {
+  const username = req.params.id;
+  console.log('_id :>> ', username);
+  //{ $match: { id: _id } },
+  try {
+    const likes = await User.aggregate([
+      { $match: { username } },
+      {
+        $lookup: {
+          from: 'likes',
+          let: { userID: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$userID', '$user'] } } },
+            {
+              $lookup: {
+                from: 'tweets',
+                let: { tweet: '$tweet' },
+                pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$tweet'] } } }],
+                as: 'tweets',
+              },
+            },
+            { $unwind: '$tweets' },
+            { $project: { _id: 0, tweets: 1 } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'tweets',
+          localField: '_id',
+          foreignField: 'user',
+          as: 'tweets',
+        },
+      },
+    ]);
+    console.log('likes :>> ', likes);
+    res.send(likes);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
 
 module.exports = router;

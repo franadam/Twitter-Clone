@@ -21,7 +21,7 @@ class Tweet extends React.Component {
 
   render() {
     const { user, userID, tweets } = this.props;
-    if (!user) return null;
+    if (!user || !tweets) return null;
     const logo = user.avatar ? (
       <img
         className={classes.avatar}
@@ -29,13 +29,13 @@ class Tweet extends React.Component {
         alt="logo"
       />
     ) : (
-      <FaUser size="2rem" />
+      <FaUser size="3rem" />
     );
 
     return (
-      <div>
+      <div className={classes.main}>
         <h1 className={classes.header}>A Twitter Clone</h1>
-        <div className={classes.createTweet}>
+        <div className={classes.compose}>
           <Link to={`/users/${user.username || userID}`}>{logo}</Link>
           <CreateTweet />
         </div>

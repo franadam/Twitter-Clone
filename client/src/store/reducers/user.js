@@ -17,6 +17,17 @@ const initialState = {
   userID: '',
 };
 
+const fetchUserByName = (state, action) => {
+  const newState = updateObject(state, {
+    user: action.user,
+  });
+  const likes = newState.user.likes.map((like) => like.tweets);
+  likes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt) < 0);
+  const user = updateObject(newState.user, { likes });
+
+  return updateObject(newState, { user });
+};
+
 export default function (state = initialState, action) {
   switch (action.type) {
     case USER_LOGOUT:
@@ -43,9 +54,7 @@ export default function (state = initialState, action) {
       });
 
     case FETCH_USER_BY_NAME:
-      return updateObject(state, {
-        user: action.user,
-      });
+      return fetchUserByName(state, action);
     case USER_AUTH_FAIL:
       return updateObject(state, {
         isAuthenticated: false,

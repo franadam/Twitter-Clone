@@ -56,6 +56,8 @@ UserSchema.virtual('likes', {
   foreignField: 'user',
 });
 
+UserSchema.statics.castUserId = (userId) => mongoose.Types.ObjectId(userId);
+
 UserSchema.pre('remove', async function (next) {
   const user = this;
   console.log('pre user remove :>> ', user);

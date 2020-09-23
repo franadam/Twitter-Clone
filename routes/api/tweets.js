@@ -10,7 +10,24 @@ const validateTweetInput = require('../../validation/tweets');
 
 router.get('/', async (req, res) => {
   try {
-    const tweets = await Tweet.find().sort({ updatedAt: -1 });
+    const tweets = await Tweet.aggregate([
+      {
+        $lookup: {
+          from: 'likes',
+          localField: '_id',
+          foreignField: 'tweet',
+          as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'tweets',
+          localField: '_id',
+          foreignField: 'tweet',
+          as: 'comments',
+        },
+      },
+    ]).sort({ updatedAt: -1 });
     res.json(tweets);
   } catch (error) {
     res.status(404).json({ notweetsfound: 'No tweets found' });

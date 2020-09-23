@@ -1,3 +1,9 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .header {
   text-align: center;
 }
@@ -8,7 +14,8 @@
   background-color: aliceblue;
 }
 
-.createTweet {
+.compose {
   display: flex;
   padding: 1rem;
+  align-self: center;
 }

@@ -113,7 +113,11 @@ class TweetBox extends Component {
       return null;
     }
     const logo = user.avatar ? (
-      <img src={`/api/users/${this.props.userID}/avatar`} alt="logo" />
+      <img
+        src={`/api/users/${this.props.userID}/avatar`}
+        alt="logo"
+        onClick={(event) => event.stopPropagation()}
+      />
     ) : (
       <FaUser color="#f0f8ff" size="2rem" />
     );
@@ -135,7 +139,11 @@ class TweetBox extends Component {
         </Link>
         <div className={classes.wrapper}>
           <div className={classes.identifier}>
-            <Link to={`/users/${user.username}`} className={classes.name}>
+            <Link
+              to={`/users/${user.username}`}
+              className={classes.name}
+              onClick={(event) => event.stopPropagation()}
+            >
               <div className={classes.fullname}>{user.fullname}</div>
               <div className={classes.username}>@{user.username}</div>
             </Link>

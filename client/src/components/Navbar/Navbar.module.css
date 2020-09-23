@@ -11,30 +11,39 @@
   height: 20px;
 }
 
-svg {
-  color: aliceblue;
-}
-
-svg:hover {
-  color:  rgb(0, 157, 255);
-}
-
 .links {
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
   justify-content: flex-start;
-  color: aliceblue;
 }
 
-.links a {
+.link,
+.auth {
   text-decoration: none;
   padding: 1rem .5rem;
   width: 100%;
-  margin: .5rem 0;
+  margin: .5rem;
   border-radius: 30px;
   text-transform: uppercase;
+}
+
+.link:hover  {
+  background-color:  rgba(0, 157, 255, 0.3);
+  border-radius: 50%;
+}
+
+.link svg {
+  color: aliceblue;
+}
+
+.link:hover svg {
+  color:  rgb(0, 157, 255);
+}
+
+.link svg.active {
+  color:  rgb(0, 157, 255);
 }
 
 .signin {
