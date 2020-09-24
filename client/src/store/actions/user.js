@@ -95,11 +95,9 @@ export const logout = () => async (dispatch) => {
 export const signup = (credential) => async (dispatch) => {
   try {
     const res = await axios.post('/api/users/register', credential);
-    console.log('signup res :>> ', res);
-    const { token, user } = res.data;
-    dispatch(userAuth(user, token, false));
+    const { user } = res.data;
+    dispatch(userAuth(user, null, false));
   } catch (error) {
-    console.log('signup res error :>> ', error);
     dispatch(userAuthFail(error));
   }
 };
@@ -128,7 +126,6 @@ export const login = (credential) => async (dispatch) => {
         message: 'This user does not exist or the password is Incorrect',
       })
     );
-    console.log('login res error :>> ', error);
   }
 };
 

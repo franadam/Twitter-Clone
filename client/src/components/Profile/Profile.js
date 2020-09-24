@@ -23,7 +23,7 @@ class Profile extends React.Component {
     //this.props.onFetchUserTweets(username);
     this.props.onFetchUserByName(username);
     //this.props.onFetchCurrentUser();
-
+    console.log('this.props :>> ', this.props);
     //this.fetchLikes();
   };
 

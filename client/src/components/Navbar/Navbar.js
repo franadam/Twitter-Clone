@@ -6,6 +6,7 @@ import {
   FaRegUser,
   FaFeatherAlt,
   FaDoorOpen,
+  FaBars,
 } from 'react-icons/all';
 
 import { logout } from '../../store/actions';
@@ -39,7 +40,14 @@ class NavBar extends React.Component {
               size="2rem"
             />
           </Link>
-          <Link className={classes.link} to={`/users/${this.props.userID}`}>
+          <Link
+            className={classes.link}
+            to={{
+              key: Math.random(),
+              pathname: `/users/${this.props.userID}`,
+              state: { fromDashboard: true },
+            }}
+          >
             <FaRegUser
               size="2rem"
               onClick={(event) => this.activateLink(event)}
@@ -69,7 +77,11 @@ class NavBar extends React.Component {
   };
 
   render() {
-    return <div className={classes.main}>{this.getLinks()}</div>;
+    return (
+      <div id="sidebar" className={classes.main}>
+        {this.getLinks()}
+      </div>
+    );
   }
 }
 

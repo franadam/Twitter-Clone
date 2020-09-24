@@ -25,7 +25,7 @@ class Tweet extends React.Component {
     const logo = user.avatar ? (
       <img
         className={classes.avatar}
-        src={`/api/users/${this.props.userID}/avatar`}
+        src={`/api/users/${userID}/avatar`}
         alt="logo"
       />
     ) : (
@@ -36,7 +36,7 @@ class Tweet extends React.Component {
       <div className={classes.main}>
         <h1 className={classes.header}>A Twitter Clone</h1>
         <div className={classes.compose}>
-          <Link to={`/users/${user.username || userID}`}>{logo}</Link>
+          <Link to={`/users/${userID}`}>{logo}</Link>
           <CreateTweet />
         </div>
         <TweetsList tweets={tweets} message={'Nobody has Tweeted yet !'} />

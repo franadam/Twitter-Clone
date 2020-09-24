@@ -2,9 +2,25 @@
   display: flex;
   align-items: flex-start;
   min-height: 100vh;
+  width: 100%;
 }
 
 .children {
   flex-grow: 1;
   border-left: 2px solid aliceblue;
+}
+
+
+
+@media screen and (max-width: 700px) {
+  .main {
+    flex-direction: column;
+  }
+  .children {
+    flex-grow: 1;
+  width: 100%;
+  border: none;
+  min-height: 80vh;
+
+  }
 }

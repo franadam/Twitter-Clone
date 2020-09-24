@@ -45,7 +45,7 @@ export default function (state = initialState, action) {
         isAuthenticated: action.isSigned,
         user: action.user,
         userID: action.user._id,
-        token: action.token,
+        token: action.token || '',
       });
     case FETCH_CURRENT_USER:
       return updateObject(state, {

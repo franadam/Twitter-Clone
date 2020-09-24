@@ -10,7 +10,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-width: 600px;
   padding: 1rem;
   position: relative;
 }

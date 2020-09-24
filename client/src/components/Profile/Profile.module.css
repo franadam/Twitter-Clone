@@ -11,7 +11,7 @@
   height: 250px;
   max-height: 40vh;
   background-color: rgb(25, 97, 143);
-  min-width: 100%;
+  width: 100%;
 }
 
 .avatar {

@@ -76,14 +76,14 @@ cursor: pointer;
 display: flex;
 justify-content: space-evenly;
 color: rgba(240, 248, 255, 0.7);
-z-index: 10;
+z-index: 5;
 }
 
 .like {
 display: flex;
 cursor: pointer;
 color: rgba(240, 248, 255, 0.7);
-z-index: 10;
+z-index: 5;
 }
 
 .comment:hover {
