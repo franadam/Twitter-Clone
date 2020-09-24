@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import TweetBox from './Tweet/TweetBox';
+import TweetBox from '../Tweet/TweetBox';
 
-import { fetchTweets, fetchCurrentUser } from '../store/actions';
-import CreateTweet from './Tweet/CreateTweet';
+import { fetchTweets, fetchCurrentUser } from '../../store/actions';
+import CreateTweet from '../Tweet/CreateTweet';
 import { FaUser } from 'react-icons/all';
 
 import classes from './Home.module.css';
-import TweetsList from './Tweet/TweetsList';
+import TweetsList from '../Tweet/TweetsList';
 class Tweet extends React.Component {
   state = {
     tweets: [],

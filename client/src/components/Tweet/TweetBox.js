@@ -34,7 +34,7 @@ class TweetBox extends Component {
     this.getTweetLikes();
     this.getTweetComments();
     this.getUserById();
-    console.log('this.props :>> ', this.props);
+    //console.log('this.props :>> ', this.props);
   };
 
   getTweetLikes = async () => {
@@ -49,7 +49,6 @@ class TweetBox extends Component {
       this.setState({
         isLoading: false,
       });
-      console.log('isLiked like :>> ', like.length !== 0, like);
       this.setState({ isLiked: like.length !== 0 });
     } catch (error) {
       console.log('error :>> ', error);
@@ -65,7 +64,6 @@ class TweetBox extends Component {
         (comment) =>
           comment.user === this.props.myID && comment.tweet === this.props.id
       );
-      console.log('isCommented comment :>> ', comment.length !== 0, comment);
       this.setState({ isCommented: comment.length !== 0 });
     } catch (error) {
       console.log('error :>> ', error);
@@ -84,7 +82,6 @@ class TweetBox extends Component {
 
   addComment = (event) => {
     event.stopPropagation();
-    console.log('addComment');
     const tweet = this.props.id;
     //this.props.history.push('/compose/tweet/${tweet}');
     this.props.history.push(`/compose/tweet`, { tweet });

@@ -63,7 +63,6 @@ export const fetchUserByName = (username) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/users/${username}`);
     const { token, user } = res.data;
-    console.log('fetchUserByName user :>> ', res.data);
     dispatch(getUserByName(res.data));
   } catch (error) {
     console.log('fetchUserByName error', error);
@@ -75,7 +74,6 @@ export const fetchCurrentUser = () => async (dispatch) => {
   try {
     const res = await axios.get('/api/users/current');
     const { token, user } = res.data;
-    console.log('fetchCurrentUser user :>> ', res);
     setAuthToken(token);
     dispatch(currentUser(user));
   } catch (error) {

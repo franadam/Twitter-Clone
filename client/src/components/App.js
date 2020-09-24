@@ -4,21 +4,17 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { authCheckState, fetchTweets } from '../store/actions';
 
-import Home from './Home';
+import Home from './Home/Home';
 import SignIn from './Auth/SignIn';
 import SignUp from './Auth/SignUp';
 
 import Tweet from './Tweet/Tweet';
 import Profile from './Profile/Profile';
-import Picture from './Picture/Picture';
 import CreateTweet from './Tweet/CreateTweet';
 import Layout from '../hoc/Layout/Layout';
 
 export class App extends Component {
   componentDidMount = () => {
-    console.log('token: ', this.props.token);
-    console.log('token Storage: ', this.props);
-    console.log('isAuthenticated: ', this.props.isAuthenticated);
     this.props.authCheckState();
     this.props.fetchTweets();
     this.intervalID = setInterval(this.fetchTweets, 5000);
@@ -34,7 +30,6 @@ export class App extends Component {
         <Route exact path="/signup" component={SignUp} />
         <Route path="/login" component={SignIn} />
         <Route path="/users/:username" component={Profile} />
-        <Route exact path="/users/:username/avatar" component={Picture} />
         <Route path="/tweets/:tweetID" component={Tweet} />
         <Redirect to="/login" />
       </Switch>
@@ -45,7 +40,6 @@ export class App extends Component {
       routes = (
         <Switch>
           <Route path="/users/:username" component={Profile} />
-          <Route exact path="/users/:username/avatar" component={Picture} />
           <Route path="/tweets/:tweetID" component={Tweet} />
           <Route path="/compose/tweet/:tweetID" component={CreateTweet} />
           <Route exact path="/compose/tweet" component={CreateTweet} />
@@ -59,11 +53,10 @@ export class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log('state: ', state);
+const mapStateToProps = ({ user }) => {
   return {
-    isAuthenticated: state.user.token !== '',
-    token: state.user.token,
+    isAuthenticated: user.isAuthenticated,
+    token: user.token,
   };
 };
 

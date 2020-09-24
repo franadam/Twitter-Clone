@@ -16,12 +16,6 @@ const router = express.Router();
 
 router.get('/:username', async (req, res) => {
   const username = req.params.username;
-  console.log(
-    'aggregate username :>> ',
-    username,
-    mongoose.isValidObjectId(username)
-  );
-  //{ $match: { username } },
   try {
     const users = await User.aggregate([
       {
@@ -61,6 +55,7 @@ router.get('/:username', async (req, res) => {
                 as: 'comments',
               },
             },
+            { $sort: { createdAt: -1 } },
           ],
           as: 'tweets',
         },

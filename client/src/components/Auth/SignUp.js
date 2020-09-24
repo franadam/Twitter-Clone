@@ -105,10 +105,6 @@ class SignUp extends React.Component {
     },
   };
 
-  componentDidMount = () => {
-    console.log('signUp :>> ', 'signUp');
-  };
-
   createForm = (formData) => {
     const formElementsArray = [];
     for (let key in formData) {

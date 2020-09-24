@@ -4,7 +4,6 @@ import classes from './FormField.module.css';
 const formField = ({ field, id, change, keyUp, focus, blur }) => {
   const renderTemplate = () => {
     let formTemplate = null;
-    //console.log(' FORMFIELD field :>> ', field);
 
     const showError = () => {
       let errorMessage = (

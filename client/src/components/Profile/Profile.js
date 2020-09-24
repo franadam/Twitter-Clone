@@ -17,24 +17,10 @@ import Spinner from '../Spinner/Spinner';
 import classes from './Profile.module.css';
 
 class Profile extends React.Component {
-  state = {
-    likes: [],
-  };
-
   componentDidMount = () => {
     const { username } = this.props.match.params;
-    //this.props.onFetchUserTweets(username);
     this.props.onFetchUserByName(username);
-    //this.props.onFetchCurrentUser();
-    console.log('this.props :>> ', this.props);
-    //this.fetchLikes();
   };
-
-  //fetchLikes = async () => {
-  //  const res = await axios.get(`/api/users/$//{this.props.userID}/likes`);
-  //  const likes = res.data;
-  //  this.setState({ likes });
-  //};
 
   showTab = (event, tab) => {
     const tabs = document.getElementsByClassName(`${classes.tab__header}`);
@@ -57,16 +43,13 @@ class Profile extends React.Component {
 
   render() {
     const { user } = this.props;
-    //    const { likes } = this.state;
 
     if (!user.createdAt) {
       return <Spinner />;
     }
 
-    const tweets = this.props.user.tweets; //.filter((tw) => tw.user === user._id);
-    const likes = this.props.user.likes; //.map((l) => l.tweets);
-    console.log('tweets :>> ', tweets);
-    console.log('likes :>> ', likes);
+    const tweets = this.props.user.tweets;
+    const likes = this.props.user.likes;
 
     const logo = user.avatar ? (
       <a className={classes.avatar} href={`/api/users/${user.username}/avatar`}>
@@ -141,7 +124,6 @@ class Profile extends React.Component {
 }
 
 const mapStateToProps = ({ user, tweet }) => {
-  console.log('state :>> ', { user, tweet });
   return {
     tweets: tweet.all,
     user: user.user,

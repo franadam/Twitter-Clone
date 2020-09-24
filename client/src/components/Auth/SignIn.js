@@ -161,7 +161,6 @@ class SignIn extends React.Component {
     );
 
     if (this.props.error) {
-      console.log('signin error');
       document.getElementById('myModal').style.display = 'block';
     }
 

@@ -22,7 +22,7 @@ const fetchUserByName = (state, action) => {
     user: action.user,
   });
   const likes = newState.user.likes.map((like) => like.tweets);
-  likes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt) < 0);
+  likes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   const user = updateObject(newState.user, { likes });
 
   return updateObject(newState, { user });

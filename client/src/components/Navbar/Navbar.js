@@ -22,7 +22,6 @@ class NavBar extends React.Component {
   activateLink = (event) => {
     const links = document.getElementsByTagName(`svg`);
     let i;
-    console.log('activateLink :>> ', links, event.target);
     for (i = 0; i < links.length; i++) {
       links[i].classList.remove(`${classes.active}`);
     }

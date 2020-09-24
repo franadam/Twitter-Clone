@@ -19,8 +19,6 @@ class CreateTweet extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log('this.props :>> ', this.props);
-    console.log('this.state :>> ', this.state);
     const { state } = this.props.location;
     if (state) {
       const { tweet: tweetID } = state;
@@ -32,7 +30,6 @@ class CreateTweet extends React.Component {
   getTweet = async (tweetID) => {
     try {
       const res = await axios.get(`/api/tweets/${tweetID}`);
-      console.log('res :>> ', res);
       const tweet = res.data;
       this.setState({ tweet });
     } catch (error) {
@@ -50,7 +47,6 @@ class CreateTweet extends React.Component {
 
     this.props.onCreateNewTweet(tweet);
     this.setState({ text: '', newTweet: tweet });
-    console.log('this.state :>> ', tweet, this.state);
     this.props.history.goBack();
   };
 
