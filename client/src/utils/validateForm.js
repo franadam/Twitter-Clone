@@ -12,7 +12,7 @@ const validate = (element) => {
   if (element.validation.required) {
     const valid = element.value.trim() !== '';
     const message = `${
-      !valid ? `${element.config.name} field is required` : ''
+      !valid ? `The ${element.config.name} field is required` : ''
     }`;
     error = !valid ? [valid, message] : error;
   }
@@ -82,6 +82,15 @@ const validate = (element) => {
     }
   }
   return error;
+};
+
+export const showPassword = () => {
+  const x = document.getElementById('password');
+  if (x.type === 'password') {
+    x.type = 'text';
+  } else {
+    x.type = 'password';
+  }
 };
 
 export default validate;

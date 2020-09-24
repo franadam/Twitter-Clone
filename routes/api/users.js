@@ -96,6 +96,9 @@ router.get('/:username', async (req, res) => {
 
 router.get('/:id/avatar', async (req, res) => {
   const username = req.params.id;
+
+  console.log('username :>> ', username);
+
   try {
     const user =
       (await User.findOne({ username })) || (await User.findById(username));
@@ -199,7 +202,9 @@ router.post('/register', async (req, res) => {
     if (!isValid) {
       throw new Error(JSON.stringify(errors));
     }
-    const user = await User.findOne({ username: req.body.username });
+    const user = await User.findOne({
+      $or: [{ username: req.body.username }, { email: req.body.email }],
+    });
     if (user) {
       errors.username = 'User already exists';
       throw new Error(errors.username);

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import FormField from '../FormFiled/FormField';
+import ShowPasswordField from '../FormFiled/ShowPasswordField';
 import Modal from '../../hoc/Modal/Modal';
 
 import formStyle from '../FormFiled/FormField.module.css';
@@ -18,7 +19,6 @@ class SignUp extends React.Component {
     formError: false,
     formSuccess: '',
     formValid: false,
-    error: null,
     formData: {
       fullname: {
         element: 'input',
@@ -216,21 +216,11 @@ class SignUp extends React.Component {
     }
   };
 
-  // Render the session error if there are any
-  renderError = () => {
-    return (
-      <ul>
-        {Object.keys(this.state.error).map((error, i) => (
-          <li key={`error-${i}`}>{this.state.error[error]}</li>
-        ))}
-      </ul>
-    );
-  };
-
   render() {
     const form = (
       <form className={formStyle.form} onSubmit={this.handleSubmit}>
         {this.createForm(this.state.formData)}
+        <ShowPasswordField />
         <button
           className={formStyle.btn}
           onClick={(event) => this.handleSubmit(event)}
@@ -238,7 +228,6 @@ class SignUp extends React.Component {
         >
           SIGN UP
         </button>
-        {this.state.error ? this.renderError() : null}
       </form>
     );
 

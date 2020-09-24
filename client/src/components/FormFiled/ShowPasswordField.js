@@ -1,24 +1,18 @@
 import React from 'react';
+import classes from './FormField.module.css';
+import { showPassword } from '../../utils/validateForm';
 
-const showPasswordField = ({ showPasswordHandler }) => {
+const showPasswordField = () => {
   return (
-    <div className="row">
-      <div className="col col-25" />
-      <div className="col col-75">
-        <div className="col col-25" />
-        <div className="col col-75">
-          <label className="checklabel" htmlFor="checkbox" id="checklabel">
-            <input
-              className="showpw"
-              id="checkbox"
-              onClick={showPasswordHandler}
-              type="checkbox"
-            />{' '}
-            Show Password
-            <span className="checkmark" />
-          </label>
-        </div>
-      </div>
+    <div className={classes.show_password}>
+      <label
+        className={classes.show_password_label}
+        htmlFor=" "
+        id="checklabel"
+      >
+        <input id="checkbox" onClick={showPassword} type="checkbox" /> <span />
+        Show Password
+      </label>
     </div>
   );
 };

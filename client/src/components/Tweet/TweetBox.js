@@ -10,10 +10,9 @@ import {
   FaUser,
 } from 'react-icons/all';
 import classes from './TweetBox.module.css';
-
+import Spinner from '../Spinner/Spinner';
 import {
   fetchTweetLikes,
-  fetchCurrentUser,
   likeATweet,
   unlikeATweet,
   createNewTweet,
@@ -28,6 +27,7 @@ class TweetBox extends Component {
     isLiked: false,
     isCommented: false,
     comments: [],
+    isLoading: true,
   };
 
   componentDidMount = () => {
@@ -45,6 +45,10 @@ class TweetBox extends Component {
       const like = likes.filter(
         (like) => like.user === this.props.myID && like.tweet === this.props.id
       );
+
+      this.setState({
+        isLoading: false,
+      });
       console.log('isLiked like :>> ', like.length !== 0, like);
       this.setState({ isLiked: like.length !== 0 });
     } catch (error) {
@@ -110,7 +114,7 @@ class TweetBox extends Component {
     const { text, date } = this.props;
 
     if (!likes || !user) {
-      return null;
+      return <Spinner />;
     }
     const logo = user.avatar ? (
       <img
@@ -158,14 +162,19 @@ class TweetBox extends Component {
               className={classes.comment}
               onClick={(event) => this.addComment(event)}
             >
-              {isCommented ? <FaComment /> : <FaRegComment />}
+              <div className={classes.icon}>
+                {isCommented ? <FaComment /> : <FaRegComment />}
+              </div>
+
               <div className={classes.count}>{comments.length}</div>
             </div>
             <div
               className={classes.like}
               onClick={(event) => this.likeHandler(event)}
             >
-              {isLiked ? <FaHeart /> : <FaRegHeart />}
+              <div className={classes.icon}>
+                {isLiked ? <FaHeart /> : <FaRegHeart />}
+              </div>
               <div className={classes.count}>{likes.length}</div>
             </div>
           </div>

@@ -90,12 +90,28 @@ z-index: 5;
   color: rgb(0, 162, 255);
 }
 
-.like:hover {
-  color: red;
+.comment:hover,
+.comment:hover svg {
+  color: rgb(0, 162, 255);
+} 
+.icon {
+  padding: .5rem;
+}
+.comment:hover .icon {
+  background-color:  rgba(0, 157, 255, 0.3);
+  border-radius: 50%;
 }
 
+.like:hover,
+.like:hover svg {
+  color: red;
+}
+.like:hover  .icon{
+  background-color:  rgba(255, 0, 0, 0.3);
+  border-radius: 50%;
+}
 .count {
-  padding-left: .5rem;
+  padding: .5rem;
 }
 .link {
   color: rgb(25, 97, 143);

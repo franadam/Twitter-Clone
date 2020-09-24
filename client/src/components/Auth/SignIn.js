@@ -9,12 +9,12 @@ import { login } from '../../store/actions';
 import formStyle from '../FormFiled/FormField.module.css';
 import classes from './SignIn.module.css';
 import Modal from '../../hoc/Modal/Modal';
-import validate from '../../utils/validateForm';
+import validate, { showPassword } from '../../utils/validateForm';
+import ShowPasswordField from '../FormFiled/ShowPasswordField';
 
 class SignIn extends React.Component {
   state = {
     formError: false,
-    error: null,
     formSuccess: '',
     formData: {
       email: {
@@ -119,6 +119,7 @@ class SignIn extends React.Component {
       formError: false,
       formSuccess: type ? 'Congratulation' : 'This user already exists',
     });
+    document.getElementById('myModal').style.display = 'block';
   };
 
   clearSuccesMessage = () => {
@@ -139,25 +140,16 @@ class SignIn extends React.Component {
 
     if (isValid) {
       this.props.login(dataToSubmit);
+      this.formSuccesManager();
       this.props.history.push('/home');
     }
-  };
-
-  // Render the session error if there are any
-  renderError = () => {
-    return (
-      <ul>
-        {Object.keys(this.state.error).map((error, i) => (
-          <li key={`error-${i}`}>{this.state.error[error]}</li>
-        ))}
-      </ul>
-    );
   };
 
   render() {
     const form = (
       <form className={formStyle.form} onSubmit={this.handleSubmit}>
         {this.createForm(this.state.formData)}
+        <ShowPasswordField />
         <button
           className={formStyle.btn}
           onClick={(event) => this.handleSubmit(event)}
@@ -165,7 +157,6 @@ class SignIn extends React.Component {
         >
           LOGIN IN
         </button>
-        {this.state.error ? this.renderError() : null}
       </form>
     );
 
@@ -182,6 +173,9 @@ class SignIn extends React.Component {
           <Modal>
             {!!this.props.error ? (
               <p className={classes.error}>{this.props.error.message}</p>
+            ) : null}
+            {!!this.state.formSuccess ? (
+              <p className={classes.success}>{this.state.formSuccess}</p>
             ) : null}
           </Modal>
           <Link to="/signup" className={classes.link}>

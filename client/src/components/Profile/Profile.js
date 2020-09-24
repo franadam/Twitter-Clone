@@ -1,17 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import dateFormat from 'dateformat';
 import { FaCalendarAlt, FaUser } from 'react-icons/all';
 import axios from 'axios';
+
 import {
   fetchUserTweets,
   fetchCurrentUser,
   fetchUserByName,
 } from '../../store/actions';
 
-import classes from './Profile.module.css';
-import { withRouter } from 'react-router-dom';
 import TweetsList from '../Tweet/TweetsList';
+import Spinner from '../Spinner/Spinner';
+
+import classes from './Profile.module.css';
 
 class Profile extends React.Component {
   state = {
@@ -57,7 +60,7 @@ class Profile extends React.Component {
     //    const { likes } = this.state;
 
     if (!user.createdAt) {
-      return null;
+      return <Spinner />;
     }
 
     const tweets = this.props.user.tweets; //.filter((tw) => tw.user === user._id);
@@ -121,14 +124,14 @@ class Profile extends React.Component {
         >
           <TweetsList
             key="tweet"
-            tweets={tweets}
+            tweets={tweets || []}
             message={`${user.fullname} has not tweeted yet`}
           />
         </div>
         <div className={classes.tab__content} id="likes">
           <TweetsList
             key="like"
-            tweets={likes}
+            tweets={likes || []}
             message={`${user.fullname} has not liked anything yet`}
           />
         </div>
@@ -150,7 +153,6 @@ const mapStateToProps = ({ user, tweet }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onFetchUserTweets: (id) => dispatch(fetchUserTweets(id)),
-    onFetchCurrentUser: () => dispatch(fetchCurrentUser()),
     onFetchUserByName: (username) => dispatch(fetchUserByName(username)),
   };
 };
