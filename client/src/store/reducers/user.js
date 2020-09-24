@@ -12,7 +12,7 @@ import { updateObject } from '../../utils/updateObject';
 const initialState = {
   isAuthenticated: false,
   user: {},
-  error: {},
+  error: null,
   token: '',
   userID: '',
 };

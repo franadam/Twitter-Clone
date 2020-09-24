@@ -60,10 +60,16 @@ input[type='textarea'] {
   height: 100px;
 }
 .error {
-  color: red;
-  font-weight: bold;
+  color: #ff9d9d;
+  padding: .5rem;
+  font-style: italic;
 }
 
 .empty {
   background-color: rgb(255, 221, 221);
+}
+
+
+.empty::placeholder {
+  color: red;
 }

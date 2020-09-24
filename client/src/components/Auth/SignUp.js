@@ -4,10 +4,13 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import FormField from '../FormFiled/FormField';
+import Modal from '../../hoc/Modal/Modal';
 
-import { signup } from '../../store/actions';
 import formStyle from '../FormFiled/FormField.module.css';
 import classes from './SignIn.module.css';
+
+import validate from '../../utils/validateForm';
+import { signup } from '../../store/actions';
 
 class SignUp extends React.Component {
   state = {
@@ -64,11 +67,11 @@ class SignUp extends React.Component {
         },
         validation: {
           required: true,
-          minLength: false,
-          hasUpperCase: false,
-          hasLowerCase: false,
-          hasSpecialChar: false,
-          hasNumber: false,
+          minLength: [true, 8],
+          hasUpperCase: true,
+          hasLowerCase: true,
+          hasSpecialChar: true,
+          hasNumber: true,
         },
         score: 0,
       },
@@ -131,13 +134,37 @@ class SignUp extends React.Component {
     return formularField;
   };
 
-  formFieldHandler = (element) => {
+  formFieldHandler = ({ event, id }) => {
     const newFormData = { ...this.state.formData };
-    const newElement = { ...newFormData[element.id] };
+    const newElement = { ...newFormData[id] };
 
-    newElement.value = element.event.target.value;
+    newElement.value = event.target.value;
 
-    newFormData[element.id] = newElement;
+    const element = event.target;
+
+    newElement.value = element.value;
+
+    const [valid, validationMessage] = validate(newElement);
+    newElement.valid = valid;
+    newElement.validationMessage = validationMessage;
+
+    if (element.value === '') {
+      element.classList.add(formStyle.empty);
+    } else {
+      element.classList.remove(formStyle.empty);
+    }
+
+    if (id === 'password_confirmation') {
+      if (
+        element.value !== '' &&
+        element.value !== newFormData.password.value
+      ) {
+        newElement.validationMessage = 'The passwords must be identical';
+        newElement.valid = false;
+      }
+    }
+
+    newFormData[id] = newElement;
 
     this.setState({
       formData: newFormData,
@@ -173,14 +200,20 @@ class SignUp extends React.Component {
     event.preventDefault();
 
     const dataToSubmit = {};
+    let isValid = true;
 
     for (let key in this.state.formData) {
       dataToSubmit[key] = this.state.formData[key].value;
+      isValid = isValid && this.state.formData[key].valid;
     }
 
-    this.props.signup(dataToSubmit);
-    this.props.history.push('/signin');
-    //this.setState({ formError: true });
+    if (isValid) {
+      this.props.signup(dataToSubmit);
+      this.props.history.push('/signin');
+    } else {
+      this.setState({ formError: true });
+      document.getElementById('myModal').style.display = 'block';
+    }
   };
 
   // Render the session error if there are any
@@ -214,6 +247,11 @@ class SignUp extends React.Component {
         <div className={classes.wrapper}>
           <h1>Twitter</h1>
           {form}
+          <Modal>
+            {this.state.formError ? (
+              <p className={classes.error}>Please fill all fields properly</p>
+            ) : null}
+          </Modal>
           <Link to="/signin" className={classes.link}>
             SIGN IN
           </Link>
@@ -236,4 +274,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));

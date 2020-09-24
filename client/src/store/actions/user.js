@@ -34,9 +34,9 @@ const getUserByName = (user) => ({
   user,
 });
 
-const userAuthFail = (errors) => ({
+const userAuthFail = (error) => ({
   type: USER_AUTH_FAIL,
-  errors,
+  error,
 });
 
 const userLogout = () => ({
@@ -99,7 +99,7 @@ export const signup = (credential) => async (dispatch) => {
     const { token, user } = res.data;
     dispatch(userAuth(user, token, false));
   } catch (error) {
-    console.log('signup res :>> ', error);
+    console.log('signup res error :>> ', error);
     dispatch(userAuthFail(error));
   }
 };
@@ -122,7 +122,13 @@ export const login = (credential) => async (dispatch) => {
     );
     //    dispatch(checkUserToken(user._id, token));
   } catch (error) {
-    dispatch(userAuthFail(error));
+    dispatch(
+      userAuthFail({
+        ...error,
+        message: 'This user does not exist or the password is Incorrect',
+      })
+    );
+    console.log('login res error :>> ', error);
   }
 };
 

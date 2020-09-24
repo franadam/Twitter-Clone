@@ -8,6 +8,8 @@ import FormField from '../FormFiled/FormField';
 import { login } from '../../store/actions';
 import formStyle from '../FormFiled/FormField.module.css';
 import classes from './SignIn.module.css';
+import Modal from '../../hoc/Modal/Modal';
+import validate from '../../utils/validateForm';
 
 class SignIn extends React.Component {
   state = {
@@ -73,13 +75,27 @@ class SignIn extends React.Component {
     return formularField;
   };
 
-  formFieldHandler = (element) => {
+  formFieldHandler = ({ event, id }) => {
     const newFormData = { ...this.state.formData };
-    const newElement = { ...newFormData[element.id] };
+    const newElement = { ...newFormData[id] };
 
-    newElement.value = element.event.target.value;
+    newElement.value = event.target.value;
 
-    newFormData[element.id] = newElement;
+    const element = event.target;
+
+    newElement.value = element.value;
+
+    const [valid, validationMessage] = validate(newElement);
+    newElement.valid = valid;
+    newElement.validationMessage = validationMessage;
+
+    if (element.value === '') {
+      element.classList.add(formStyle.empty);
+    } else {
+      element.classList.remove(formStyle.empty);
+    }
+
+    newFormData[id] = newElement;
 
     this.setState({
       formData: newFormData,
@@ -113,18 +129,18 @@ class SignIn extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-
-    const formData = this.state.formData;
     const dataToSubmit = {};
+    let isValid = true;
 
-    for (let key in formData) {
-      dataToSubmit[key] = formData[key].value;
+    for (let key in this.state.formData) {
+      dataToSubmit[key] = this.state.formData[key].value;
+      isValid = isValid && this.state.formData[key].valid;
     }
 
-    this.props.login(dataToSubmit);
-    this.props.history.push('/home');
-
-    //this.setState({ formError: true });
+    if (isValid) {
+      this.props.login(dataToSubmit);
+      this.props.history.push('/home');
+    }
   };
 
   // Render the session error if there are any
@@ -153,11 +169,21 @@ class SignIn extends React.Component {
       </form>
     );
 
+    if (this.props.error) {
+      console.log('signin error');
+      document.getElementById('myModal').style.display = 'block';
+    }
+
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
           <h1>Twitter</h1>
           {form}
+          <Modal>
+            {!!this.props.error ? (
+              <p className={classes.error}>{this.props.error.message}</p>
+            ) : null}
+          </Modal>
           <Link to="/signup" className={classes.link}>
             SIGN UP
           </Link>

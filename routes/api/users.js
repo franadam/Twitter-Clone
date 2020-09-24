@@ -241,7 +241,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  console.log('req.body :>> ', JSON.stringify(req.body));
+  //console.log('req.body :>> ', JSON.stringify(req.body));
   const { errors, isValid } = validateLoginInput(req.body);
 
   try {
@@ -252,6 +252,7 @@ router.post('/login', async (req, res) => {
     const password = req.body.password;
     const user = await User.findOne({ email });
     if (!user) {
+      console.log('login user :>> ', user);
       errors.email = 'This user does not exist';
       throw new Error(errors.email);
     }
@@ -281,7 +282,8 @@ router.post('/login', async (req, res) => {
       throw new Error(errors.password);
     }
   } catch (error) {
-    res.status(400).json(errors);
+    console.log('login user error :>> ', error.message);
+    res.status(404).json(error);
   }
 });
 

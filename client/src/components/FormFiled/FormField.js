@@ -18,7 +18,7 @@ const formField = ({ field, id, change, keyUp, focus, blur }) => {
 
     switch (field.element) {
       case 'input':
-        if (field.config.name === 'passssword') {
+        if (field.config.name === 'password' && keyUp && focus && blur) {
           formTemplate = (
             <>
               <input

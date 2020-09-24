@@ -25,33 +25,31 @@ class NavBar extends React.Component {
     for (i = 0; i < links.length; i++) {
       links[i].classList.remove(`${classes.active}`);
     }
-    event.target.parentElement.classList.add(`${classes.active}`);
+    event.currentTarget.classList.add(`${classes.active}`);
   };
 
   getLinks = () => {
     if (this.props.loggedIn) {
       return (
         <div className={classes.links}>
-          <Link
-            onClick={(event) => this.activateLink(event)}
-            className={`${classes.link}`}
-            to={'/home'}
-          >
-            <FaTwitter className={classes.active} size="2rem" />
+          <Link className={`${classes.link}`} to={'/home'}>
+            <FaTwitter
+              className={classes.active}
+              onClick={(event) => this.activateLink(event)}
+              size="2rem"
+            />
           </Link>
-          <Link
-            onClick={(event) => this.activateLink(event)}
-            className={classes.link}
-            to={`/users/${this.props.userID}`}
-          >
-            <FaRegUser size="2rem" />
+          <Link className={classes.link} to={`/users/${this.props.userID}`}>
+            <FaRegUser
+              size="2rem"
+              onClick={(event) => this.activateLink(event)}
+            />
           </Link>
-          <Link
-            onClick={(event) => this.activateLink(event)}
-            className={classes.link}
-            to={'/compose/tweet'}
-          >
-            <FaFeatherAlt size="2rem" />
+          <Link className={classes.link} to={'/compose/tweet'}>
+            <FaFeatherAlt
+              size="2rem"
+              onClick={(event) => this.activateLink(event)}
+            />
           </Link>
           <FaDoorOpen size="2rem" color="red" onClick={this.logoutUser} />
         </div>
