@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const path = require('path');
 
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -15,6 +16,13 @@ mongoose
 
 const app = express();
 const port = process.env.PORT;
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 const tweetsRouter = require('./routes/api/tweets');
 const usersRouter = require('./routes/api/users');
