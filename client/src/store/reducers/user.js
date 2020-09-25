@@ -5,6 +5,7 @@ import {
   USER_AUTH_FAIL,
   USER_LOGOUT,
   FETCH_USER_BY_NAME,
+  CLEAR_ERROR,
 } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
@@ -60,6 +61,10 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         user: undefined,
         error: action.error,
+      });
+    case CLEAR_ERROR:
+      return updateObject(state, {
+        error: null,
       });
     default:
       return state;

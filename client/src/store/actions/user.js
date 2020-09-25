@@ -8,6 +8,7 @@ import {
   USER_LOGOUT,
   USER_TOKEN,
   FETCH_USER_BY_NAME,
+  CLEAR_ERROR,
 } from './types';
 
 const checkUserToken = (userID, token) => ({
@@ -41,6 +42,10 @@ const userAuthFail = (error) => ({
 
 const userLogout = () => ({
   type: USER_LOGOUT,
+});
+
+export const clearError = () => ({
+  type: CLEAR_ERROR,
 });
 
 export const setAuthToken = (token) => {

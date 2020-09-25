@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { clearError } from '../../store/actions';
+
 import classes from './Modal.module.css';
 
 const Modal = (props) => {
@@ -7,11 +10,13 @@ const Modal = (props) => {
 
   const spanHandler = () => {
     modal.style.display = 'none';
+    props.clearError();
   };
 
   window.onclick = (event) => {
     if (event.target == modal) {
       modal.style.display = 'none';
+      props.clearError();
     }
   };
 
@@ -27,4 +32,10 @@ const Modal = (props) => {
   );
 };
 
-export default Modal;
+const mapStateToProps = ({ user }) => {
+  return {
+    error: user.error,
+  };
+};
+
+export default connect(mapStateToProps, { clearError })(Modal);

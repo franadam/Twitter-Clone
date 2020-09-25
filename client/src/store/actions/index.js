@@ -5,6 +5,7 @@ export {
   authCheckState,
   fetchCurrentUser,
   fetchUserByName,
+  clearError,
 } from './user';
 export {
   fetchTweets,
