@@ -2,15 +2,17 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { FaTwitter } from 'react-icons/all';
 
-import FormField from '../FormFiled/FormField';
-
-import { login } from '../../store/actions';
 import formStyle from '../FormFiled/FormField.module.css';
 import classes from './SignIn.module.css';
+
+import FormField from '../FormFiled/FormField';
 import Modal from '../../hoc/Modal/Modal';
-import validate, { showPassword } from '../../utils/validateForm';
+import validate from '../../utils/validateForm';
 import ShowPasswordField from '../FormFiled/ShowPasswordField';
+
+import { login } from '../../store/actions';
 
 class SignIn extends React.Component {
   state = {
@@ -167,7 +169,9 @@ class SignIn extends React.Component {
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
-          <h1>Twitter</h1>
+          <h1>
+            <FaTwitter size="4rem" />
+          </h1>
           {form}
           <Modal>
             {!!this.props.error ? (

@@ -15,6 +15,10 @@
   position: relative;
 }
 
+h1 svg {
+  color: rgb(0, 157, 255);
+}
+
 .link {
   color: rgb(25, 97, 143);
   text-decoration: none;
