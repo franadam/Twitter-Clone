@@ -2,7 +2,8 @@
 This is a simple application created using the MERN stack (`MongoDB`, `Express`,  `React` and  `Nodes`) to mimic basic design and functionality of the official Twitter app. 
 
 ## Demo
-[Live Demo](https://franadam-twitter-clone.herokuapp.com/)
+The app is deployed on 
+[Heroku](https://franadam-twitter-clone.herokuapp.com/)
 
 ## Feature
 
@@ -23,7 +24,19 @@ This is a simple application created using the MERN stack (`MongoDB`, `Express`,
 * multer - uploading files
 
 ## Wiki
+You can find more detail about the API in the 
 [Wiki](https://github.com/franadam/Twitter-Clone/wiki)
 
 ## Install
 `npm run install`
+
+## Previews
+
+### Home
+![Home](screenshots/twitter-clone-home.png?raw=true "Home")
+
+### Profile
+![Profile](screenshots/twitter-clone-profile.png?raw=true "Profile")
+
+### Tweet
+![Tweet](screenshots/twitter-clone-tweet.png?raw=true "Tweet")
