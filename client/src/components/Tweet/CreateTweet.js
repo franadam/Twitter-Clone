@@ -9,6 +9,8 @@ import { createNewTweet } from '../../store/actions';
 
 import classes from './CreateTweet.module.css';
 import formStyle from '../FormFiled/FormField.module.css';
+import Avatar from '../UI/Avatar/Avatar';
+import { FaImage } from 'react-icons/fa';
 
 class CreateTweet extends React.Component {
   state = {
@@ -58,20 +60,25 @@ class CreateTweet extends React.Component {
 
   render() {
     const form = (
-      <form className={formStyle.form} onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit}>
         <input
           type="textarea"
           value={this.state.text}
           onChange={(event) => this.changeHandler(event)}
           placeholder="What's happening ?"
         />
-        <button
-          className={formStyle.btn}
-          onClick={(event) => this.handleSubmit(event)}
-          type="submit"
-        >
-          TWEET
-        </button>
+        <div className={classes.btns_container}>
+          <div>
+            <div className={classes.btns_picture}>
+              <FaImage size="2rem" />
+            </div>
+          </div>
+          <div className={classes.btn}>
+            <button onClick={(event) => this.handleSubmit(event)} type="submit">
+              Tweet
+            </button>
+          </div>
+        </div>
         {this.state.error ? this.renderError() : null}
       </form>
     );
@@ -81,14 +88,22 @@ class CreateTweet extends React.Component {
       <div className={classes.main}>
         <div className={classes.wrapper}>
           {tweet ? (
-            <TweetBox
-              id={tweet._id}
-              userID={tweet.user}
-              text={tweet.text}
-              date={tweet.updatedAt || ''}
-            />
+            <>
+              <TweetBox
+                id={tweet._id}
+                userID={tweet.user}
+                text={tweet.text}
+                date={tweet.updatedAt || ''}
+              />
+              Reply to @{tweet.user}
+            </>
           ) : null}
-          {form}
+          <div className={classes.compose}>
+            <Link to={`/users/${this.props.userID}`}>
+              <Avatar avatar={this.props.userID} userID={this.props.userID} />
+            </Link>
+            <div className={classes.form}>{form}</div>
+          </div>
           {newTweet._id ? (
             <TweetBox
               key={newTweet._id}

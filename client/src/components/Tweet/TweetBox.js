@@ -175,7 +175,11 @@ class TweetBox extends Component {
                 onClick={(event) => this.addComment(event)}
               >
                 <div className={classes.icon}>
-                  {isCommented ? <FaComment /> : <FaRegComment />}
+                  {isCommented ? (
+                    <FaComment className={classes.commented} />
+                  ) : (
+                    <FaRegComment />
+                  )}
                 </div>
 
                 <div className={classes.count}>{comments.length}</div>
@@ -185,7 +189,11 @@ class TweetBox extends Component {
                 onClick={(event) => this.likeHandler(event)}
               >
                 <div className={classes.icon}>
-                  {isLiked ? <FaHeart /> : <FaRegHeart />}
+                  {isLiked ? (
+                    <FaHeart className={classes.liked} />
+                  ) : (
+                    <FaRegHeart />
+                  )}
                 </div>
                 <div className={classes.count}>{likes.length}</div>
               </div>

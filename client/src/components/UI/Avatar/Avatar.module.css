@@ -1,0 +1,16 @@
+.avatar {
+  display: flex;
+  bottom: -3rem;
+  height: 6rem;
+  border-radius: 50%;
+  border: 5px solid #15202b;
+  background-color: aliceblue;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  color: #15202b;
+}
+
+.avatar img {
+  height: 100%;
+}

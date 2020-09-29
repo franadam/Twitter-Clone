@@ -52,9 +52,9 @@ class Profile extends React.Component {
     const likes = this.props.user.likes;
 
     const logo = user.avatar ? (
-      <a className={classes.avatar} href={`/api/users/${user.username}/avatar`}>
+      <div className={classes.avatar} href={`/${user.username}/avatar`}>
         <img src={`/api/users/${user.username}/avatar`} alt="logo" />
-      </a>
+      </div>
     ) : (
       <FaUser className={classes.avatar} size="5rem" />
     );

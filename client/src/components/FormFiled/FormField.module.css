@@ -12,7 +12,7 @@
   border-radius: 40px;
   outline: none;
   border:none;
-  width: 100%;
+  width: fit-content;
   font-size: 1.2rem;
   font-weight: bold;
   padding: 1rem;
@@ -47,7 +47,7 @@
   width: 100%;
   border: none;
   border-radius: 5px;
-  background-color: rgb(42, 63, 83);
+  background-color: rgb(21, 32, 43);
   outline: none;
   font-size: 1.3rem;
 }

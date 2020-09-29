@@ -5,7 +5,7 @@
 }
 
 .header {
-  text-align: center;
+  padding: .5rem;
 }
 
 .avatar {
@@ -15,7 +15,7 @@
 }
 
 .compose {
-  display: flex;
-  padding: 1rem;
-  align-self: center;
+  display: block;
+  border-top: 1px solid rgba(240, 248, 255, 0.6) ;
+  border-bottom: 5px solid rgba(240, 248, 255, 0.6) 
 }

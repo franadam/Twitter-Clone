@@ -101,12 +101,16 @@ z-index: 5;
   background-color:  rgba(0, 157, 255, 0.3);
   border-radius: 50%;
 }
-
+.commented {
+  color: rgb(0, 162, 255);
+}
 .like:hover,
 .like:hover svg {
   color: red;
 }
-
+.liked {
+  color: red;
+}
 .like:hover  .icon{
   background-color:  rgba(255, 0, 0, 0.3);
   border-radius: 50%;

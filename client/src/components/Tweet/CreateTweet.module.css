@@ -1,21 +1,73 @@
 .main {
   color: aliceblue;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  align-items: center;;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 1rem;
   position: relative;
+  width: 100%;
 }
 
 .link {
   color: rgb(25, 97, 143);
   text-decoration: none;
   font-weight: bold;
+}
+
+.btns_container {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid aliceblue;
+}
+
+.btns_picture {
+  display: flex;
+  padding: 1rem;
+  cursor: pointer;
+}
+.btns_picture:hover  {
+  background-color:  rgba(0, 157, 255, 0.3);
+  border-radius: 50%;
+}
+.btns_picture:hover svg {
+  color:  rgb(0, 157, 255);
+}
+
+
+.btns_picture svg {
+  color: rgb(25, 97, 143);
+}
+
+.btns_submit {
+  display: flex;
+}
+
+.compose {
+  display: flex;
+}
+
+.form {
+  flex-grow: 1;
+}
+
+.btn {
+  padding: 1rem;
+}
+.btn button {
+  background-color: rgb(25, 97, 143);
+  color: aliceblue;
+  border-radius: 40px;
+  outline: none;
+  border:none;
+  width: fit-content;
+  padding: .8rem;
+  cursor: pointer;
+}
+
+.btn button:hover {
+  background-color: rgb(0, 157, 255);
 }
