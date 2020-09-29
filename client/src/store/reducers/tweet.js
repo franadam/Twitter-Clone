@@ -3,6 +3,7 @@ import {
   FETCH_TWEETS,
   FETCH_USER_TWEETS,
   CREATE_NEW_TWEET,
+  DELETE_TWEET,
   FETCH_TWEET_COMMENTS,
   FETCH_TWEET_LIKES,
   LIKE_A_TWEET,
@@ -28,6 +29,11 @@ const unlikeATweet = (state, action) => {
   return updateObject(state, { likes });
 };
 
+const deleteTweet = (state, action) => {
+  const all = state.all.filter((tweet) => tweet._id !== action.tweet._id);
+  return updateObject(state, { all });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_TWEETS:
@@ -42,6 +48,8 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         new: action.tweet,
       });
+    case DELETE_TWEET:
+      return deleteTweet(state, action);
     case FETCH_TWEET_COMMENTS:
       return updateObject(state, {
         comments: action.comments,

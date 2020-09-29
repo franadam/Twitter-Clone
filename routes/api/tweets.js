@@ -131,8 +131,11 @@ router.delete(
         _id: req.params.id,
         user: req.user.id,
       });
+
+      console.log('delete tweet :>> ', tweet);
+      await Like.deleteMany({ tweet: tweet._id });
+      await Tweet.deleteMany({ tweet: tweet._id });
       await tweet.deleteOne();
-      //console.log('delete tweet :>> ', tweet);
       if (!tweet) {
         return res.status(404).send();
       }

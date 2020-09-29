@@ -5,6 +5,7 @@ import {
   FETCH_USER_TWEETS,
   CREATE_NEW_TWEET,
   FETCH_TWEET_COMMENTS,
+  DELETE_TWEET,
   FETCH_TWEET_LIKES,
   LIKE_A_TWEET,
   UNLIKE_A_TWEET,
@@ -36,6 +37,11 @@ const deleteLike = (like) => ({
   like,
 });
 
+const delTweet = (tweet) => ({
+  type: DELETE_TWEET,
+  tweet,
+});
+
 const getUserTweets = (tweets) => ({
   type: FETCH_USER_TWEETS,
   tweets,
@@ -45,6 +51,17 @@ const postNewTweet = (tweet) => ({
   type: CREATE_NEW_TWEET,
   tweet,
 });
+
+export const deleteTweet = (id) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem('jwtToken');
+    setAuthToken(token);
+    const deletedTweet = await axios.delete(`/api/tweets/${id}`);
+    dispatch(delTweet(deletedTweet));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const fetchTweets = () => async (dispatch) => {
   try {
@@ -115,7 +132,7 @@ export const unlikeATweet = (id) => async (dispatch) => {
     const token = localStorage.getItem('jwtToken');
     setAuthToken(token);
     const like = await axios.delete(`/api/tweets/${id}/likes`);
-    dispatch(postLike(like.data));
+    dispatch(deleteLike(like.data));
   } catch (error) {
     console.log(error);
   }

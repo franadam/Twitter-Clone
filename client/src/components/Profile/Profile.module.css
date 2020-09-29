@@ -38,11 +38,28 @@
   padding: .5rem;
 }
 
-.info h1 {
+.info__fullname {
   color:aliceblue ;
   text-transform: capitalize;
+  margin-bottom: 0;
 }
 
+.info__username {
+  margin-top: 0;
+}
+
+.info__bio {
+  color: aliceblue;
+}
+
+.place {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.place p {
+  padding: 0 .5rem;
+}
 .tabs {
   display: flex;
   justify-content: space-evenly;

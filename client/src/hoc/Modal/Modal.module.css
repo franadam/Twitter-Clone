@@ -11,19 +11,21 @@
   background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
 }
 
-.main p {
-  color: red;
-}
 /* Modal Content/Box */
 .content {
-  background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
+  background-color: rgb(17, 44, 71);
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
   border-radius: 5px;
 }
 
+.children {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
 /* The Close Button */
 .close {
   color: #aaa;

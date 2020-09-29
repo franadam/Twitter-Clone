@@ -106,15 +106,42 @@ z-index: 5;
 .like:hover svg {
   color: red;
 }
+
 .like:hover  .icon{
   background-color:  rgba(255, 0, 0, 0.3);
   border-radius: 50%;
 }
+
 .count {
   padding: .5rem;
 }
+
+.delete:hover,
+.delete:hover svg {
+  color: red;
+}
+
+.delete:hover  .icon{
+  background-color:  rgba(255, 0, 0, 0.3);
+  border-radius: 50%;
+}
+
 .link {
   color: rgb(25, 97, 143);
   text-decoration: none;
   font-weight: bold;
+}
+
+.btn_danger {
+  padding: 1rem;
+  border: none;
+  border-radius: 20px;
+  color: aliceblue;
+  background-color: brown;
+  align-self: flex-end;
+}
+
+.btn_danger:hover {
+  background-color: rgb(255, 128, 128);
+  color: blue;
 }

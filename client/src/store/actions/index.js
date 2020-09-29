@@ -11,6 +11,7 @@ export {
   fetchTweets,
   fetchUserTweets,
   createNewTweet,
+  deleteTweet,
   fetchTweetComments,
   fetchTweetLikes,
   likeATweet,

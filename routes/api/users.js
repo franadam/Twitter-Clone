@@ -68,7 +68,7 @@ router.get('/:username', async (req, res) => {
     } else {
       user = users.find((u) => u.username === username);
     }
-    console.log('user', user);
+    //console.log('user', user);
     res.send(user);
   } catch (error) {
     res.status(500).send(error);

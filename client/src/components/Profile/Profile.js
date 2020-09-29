@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import dateFormat from 'dateformat';
-import { FaCalendarAlt, FaUser } from 'react-icons/all';
+import { FaCalendarAlt, FaUser, FaMapMarkerAlt, FaLink } from 'react-icons/all';
 import axios from 'axios';
 
 import {
@@ -79,11 +79,20 @@ class Profile extends React.Component {
             {logo}
           </div>
           <div className={classes.info}>
-            <h1>{user.fullname}</h1>
-            <h3>{user.username}</h3>
-            <h4>
-              <FaCalendarAlt /> Joined {dateFormat(joinedAt, 'mmmm yyyy')}
-            </h4>
+            <h1 className={classes.info__fullname}>{user.fullname}</h1>
+            <p className={classes.info__username}>@{user.username}</p>
+            <p className={classes.info__bio}>{'user.bio'}</p>
+            <div className={classes.place}>
+              <p>
+                <FaMapMarkerAlt /> {'user.place'}
+              </p>
+              <p>
+                <FaLink /> {'user.website'}
+              </p>
+              <p>
+                <FaCalendarAlt /> Joined {dateFormat(joinedAt, 'mmmm yyyy')}
+              </p>
+            </div>
           </div>
         </div>
         <div className={classes.tabs}>

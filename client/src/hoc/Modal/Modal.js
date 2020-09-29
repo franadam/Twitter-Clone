@@ -11,12 +11,14 @@ const Modal = (props) => {
   const spanHandler = () => {
     modal.style.display = 'none';
     props.clearError();
+    if (props.actions) props.actions();
   };
 
   window.onclick = (event) => {
-    if (event.target == modal) {
+    if (event.target === modal) {
       modal.style.display = 'none';
       props.clearError();
+      if (props.actions) props.actions();
     }
   };
 
@@ -26,7 +28,7 @@ const Modal = (props) => {
         <span className={classes.close} onClick={() => spanHandler()}>
           &times;
         </span>
-        <div>{props.children}</div>
+        <div className={classes.children}>{props.children}</div>
       </div>
     </div>
   );
