@@ -18,6 +18,11 @@
   font-weight: bold;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
 .btns_container {
   display: flex;
   justify-content: space-between;
@@ -45,6 +50,40 @@
 .btns_submit {
   display: flex;
 }
+
+.picture__input {
+  width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    z-index: -1;}
+
+    .media {
+      align-self: center;
+      position: relative;
+      max-width: 300px;
+      padding: .5rem;
+    }
+    .media img {
+      border-radius: 10px;
+      width: 100%;
+    }
+
+    .close {
+      position: absolute;
+      top: -1rem;
+      right: 1rem;
+      color: #aaa;
+      float: right;
+      font-size: 4rem;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
 
 .compose {
   display: flex;

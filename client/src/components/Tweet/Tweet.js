@@ -48,6 +48,7 @@ class Tweet extends React.Component {
                 id={tweet._id}
                 userID={tweet.user}
                 text={tweet.text}
+                media={tweet.media}
                 date={tweet.updatedAt || ''}
               />
             ) : null}

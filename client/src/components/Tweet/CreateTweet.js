@@ -18,6 +18,7 @@ class CreateTweet extends React.Component {
     tweetID: '',
     text: '',
     newTweet: {},
+    media: '',
   };
 
   componentDidMount = () => {
@@ -41,15 +42,39 @@ class CreateTweet extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+
     const tweet = {
-      tweet: this.state.tweetID || null,
+      media: this.state.media || null,
+      tweet: this.state.tweetID,
       text: this.state.text,
       user: this.props.userID,
     };
 
-    this.props.onCreateNewTweet(tweet);
+    for (let key in tweet) {
+      console.log('key', key, tweet[key]);
+      formData.append(key, tweet[key]);
+    }
+
+    this.props.onCreateNewTweet(formData);
     this.setState({ text: '', newTweet: tweet });
     this.props.history.goBack();
+  };
+
+  onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const media = event.target.files[0];
+      this.setState({
+        media,
+      });
+    }
+  };
+
+  deleteMedia = (e) => {
+    e.stopPropagation();
+    this.setState({
+      media: '',
+    });
   };
 
   changeHandler = (e) => {
@@ -59,18 +84,44 @@ class CreateTweet extends React.Component {
   };
 
   render() {
+    const { tweet, newTweet, media } = this.state;
+
     const form = (
-      <form onSubmit={this.handleSubmit}>
+      <form className={classes.form} onSubmit={this.handleSubmit}>
         <input
           type="textarea"
           value={this.state.text}
           onChange={(event) => this.changeHandler(event)}
           placeholder="What's happening ?"
         />
+        {media ? (
+          <div
+            className={classes.media}
+            onClick={(event) => this.showImage(event)}
+          >
+            <div className={classes.close}>
+              <span onClick={(event) => this.deleteMedia(event)}>&times;</span>
+            </div>
+            <img src={URL.createObjectURL(media)} alt="media" />
+          </div>
+        ) : null}
         <div className={classes.btns_container}>
           <div>
-            <div className={classes.btns_picture}>
-              <FaImage size="2rem" />
+            <div>
+              <div
+                className={classes.btns_picture}
+                role="button"
+                onClick={() => document.getElementById('picture_input').click()}
+              >
+                <FaImage size="2rem" />
+              </div>
+              <input
+                className={classes.picture__input}
+                type="file"
+                id="picture_input"
+                name="picture_input"
+                onChange={(event) => this.onImageChange(event)}
+              />
             </div>
           </div>
           <div className={classes.btn}>
@@ -82,7 +133,6 @@ class CreateTweet extends React.Component {
         {this.state.error ? this.renderError() : null}
       </form>
     );
-    const { tweet, newTweet } = this.state;
 
     return (
       <div className={classes.main}>

@@ -16,6 +16,7 @@ const TweetsList = ({ tweets, message }) => {
             id={tweet._id}
             text={tweet.text}
             userID={tweet.user}
+            media={tweet.media}
             date={tweet.updatedAt || ''}
           />
         ))}

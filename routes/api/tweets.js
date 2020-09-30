@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const sharp = require('sharp');
 const passport = require('passport');
 
 const User = require('../../models/User');
 const Tweet = require('../../models/Tweet');
 const Like = require('../../models/Like');
 const validateTweetInput = require('../../validation/tweets');
+const uploadImage = require('../../services/loader');
 
 router.get('/', async (req, res) => {
   try {
@@ -70,23 +72,61 @@ router.get('/:id/comments', async (req, res) => {
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
+  uploadImage.single('media'),
   async (req, res) => {
-    const { errors, isValid } = validateTweetInput(req.body);
-    console.log('errors, isValid :>> ', errors, isValid);
-    if (!isValid) {
-      return res.status(400).json(errors);
+    try {
+      console.log('req body:>> ', JSON.stringify(req.body));
+      console.log('req headers:>> ', req.headers);
+      const { errors, isValid } = validateTweetInput(req.body);
+      console.log('errors, isValid :>> ', errors, isValid);
+
+      if (!isValid) {
+        console.log('isValid :>> ', isValid);
+        throw new Error(JSON.stringify(errors));
+      }
+
+      let buffer = null;
+      if (req.file) {
+        console.log('req.file :>> ', req.file);
+        buffer = await sharp(req.file.buffer)
+          .resize({ width: 300, height: 300 })
+          .png()
+          .toBuffer();
+      }
+
+      const newTweet = new Tweet({
+        tweet: req.body.tweet || null,
+        media: buffer,
+        text: req.body.text,
+        user: req.user.id,
+      });
+
+      await newTweet.save();
+      res.json(newTweet);
+    } catch (error) {
+      console.log('error :>> ', error);
     }
-
-    const newTweet = new Tweet({
-      tweet: req.body.tweet || null,
-      text: req.body.text,
-      user: req.user.id,
-    });
-
-    await newTweet.save();
-    res.json(newTweet);
   }
 );
+
+router.get('/:id/media', async (req, res) => {
+  const _id = req.params.id;
+
+  console.log('_id :>> ', _id);
+
+  try {
+    const tweet = await Tweet.findById(_id);
+
+    if (!tweet || !tweet.media) {
+      throw new Error();
+    }
+
+    res.set('Content-Type', 'image/png');
+    res.send(tweet.media);
+  } catch (error) {
+    res.status(404).send();
+  }
+});
 
 router.patch(
   '/:id',

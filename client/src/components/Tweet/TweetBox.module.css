@@ -64,6 +64,12 @@ font-size: .8rem;
   padding: .5rem;
 }
 
+.media {
+  align-self: center;
+}
+.media img {
+  border-radius: 10px;
+}
 .activity {
   display: flex;
   justify-content: space-evenly;

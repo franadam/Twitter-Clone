@@ -38,7 +38,7 @@ class TweetBox extends Component {
     this.getTweetLikes();
     this.getTweetComments();
     this.getUserById();
-    console.log('this.props :>> ', this.props);
+    //console.log('this.props :>> ', this.props);
   };
 
   getTweetLikes = async () => {
@@ -55,7 +55,7 @@ class TweetBox extends Component {
       });
       this.setState({ isLiked: like.length !== 0 });
     } catch (error) {
-      console.log('error :>> ', error);
+      //console.log('error :>> ', error);
     }
   };
 
@@ -90,19 +90,26 @@ class TweetBox extends Component {
     //this.props.history.push('/compose/tweet/${tweet}');
     this.props.history.push(`/compose/tweet`, { tweet });
     //this.props.match.params = { tweet };
-    //console.log(this.props.match.params);
+    ////console.log(this.props.match.params);
   };
 
   deleteTweet = (event) => {
     event.stopPropagation();
-    console.log('deleteTweet');
+    //console.log('deleteTweet');
     document.getElementById('myModal').style.display = 'block';
     this.props.onDeleteTweet(this.props.id);
   };
 
+  showImage = (event) => {
+    event.stopPropagation();
+    //console.log('showImage');
+    document.getElementById('myModal').style.display = 'block';
+    //this.props.history.push(`/api/tweets/${this.props.id}/media`);
+  };
+
   likeHandler = (event) => {
     event.stopPropagation();
-    console.log('likeHandler');
+    //console.log('likeHandler');
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
     } else {
@@ -119,7 +126,7 @@ class TweetBox extends Component {
 
   render() {
     const { isCommented, isLiked, likes, user, comments } = this.state;
-    const { text, date, myID } = this.props;
+    const { text, date, media, myID } = this.props;
 
     if (!likes || !user) {
       return <Spinner />;
@@ -141,6 +148,12 @@ class TweetBox extends Component {
       return `${hour}h`;
     };
 
+    const imageForm = (
+      <form className="">
+        <input type="file" id="file-input" name="ImageStyle" />
+        <button>SEND</button>
+      </form>
+    );
     return (
       <>
         <Modal actions={() => this.props.history.go(0)}>
@@ -168,7 +181,14 @@ class TweetBox extends Component {
               </time>
             </div>
             <div className={classes.text}>{text}</div>
-            <div className={classes.image}></div>
+            {media ? (
+              <div
+                className={classes.media}
+                onClick={(event) => this.showImage(event)}
+              >
+                <img src={`/api/tweets/${this.props.id}/media`} alt="media" />
+              </div>
+            ) : null}
             <div className={classes.activity}>
               <div
                 className={classes.comment}

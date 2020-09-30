@@ -87,7 +87,13 @@ export const createNewTweet = (data) => async (dispatch) => {
   try {
     const token = localStorage.getItem('jwtToken');
     setAuthToken(token);
-    const tweet = await axios.post('/api/tweets/', data);
+    console.log('action data :>> ', data);
+    const tweet = await axios.post('/api/tweets/', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log('action tweet :>> ', tweet);
     dispatch(postNewTweet(tweet.data));
   } catch (error) {
     console.log(error);

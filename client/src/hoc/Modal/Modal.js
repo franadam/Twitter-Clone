@@ -5,7 +5,7 @@ import { clearError } from '../../store/actions';
 import classes from './Modal.module.css';
 
 const Modal = (props) => {
-  console.log('Modal props :>> ', props);
+  // console.log('Modal props :>> ', props);
   const modal = document.getElementById('myModal');
 
   const spanHandler = () => {
