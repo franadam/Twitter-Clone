@@ -1,19 +1,20 @@
-export { logout, signup, login, authCheckState, clearAuthError } from './auth';
-
 export {
-  fetchCurrentUser,
-  fetchUserByName,
-  fetchUsers,
-  clearUserError,
-} from './user';
+  errorAuth,
+  errorUsers,
+  errorTweets,
+  errorLikes,
+  errorComments,
+  clearError,
+} from './error';
+
+export { logout, signup, login, authCheckState, setAuthToken } from './auth';
+
+export { fetchCurrentUser, fetchUserByName, fetchUsers } from './user';
 
 export {
   fetchTweets,
-  fetchUserTweets,
   createNewTweet,
   deleteTweet,
-  fetchTweetComments,
-  fetchTweetLikes,
   likeATweet,
   unlikeATweet,
 } from './tweet';

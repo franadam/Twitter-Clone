@@ -190,9 +190,9 @@ class SignIn extends React.Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, error }) => {
   return {
-    error: auth.error,
+    error: error.auth,
     token: auth.token,
   };
 };

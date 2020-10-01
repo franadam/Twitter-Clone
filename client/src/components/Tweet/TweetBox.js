@@ -15,7 +15,6 @@ import Spinner from '../Spinner/Spinner';
 import Modal from '../../hoc/Modal/Modal';
 
 import {
-  fetchTweetLikes,
   likeATweet,
   unlikeATweet,
   createNewTweet,
@@ -23,33 +22,31 @@ import {
 } from '../../store/actions';
 
 import axios from 'axios';
+import Avatar from '../UI/Avatar/Avatar';
 
 class TweetBox extends Component {
   state = {
-    likes: null,
     user: null,
     isLiked: false,
     isCommented: false,
-    comments: [],
     isLoading: true,
   };
 
   componentDidMount = () => {
-    this.getTweetLikes();
-    this.getTweetComments();
+    //this.getTweetLikes();
+    //this.getTweetComments();
     this.getUserById();
     //console.log('this.props :>> ', this.props);
   };
 
   getTweetLikes = async () => {
     try {
-      const res = await axios.get(`/api/tweets/${this.props.id}/likes`);
-      const likes = res.data;
-      this.setState({ likes });
+      const { likes } = this.props;
       const like = likes.filter(
         (like) => like.user === this.props.myID && like.tweet === this.props.id
       );
 
+      console.log('Tweet Box like before click :>> ', like, likes);
       this.setState({
         isLoading: false,
       });
@@ -112,33 +109,41 @@ class TweetBox extends Component {
 
   likeHandler = (event) => {
     event.stopPropagation();
+    const { likes } = this.props;
+    const like = likes.find(
+      (like) => like.user === this.props.myID && like.tweet === this.props.id
+    );
     //console.log('likeHandler');
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
     } else {
-      if (this.state.isLiked) {
+      if (like) {
         this.props.onUnlikeATweet(this.props.id);
-        //this.setState({ isLiked: false });
+        this.setState({ isLiked: false });
+        console.log('Tweet Box like after click :>> ', likes);
       } else {
-        //this.setState({ isLiked: true });
         this.props.onLikeATweet(this.props.id);
+        this.setState({ isLiked: true });
+        console.log('Tweet Box like after click :>> ', likes);
       }
-      this.getTweetLikes();
+      //this.getTweetLikes();
     }
   };
 
   render() {
-    const { isCommented, isLiked, likes, user, comments } = this.state;
-    const { text, date, media, myID } = this.props;
-
+    const { isCommented, isLiked, user } = this.state;
+    const { text, date, media, myID, likes, comments } = this.props;
     if (!likes || !user) {
       return <Spinner />;
     }
+    const like = likes.find(
+      (like) => like.user === this.props.myID && like.tweet === this.props.id
+    );
     const logo = user.avatar ? (
-      <img
-        src={`/api/users/${this.props.userID}/avatar`}
-        alt="logo"
-        onClick={(event) => event.stopPropagation()}
+      <Avatar
+        avatar={this.props.userID}
+        size="4rem"
+        userID={this.props.userID}
       />
     ) : (
       <FaUser color="#f0f8ff" size="2rem" />
@@ -212,7 +217,7 @@ class TweetBox extends Component {
                 onClick={(event) => this.likeHandler(event)}
               >
                 <div className={classes.icon}>
-                  {isLiked ? (
+                  {isLiked || like ? (
                     <FaHeart className={classes.liked} />
                   ) : (
                     <FaRegHeart />
@@ -240,7 +245,6 @@ class TweetBox extends Component {
 
 const mapStateToProps = ({ tweet, user, auth }) => {
   return {
-    likes: tweet.likes,
     myID: auth.userID,
     users: user.users,
     isAuthenticated: !!auth.token,
@@ -249,7 +253,6 @@ const mapStateToProps = ({ tweet, user, auth }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchTweetLikes: (id) => dispatch(fetchTweetLikes(id)),
     onCreateNewTweet: (data) => dispatch(createNewTweet(data)),
     onLikeATweet: (id) => dispatch(likeATweet(id)),
     onUnlikeATweet: (id) => dispatch(unlikeATweet(id)),

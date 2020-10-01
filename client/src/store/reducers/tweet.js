@@ -11,38 +11,53 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  all: [],
-  user: [],
-  comments: [],
+  tweets: [],
   new: undefined,
-  likes: [],
+};
+
+const sortByCreatedAt = (tweets) => {
+  tweets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  return tweets;
 };
 
 const likeATweet = (state, action) => {
-  const likes = state.likes.slice();
+  const tweet = state.tweets.find((tweet) => tweet._id === action.like.tweet);
+  const likes = tweet.likes.slice();
   likes.push(action.like);
-  return updateObject(state, { likes });
+  const newTweet = updateObject(tweet, { likes });
+  const tweets = state.tweets.filter(
+    (tweet) => tweet._id !== action.like.tweet
+  );
+  console.log('liked', likes);
+  tweets.push(newTweet);
+  sortByCreatedAt(tweets);
+  return updateObject(state, { tweets });
 };
 
 const unlikeATweet = (state, action) => {
-  const likes = state.likes.filter((l) => l._id !== action.like._id);
-  return updateObject(state, { likes });
+  const tweet = state.tweets.find((tweet) => tweet._id === action.like.tweet);
+  const likes = tweet.likes.filter((l) => l._id !== action.like._id);
+  console.log('unliked', likes);
+  const newTweet = updateObject(tweet, { likes });
+  const tweets = state.tweets.filter(
+    (tweet) => tweet._id !== action.like.tweet
+  );
+  console.log('liked', likes);
+  tweets.push(newTweet);
+  sortByCreatedAt(tweets);
+  return updateObject(state, { tweets });
 };
 
 const deleteTweet = (state, action) => {
-  const all = state.all.filter((tweet) => tweet._id !== action.tweet._id);
-  return updateObject(state, { all });
+  const tweets = state.tweets.filter((tweet) => tweet._id !== action.tweet._id);
+  return updateObject(state, { tweets });
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_TWEETS:
       return updateObject(state, {
-        all: action.tweets,
-      });
-    case FETCH_USER_TWEETS:
-      return updateObject(state, {
-        user: action.tweets,
+        tweets: action.tweets,
       });
     case CREATE_NEW_TWEET:
       return updateObject(state, {
@@ -50,14 +65,6 @@ const reducer = (state = initialState, action) => {
       });
     case DELETE_TWEET:
       return deleteTweet(state, action);
-    case FETCH_TWEET_COMMENTS:
-      return updateObject(state, {
-        comments: action.comments,
-      });
-    case FETCH_TWEET_LIKES:
-      return updateObject(state, {
-        likes: action.likes,
-      });
     case LIKE_A_TWEET:
       return likeATweet(state, action);
     case UNLIKE_A_TWEET:

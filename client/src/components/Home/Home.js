@@ -46,7 +46,7 @@ class Tweet extends React.Component {
 
 const mapStateToProps = ({ tweet, user, auth }) => {
   return {
-    tweets: tweet.all,
+    tweets: tweet.tweets,
     user: user.user,
     users: user.users,
     userID: auth.userID,

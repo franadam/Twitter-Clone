@@ -206,7 +206,7 @@ router.post(
       });
       console.log('like :>> ', like);
       if (like) {
-        return res.status(401).send('You already like this tweet');
+        throw new Error('You already like this tweet');
       } else {
         const newLike = new Like({
           tweet: req.params.id,
@@ -218,7 +218,7 @@ router.post(
         res.send(newLike);
       }
     } catch (error) {
-      res.status(500).send();
+      res.status(500).send(error);
     }
   }
 );

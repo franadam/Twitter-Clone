@@ -25,8 +25,9 @@ class CreateTweet extends React.Component {
     const { state } = this.props.location;
     if (state) {
       const { tweet: tweetID } = state;
-      this.setState({ tweetID });
-      this.getTweet(tweetID);
+      const tweet = this.props.tweets.find((tweet) => tweet._id === tweetID);
+      this.setState({ tweetID, tweet });
+      //this.getTweet(tweetID);
     }
   };
 
@@ -85,6 +86,9 @@ class CreateTweet extends React.Component {
 
   render() {
     const { tweet, newTweet, media } = this.state;
+    const user = tweet
+      ? this.props.users.find((user) => user._id === tweet.user)
+      : {};
 
     const form = (
       <form className={classes.form} onSubmit={this.handleSubmit}>
@@ -142,15 +146,25 @@ class CreateTweet extends React.Component {
               <TweetBox
                 id={tweet._id}
                 userID={tweet.user}
+                media={tweet.media}
                 text={tweet.text}
                 date={tweet.updatedAt || ''}
+                likes={tweet.likes || []}
+                comments={tweet.comments || []}
               />
-              Reply to @{tweet.user}
+              <div className={classes.reply}>
+                Reply to
+                <Link to={`users/${user.username}`}> @{user.username}</Link>
+              </div>
             </>
           ) : null}
           <div className={classes.compose}>
             <Link to={`/users/${this.props.userID}`}>
-              <Avatar avatar={this.props.userID} userID={this.props.userID} />
+              <Avatar
+                avatar={this.props.userID}
+                size="4rem"
+                userID={this.props.userID}
+              />
             </Link>
             <div className={classes.form}>{form}</div>
           </div>
@@ -159,8 +173,11 @@ class CreateTweet extends React.Component {
               key={newTweet._id}
               id={newTweet._id}
               userID={newTweet.user}
+              media={newTweet.media || ''}
               text={newTweet.text}
               date={newTweet.updatedAt || ''}
+              likes={newTweet.likes || []}
+              comments={newTweet.comments || []}
             />
           ) : null}
         </div>
@@ -169,10 +186,13 @@ class CreateTweet extends React.Component {
   }
 }
 
-const mapStateToProps = ({ tweet, auth, user }) => {
+const mapStateToProps = ({ tweet, auth, user, error }) => {
   return {
     userID: auth.userID,
+    tweets: tweet.tweets,
     newTweet: tweet.new,
+    users: user.users,
+    error: error.tweet,
   };
 };
 

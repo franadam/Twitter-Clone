@@ -10,7 +10,8 @@ import {
   LIKE_A_TWEET,
   UNLIKE_A_TWEET,
 } from './types';
-import { setAuthToken } from './userold';
+
+import { setAuthToken, errorTweets, errorLikes, errorComments } from './';
 
 const getTweets = (tweets) => ({
   type: FETCH_TWEETS,
@@ -68,6 +69,7 @@ export const fetchTweets = () => async (dispatch) => {
     const tweets = await axios.get('/api/tweets');
     dispatch(getTweets(tweets.data));
   } catch (error) {
+    dispatch(errorTweets(error));
     console.log(error);
   }
 };
@@ -79,6 +81,7 @@ export const fetchUserTweets = (username) => async (dispatch) => {
     const tweets = await axios.get(`/api/tweets/user/${username}`);
     dispatch(getUserTweets(tweets.data));
   } catch (error) {
+    dispatch(errorTweets(error));
     console.log(error);
   }
 };
@@ -96,6 +99,7 @@ export const createNewTweet = (data) => async (dispatch) => {
     console.log('action tweet :>> ', tweet);
     dispatch(postNewTweet(tweet.data));
   } catch (error) {
+    dispatch(errorTweets(error));
     console.log(error);
   }
 };
@@ -107,6 +111,7 @@ export const fetchTweetComments = (id) => async (dispatch) => {
     const comments = await axios.get(`/api/tweets/${id}/comments`);
     dispatch(getTweetComments(comments.data));
   } catch (error) {
+    dispatch(errorComments(error));
     console.log(error);
   }
 };
@@ -118,6 +123,7 @@ export const fetchTweetLikes = (id) => async (dispatch) => {
     const likes = await axios.get(`/api/tweets/${id}/likes`);
     dispatch(getTweetLikes(likes.data));
   } catch (error) {
+    dispatch(errorLikes(error));
     console.log(error);
   }
 };
@@ -127,8 +133,10 @@ export const likeATweet = (id) => async (dispatch) => {
     const token = localStorage.getItem('jwtToken');
     setAuthToken(token);
     const like = await axios.post(`/api/tweets/${id}/likes`);
+    console.log('token :>> ', like);
     dispatch(postLike(like.data));
   } catch (error) {
+    dispatch(errorLikes(error));
     console.log(error);
   }
 };
@@ -140,6 +148,7 @@ export const unlikeATweet = (id) => async (dispatch) => {
     const like = await axios.delete(`/api/tweets/${id}/likes`);
     dispatch(deleteLike(like.data));
   } catch (error) {
+    dispatch(errorLikes(error));
     console.log(error);
   }
 };

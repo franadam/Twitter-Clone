@@ -10,7 +10,7 @@ import classes from './Tweet.module.css';
 
 class Tweet extends React.Component {
   state = {
-    tweets: [],
+    tweetID: '',
   };
 
   componentDidMount() {
@@ -19,7 +19,7 @@ class Tweet extends React.Component {
     const { tweetID } = this.props.match.params;
     if (tweetID) {
       this.setState({ tweetID });
-      this.getTweet(tweetID);
+      //this.getTweet(tweetID);
     }
   }
 
@@ -35,7 +35,10 @@ class Tweet extends React.Component {
   };
 
   render() {
-    const { tweet } = this.state;
+    //    const { tweetID } = this.props.match.params;
+
+    const tweet = this.props.tweets.find((tw) => tw._id === this.state.tweetID);
+
     if (!tweet) return null;
     const tweets = this.props.tweets.filter((tw) => tw.tweet === tweet._id);
 
@@ -50,6 +53,8 @@ class Tweet extends React.Component {
                 text={tweet.text}
                 media={tweet.media}
                 date={tweet.updatedAt || ''}
+                likes={tweet.likes || []}
+                comments={tweet.comments || []}
               />
             ) : null}
           </div>
@@ -64,7 +69,7 @@ class Tweet extends React.Component {
 
 const mapStateToProps = ({ tweet }) => {
   return {
-    tweets: tweet.all,
+    tweets: tweet.tweets,
   };
 };
 

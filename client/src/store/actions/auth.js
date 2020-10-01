@@ -1,13 +1,8 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import { errorAuth } from './';
 
-import {
-  AUTH_START,
-  AUTH_SUCCESS,
-  AUTH_FAIL,
-  AUTH_LOGOUT,
-  CLEAR_ERROR,
-} from './types';
+import { AUTH_START, AUTH_SUCCESS, AUTH_LOGOUT, CLEAR_ERROR } from './types';
 
 const checkUserToken = (userID, token) => ({
   type: AUTH_SUCCESS,
@@ -24,11 +19,6 @@ const authSuccess = (userID, token, isSigned) => ({
   userID,
   token,
   isSigned,
-});
-
-const authFail = (error) => ({
-  type: AUTH_FAIL,
-  error,
 });
 
 const authLogout = () => ({
@@ -69,7 +59,7 @@ export const signup = (credential) => async (dispatch) => {
     const { user } = res.data;
     dispatch(authSuccess(user._id, null, false));
   } catch (error) {
-    dispatch(authFail(error));
+    dispatch(errorAuth(error));
   }
 };
 
@@ -91,8 +81,9 @@ export const login = (credential) => async (dispatch) => {
     );
   } catch (error) {
     dispatch(
-      authFail({
+      errorAuth({
         ...error,
+        message: 'The user does not exist or the password is incorrect',
       })
     );
   }

@@ -1,18 +1,10 @@
-import {
-  FETCH_CURRENT_USER,
-  FETCH_USERS,
-  FETCH_USER_BY_NAME,
-  FETCH_USERS_ERROR,
-  CLEAR_ERROR,
-} from '../actions/types';
+import { FETCH_USERS, FETCH_USER_BY_NAME } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
 
 const initialState = {
   users: [],
   user: {},
-  error: null,
-  me: {},
 };
 
 const getUserLikes = (user) => {
@@ -45,16 +37,8 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_USERS:
       return fetchUsers(state, action);
-    case FETCH_USERS_ERROR:
-      return updateObject(state, {
-        error: action.error,
-      });
     case FETCH_USER_BY_NAME:
       return fetchUserByName(state, action);
-    case CLEAR_ERROR:
-      return updateObject(state, {
-        error: null,
-      });
     default:
       return state;
   }

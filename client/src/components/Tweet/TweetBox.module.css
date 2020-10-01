@@ -47,7 +47,9 @@
   text-decoration: none;
   color: aliceblue;
 }
-
+.fullname{
+  font-weight: bold;
+}
 .username {
   padding-left: .5rem;
   font-size: .8rem;

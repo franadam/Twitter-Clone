@@ -26,7 +26,7 @@
 .btns_container {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid aliceblue;
+  border-top: 1px solid aliceblue;padding-top: 1rem;
 }
 
 .btns_picture {
@@ -85,8 +85,21 @@
       cursor: pointer;
     }
 
+    .reply {
+      display: flex;
+      padding-left: 3rem;
+      margin-left: 3rem;
+      color: rgba(240, 248, 255, 0.7);
+    }
+    .reply a {
+      padding-left: .5rem;
+      color: rgb(48, 134, 187);
+      text-decoration: none;
+    }
 .compose {
   display: flex;
+      padding-left: .5rem;
+      padding-top: 1rem;
 }
 
 .form {

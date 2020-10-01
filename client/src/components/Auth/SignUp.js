@@ -246,10 +246,9 @@ class SignUp extends React.Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  console.log('auth :>> ', auth);
+const mapStateToProps = ({ error }) => {
   return {
-    error: auth.error,
+    error: error.auth,
   };
 };
 

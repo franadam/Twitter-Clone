@@ -1,6 +1,5 @@
 export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
-export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 
 export const SET_AUTH_REDIRECT_PATH = 'SET_AUTH_REDIRECT_PATH';
@@ -8,7 +7,6 @@ export const SET_AUTH_REDIRECT_PATH = 'SET_AUTH_REDIRECT_PATH';
 export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
 export const FETCH_USER_BY_NAME = 'FETCH_USER_BY_NAME';
 export const FETCH_USERS = 'FETCH_USERS';
-export const FETCH_USERS_ERROR = 'FETCH_USERS_ERROR';
 
 export const FETCH_TWEETS = 'FETCH_TWEETS';
 export const FETCH_USER_TWEETS = 'FETCH_USER_TWEETS';
@@ -20,8 +18,10 @@ export const DELETE_TWEET = 'DELETE_TWEET';
 export const LIKE_A_TWEET = 'LIKE_A_TWEET';
 export const UNLIKE_A_TWEET = 'UNLIKE_A_TWEET';
 
-export const USER_AUTH_FAIL = 'USER_AUTH_FAIL';
-export const USER_AUTH = 'USER_AUTH';
-export const USER_LOGOUT = 'USER_LOGOUT';
-export const USER_TOKEN = 'USER_TOKEN';
+export const ERROR_AUTH = 'ERROR_AUTH';
+export const ERROR_USERS = 'ERROR_USERS';
+export const ERROR_TWEETS = 'ERROR_TWEETS';
+export const ERROR_LIKES = 'ERROR_LIKES';
+export const ERROR_COMMENTS = 'ERROR_COMMENTS';
+
 export const CLEAR_ERROR = 'CLEAR_ERROR';

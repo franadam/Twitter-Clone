@@ -19,7 +19,6 @@ import classes from './Profile.module.css';
 class Profile extends React.Component {
   componentDidMount = () => {
     const { username } = this.props.match.params;
-    //this.props.onFetchUserByName(username);
     const user = this.props.users.find(
       (user) => user._id === username || user.username === username
     );
@@ -55,7 +54,11 @@ class Profile extends React.Component {
       return <Spinner />;
     }
 
-    const { tweets, likes } = user;
+    const { likes: tweetLiked } = user;
+    const tweets = this.props.tweets.filter((tweet) => tweet.user === user._id);
+    const likes = tweetLiked.map((like) =>
+      this.props.tweets.find((l) => like._id === l._id)
+    );
 
     const logo = user.avatar ? (
       <div className={classes.avatar} href={`/${user.username}/avatar`}>
@@ -140,21 +143,11 @@ class Profile extends React.Component {
 
 const mapStateToProps = ({ user, tweet, auth }) => {
   return {
-    tweets: tweet.all,
+    tweets: tweet.tweets,
     users: user.users,
     loggedIn: !!auth.token,
     userID: auth.userID,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onFetchUserTweets: (id) => dispatch(fetchUserTweets(id)),
-    onFetchUserByName: (username) => dispatch(fetchUserByName(username)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(Profile));
+export default connect(mapStateToProps)(withRouter(Profile));

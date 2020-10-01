@@ -1,10 +1,4 @@
-import {
-  AUTH_SUCCESS,
-  AUTH_START,
-  AUTH_FAIL,
-  AUTH_LOGOUT,
-  CLEAR_ERROR,
-} from '../actions/types';
+import { AUTH_SUCCESS, AUTH_START, AUTH_LOGOUT } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
 
@@ -34,14 +28,6 @@ const authLogout = (state) => {
   });
 };
 
-const authFail = (state, action) => {
-  return updateObject(state, { error: action.error, loading: false });
-};
-
-const clearError = (state) => {
-  return updateObject(state, { error: null, loading: false });
-};
-
 export default function (state = initialState, action) {
   switch (action.type) {
     case AUTH_START:
@@ -50,10 +36,6 @@ export default function (state = initialState, action) {
       return authLogout(state);
     case AUTH_SUCCESS:
       return authSuccess(state, action);
-    case AUTH_FAIL:
-      return authFail(state, action);
-    case CLEAR_ERROR:
-      return clearError(state, action);
     default:
       return state;
   }

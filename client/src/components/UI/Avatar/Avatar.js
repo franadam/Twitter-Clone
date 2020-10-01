@@ -2,9 +2,9 @@ import React from 'react';
 import { FaUser } from 'react-icons/fa';
 import classes from './Avatar.module.css';
 
-const Avatar = ({ avatar, userID }) => {
+const Avatar = ({ avatar, userID, size }) => {
   return avatar ? (
-    <div className={classes.avatar}>
+    <div className={classes.avatar} style={{ height: size }}>
       <img
         src={`/api/users/${userID}/avatar`}
         alt="logo"
