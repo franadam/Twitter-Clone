@@ -204,7 +204,7 @@ class SignUp extends React.Component {
     }
 
     if (isValid) {
-      this.props.signup(dataToSubmit);
+      this.props.onSignup(dataToSubmit);
       this.props.history.push('/signin');
     } else {
       this.setState({ formError: true });
@@ -246,16 +246,16 @@ class SignUp extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
-  console.log('user :>> ', user);
+const mapStateToProps = ({ auth }) => {
+  console.log('auth :>> ', auth);
   return {
-    error: user.error,
+    error: auth.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signup: (user) => dispatch(signup(user)),
+    onSignup: (credential) => dispatch(signup(credential)),
   };
 };
 

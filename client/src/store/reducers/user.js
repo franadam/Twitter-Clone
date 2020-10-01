@@ -1,67 +1,56 @@
 import {
   FETCH_CURRENT_USER,
-  USER_AUTH,
-  USER_TOKEN,
-  USER_AUTH_FAIL,
-  USER_LOGOUT,
+  FETCH_USERS,
   FETCH_USER_BY_NAME,
+  FETCH_USERS_ERROR,
   CLEAR_ERROR,
 } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
 
 const initialState = {
-  isAuthenticated: false,
+  users: [],
   user: {},
   error: null,
-  token: '',
-  userID: '',
+  me: {},
+};
+
+const getUserLikes = (user) => {
+  const likes = user.likes.map((like) => like.tweets);
+  likes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const newUser = updateObject(user, { likes });
+
+  return newUser;
 };
 
 const fetchUserByName = (state, action) => {
   const newState = updateObject(state, {
     user: action.user,
   });
-  const likes = newState.user.likes.map((like) => like.tweets);
-  likes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  const user = updateObject(newState.user, { likes });
+  const user = getUserLikes(newState.user);
 
   return updateObject(newState, { user });
 };
 
+const fetchUsers = (state, action) => {
+  const newState = updateObject(state, {
+    users: action.users,
+  });
+  const users = newState.users.map((user) => getUserLikes(user));
+
+  return updateObject(newState, { users });
+};
+
 export default function (state = initialState, action) {
   switch (action.type) {
-    case USER_LOGOUT:
+    case FETCH_USERS:
+      return fetchUsers(state, action);
+    case FETCH_USERS_ERROR:
       return updateObject(state, {
-        ...initialState,
-      });
-    case USER_TOKEN:
-      return updateObject(state, {
-        isAuthenticated: true,
-        token: action.token,
-        userID: action.userID,
-      });
-    case USER_AUTH:
-      return updateObject(state, {
-        isAuthenticated: action.isSigned,
-        user: action.user,
-        userID: action.user._id,
-        token: action.token || '',
-      });
-    case FETCH_CURRENT_USER:
-      return updateObject(state, {
-        isAuthenticated: true,
-        user: action.user,
-      });
-
-    case FETCH_USER_BY_NAME:
-      return fetchUserByName(state, action);
-    case USER_AUTH_FAIL:
-      return updateObject(state, {
-        isAuthenticated: false,
-        user: undefined,
         error: action.error,
       });
+    case FETCH_USER_BY_NAME:
+      return fetchUserByName(state, action);
     case CLEAR_ERROR:
       return updateObject(state, {
         error: null,

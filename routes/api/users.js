@@ -240,6 +240,31 @@ router.post('/register', async (req, res) => {
   }
 });
 
+router.patch('/:username', async (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  try {
+    if (!isValid) {
+      throw new Error(JSON.stringify(errors));
+    }
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) {
+      errors.username = 'User does not exists';
+      throw new Error(errors.username);
+    } else {
+      user.update({
+        fullname: req.body.fullname,
+        location: req.body.location,
+        website: req.body.website,
+        avatar: req.body.avatar,
+        cover: req.body.cover,
+      });
+    }
+  } catch (error) {
+    res.status(400).json(errors);
+  }
+});
+
 router.post('/login', async (req, res) => {
   //console.log('req.body :>> ', JSON.stringify(req.body));
   const { errors, isValid } = validateLoginInput(req.body);
@@ -251,6 +276,7 @@ router.post('/login', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const user = await User.findOne({ email });
+    console.log('user :>> ', user);
     if (!user) {
       console.log('login user :>> ', user);
       errors.email = 'This user does not exist';
@@ -298,7 +324,6 @@ router.get(
         fullname: req.user.fullname,
         username: req.user.username,
         email: req.user.email,
-        password: req.user.password,
         birth_date: req.user.birth_date,
       },
     });
@@ -357,6 +382,60 @@ router.get('/:id/likes', async (req, res) => {
     ]);
     console.log('likes :>> ', likes);
     res.send(likes);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.aggregate([
+      {
+        $lookup: {
+          from: 'likes',
+          let: { userID: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$userID', '$user'] } } },
+            {
+              $lookup: {
+                from: 'tweets',
+                let: { tweet: '$tweet' },
+                pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$tweet'] } } }],
+                as: 'tweets',
+              },
+            },
+            { $unwind: '$tweets' },
+            { $project: { _id: 0, tweets: 1 } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'tweets',
+          let: { userID: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$userID', '$user'] } } },
+            {
+              $lookup: {
+                from: 'tweets',
+                let: { tweetID: '$_id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$tweet', '$$tweetID'] } } },
+                ],
+                as: 'comments',
+              },
+            },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'tweets',
+        },
+      },
+      { $project: { password: 0, birth_date: 0 } },
+    ]);
+
+    res.send(users);
   } catch (error) {
     res.status(500).send();
   }

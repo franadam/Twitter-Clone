@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { clearError } from '../../store/actions';
+import { clearAuthError, clearUserError } from '../../store/actions';
 
 import classes from './Modal.module.css';
 
@@ -10,14 +10,16 @@ const Modal = (props) => {
 
   const spanHandler = () => {
     modal.style.display = 'none';
-    props.clearError();
+    props.clearAuthError();
+    props.clearUserError();
     if (props.actions) props.actions();
   };
 
   window.onclick = (event) => {
     if (event.target === modal) {
       modal.style.display = 'none';
-      props.clearError();
+      props.clearAuthError();
+      props.clearUserError();
       if (props.actions) props.actions();
     }
   };
@@ -40,4 +42,6 @@ const mapStateToProps = ({ user }) => {
   };
 };
 
-export default connect(mapStateToProps, { clearError })(Modal);
+export default connect(mapStateToProps, { clearAuthError, clearUserError })(
+  Modal
+);

@@ -169,10 +169,10 @@ class CreateTweet extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ tweet, auth, user }) => {
   return {
-    userID: state.user.userID,
-    newTweet: state.tweet.new,
+    userID: auth.userID,
+    newTweet: tweet.new,
   };
 };
 

@@ -76,8 +76,11 @@ class TweetBox extends Component {
 
   getUserById = async () => {
     try {
-      const res = await axios.get(`/api/users/${this.props.userID}`);
-      const user = res.data;
+      //const res = await axios.get(`/api/users/${this.props.userID}`);
+      //const user = res.data;
+      const user = this.props.users.find(
+        (user) => user._id === this.props.userID
+      );
       this.setState({ user });
     } catch (error) {
       console.log('error :>> ', error);
@@ -235,11 +238,12 @@ class TweetBox extends Component {
   }
 }
 
-const mapStateToProps = ({ tweet, user }) => {
+const mapStateToProps = ({ tweet, user, auth }) => {
   return {
     likes: tweet.likes,
-    myID: user.userID,
-    isAuthenticated: user.token !== '',
+    myID: auth.userID,
+    users: user.users,
+    isAuthenticated: !!auth.token,
   };
 };
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import { authCheckState, fetchTweets } from '../store/actions';
+import { authCheckState, fetchTweets, fetchUsers } from '../store/actions';
 
 import Home from './Home/Home';
 import SignIn from './Auth/SignIn';
@@ -17,6 +17,7 @@ export class App extends Component {
   componentDidMount = () => {
     this.props.authCheckState();
     this.props.fetchTweets();
+    this.props.fetchUsers();
     this.intervalID = setInterval(this.fetchTweets, 5000);
   };
 
@@ -53,11 +54,15 @@ export class App extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ auth }) => {
   return {
-    isAuthenticated: user.isAuthenticated,
-    token: user.token,
+    isAuthenticated: !!auth.token,
+    token: auth.token,
   };
 };
 
-export default connect(mapStateToProps, { authCheckState, fetchTweets })(App);
+export default connect(mapStateToProps, {
+  authCheckState,
+  fetchTweets,
+  fetchUsers,
+})(App);

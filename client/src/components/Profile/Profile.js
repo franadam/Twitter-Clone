@@ -19,7 +19,11 @@ import classes from './Profile.module.css';
 class Profile extends React.Component {
   componentDidMount = () => {
     const { username } = this.props.match.params;
-    this.props.onFetchUserByName(username);
+    //this.props.onFetchUserByName(username);
+    const user = this.props.users.find(
+      (user) => user._id === username || user.username === username
+    );
+    this.setState({ user });
   };
 
   showTab = (event, tab) => {
@@ -42,14 +46,16 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { user } = this.props;
+    const { username } = this.props.match.params;
+    const user = this.props.users.find(
+      (user) => user._id === username || user.username === username
+    );
 
-    if (!user.createdAt) {
+    if (!user || !user.createdAt) {
       return <Spinner />;
     }
 
-    const tweets = this.props.user.tweets;
-    const likes = this.props.user.likes;
+    const { tweets, likes } = user;
 
     const logo = user.avatar ? (
       <div className={classes.avatar} href={`/${user.username}/avatar`}>
@@ -132,12 +138,12 @@ class Profile extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user, tweet }) => {
+const mapStateToProps = ({ user, tweet, auth }) => {
   return {
     tweets: tweet.all,
-    user: user.user,
-    loggedIn: user.isAuthenticated,
-    userID: user.userID,
+    users: user.users,
+    loggedIn: !!auth.token,
+    userID: auth.userID,
   };
 };
 

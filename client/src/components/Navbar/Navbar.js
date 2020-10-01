@@ -84,9 +84,9 @@ class NavBar extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  userID: user.userID,
-  loggedIn: user.isAuthenticated,
+const mapStateToProps = ({ auth }) => ({
+  userID: auth.userID,
+  loggedIn: !!auth.token,
 });
 
 export default connect(mapStateToProps, { logout })(NavBar);

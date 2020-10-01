@@ -10,7 +10,7 @@ import {
   LIKE_A_TWEET,
   UNLIKE_A_TWEET,
 } from './types';
-import { setAuthToken } from './user';
+import { setAuthToken } from './userold';
 
 const getTweets = (tweets) => ({
   type: FETCH_TWEETS,

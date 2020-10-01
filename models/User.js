@@ -30,6 +30,16 @@ const UserSchema = new Schema(
       type: Date,
       required: true,
     },
+    location: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    website: {
+      type: String,
+      default: null,
+      trim: true,
+    },
     avatar: {
       type: Buffer,
       default: null,

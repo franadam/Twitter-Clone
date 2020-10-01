@@ -1,12 +1,12 @@
+export { logout, signup, login, authCheckState, clearAuthError } from './auth';
+
 export {
-  logout,
-  signup,
-  login,
-  authCheckState,
   fetchCurrentUser,
   fetchUserByName,
-  clearError,
+  fetchUsers,
+  clearUserError,
 } from './user';
+
 export {
   fetchTweets,
   fetchUserTweets,

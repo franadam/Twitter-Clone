@@ -1,55 +1,97 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { FaTwitter } from 'react-icons/all';
-
-import formStyle from '../FormFiled/FormField.module.css';
-import classes from './SignIn.module.css';
 
 import FormField from '../FormFiled/FormField';
 import Modal from '../../hoc/Modal/Modal';
+
+import formStyle from '../FormFiled/FormField.module.css';
+import classes from './Picture.module.css';
+
 import validate from '../../utils/validateForm';
-import ShowPasswordField from '../FormFiled/ShowPasswordField';
+import { signup } from '../../store/actions';
 
-import { login } from '../../store/actions';
-
-class SignIn extends React.Component {
+class SignUp extends Component {
   state = {
+    currentStep: 1,
     formError: false,
     formSuccess: '',
+    formValid: false,
     formData: {
-      email: {
+      fullname: {
         element: 'input',
         value: '',
         config: {
-          name: 'email',
-          type: 'email',
-          placeholder: 'Enter your email',
+          name: 'fullname',
+          type: 'text',
+          placeholder: 'Enter your fullname',
         },
         validation: {
           required: true,
-          email: true,
         },
       },
-      password: {
+      bio: {
         element: 'input',
         value: '',
         config: {
-          name: 'password',
-          type: 'password',
-          placeholder: 'Enter your password',
+          name: 'bio',
+          type: 'text',
+          placeholder: 'Say something about you',
         },
         validation: {
-          required: true,
-          minLength: 8,
+          required: false,
+        },
+      },
+      location: {
+        element: 'input',
+        value: '',
+        config: {
+          name: 'location',
+          type: 'text',
+          placeholder: 'Enter your location',
+        },
+        validation: {
+          required: false,
+        },
+      },
+      website: {
+        element: 'input',
+        value: '',
+        config: {
+          name: 'website',
+          type: 'text',
+          placeholder: 'Enter your website',
+        },
+        validation: {
+          required: false,
+        },
+      },
+      avatar: {
+        element: 'input',
+        value: '',
+        config: {
+          name: 'avatar',
+          type: 'file',
+          placeholder: 'Choose your avatar',
+        },
+        validation: {
+          required: false,
+        },
+      },
+      cover: {
+        element: 'input',
+        value: '',
+        config: {
+          name: 'cover',
+          type: 'file',
+          placeholder: 'Choose your cover',
+        },
+        validation: {
+          required: false,
         },
       },
     },
-  };
-
-  componentDidMount = () => {
-    if (this.props.token) this.props.history.push('/home');
   };
 
   createForm = (formData) => {
@@ -81,8 +123,6 @@ class SignIn extends React.Component {
     const newFormData = { ...this.state.formData };
     const newElement = { ...newFormData[id] };
 
-    newElement.value = event.target.value;
-
     const element = event.target;
 
     newElement.value = element.value;
@@ -95,6 +135,22 @@ class SignIn extends React.Component {
       element.classList.add(formStyle.empty);
     } else {
       element.classList.remove(formStyle.empty);
+    }
+
+    if (id === 'password_confirmation') {
+      if (
+        element.value !== '' &&
+        element.value !== newFormData.password.value
+      ) {
+        newElement.validationMessage = 'The passwords must be identical';
+        newElement.valid = false;
+      }
+    }
+
+    if (element.config.type === 'file') {
+      if (element.files && element.files[0]) {
+        newElement.value = element.files[0];
+      }
     }
 
     newFormData[id] = newElement;
@@ -121,7 +177,6 @@ class SignIn extends React.Component {
       formError: false,
       formSuccess: type ? 'Congratulation' : 'This user already exists',
     });
-    document.getElementById('myModal').style.display = 'block';
   };
 
   clearSuccesMessage = () => {
@@ -132,6 +187,7 @@ class SignIn extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+
     const dataToSubmit = {};
     let isValid = true;
 
@@ -141,9 +197,11 @@ class SignIn extends React.Component {
     }
 
     if (isValid) {
-      this.props.onLogin(dataToSubmit);
-      this.formSuccesManager();
-      this.props.history.push('/home');
+      this.props.signup(dataToSubmit);
+      this.props.history.push('/signin');
+    } else {
+      this.setState({ formError: true });
+      document.getElementById('myModal').style.display = 'block';
     }
   };
 
@@ -151,56 +209,43 @@ class SignIn extends React.Component {
     const form = (
       <form className={formStyle.form} onSubmit={this.handleSubmit}>
         {this.createForm(this.state.formData)}
-        <ShowPasswordField />
         <button
           className={formStyle.btn}
           onClick={(event) => this.handleSubmit(event)}
           type="submit"
         >
-          LOGIN IN
+          UPDATE
         </button>
       </form>
     );
 
-    if (this.props.error) {
-      document.getElementById('myModal').style.display = 'block';
-    }
-
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
-          <h1>
-            <FaTwitter size="4rem" />
-          </h1>
+          <h1>Edit Profile</h1>
           {form}
           <Modal>
-            {!!this.props.error ? (
-              <p className={classes.error}>{this.props.error.message}</p>
-            ) : null}
-            {!!this.state.formSuccess ? (
-              <p className={classes.success}>{this.state.formSuccess}</p>
+            {this.state.formError ? (
+              <p className={classes.error}>Please fill all fields properly</p>
             ) : null}
           </Modal>
-          <Link to="/signup" className={classes.link}>
-            SIGN UP
-          </Link>
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ user }) => {
+  console.log('user :>> ', user);
   return {
-    error: auth.error,
-    token: auth.token,
+    error: user.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLogin: (user) => dispatch(login(user)),
+    signup: (user) => dispatch(signup(user)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignIn));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));
