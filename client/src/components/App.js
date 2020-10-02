@@ -12,6 +12,7 @@ import Tweet from './Tweet/Tweet';
 import Profile from './Profile/Profile';
 import CreateTweet from './Tweet/CreateTweet';
 import Layout from '../hoc/Layout/Layout';
+import EditProfile from './EditProfile/EditProfile';
 
 export class App extends Component {
   componentDidMount = () => {
@@ -40,10 +41,10 @@ export class App extends Component {
       //
       routes = (
         <Switch>
-          <Route path="/users/:username" component={Profile} />
+          <Route exact path="/users/:username" component={Profile} />
           <Route path="/tweets/:tweetID" component={Tweet} />
-          <Route path="/compose/tweet/:tweetID" component={CreateTweet} />
-          <Route exact path="/compose/tweet" component={CreateTweet} />
+          <Route path="/compose/tweet" component={CreateTweet} />
+          <Route exact path="/users/:username/edit" component={EditProfile} />
           <Route path="/setting" component={SignIn} />
           <Route exact path="/home" component={Home} />
           <Redirect to="/home" />

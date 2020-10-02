@@ -1,15 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Navbar from '../../components/Navbar/Navbar';
 
 import classes from './Layout.module.css';
 
-const Layout = (props) => {
+const Layout = ({ loggedIn, children }) => {
   return (
-    <div className={classes.main}>
+    <div className={`${classes.main} ${!loggedIn ? classes.unsigned : ''}`}>
       <Navbar />
-      <div className={classes.children}>{props.children}</div>
+      <div className={classes.children}>{children}</div>
     </div>
   );
 };
 
-export default Layout;
+const mapStateToProps = ({ auth }) => ({
+  loggedIn: !!auth.token,
+});
+
+export default connect(mapStateToProps)(Layout);

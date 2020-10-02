@@ -30,6 +30,11 @@ const UserSchema = new Schema(
       type: Date,
       required: true,
     },
+    bio: {
+      type: String,
+      default: null,
+      trim: true,
+    },
     location: {
       type: String,
       default: null,

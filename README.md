@@ -8,10 +8,11 @@ The app is deployed on
 ## Feature
 
 * User authentification: sign up and log in
-* New Tweet
+* Tweet
 * Like / Unlike 
 * Comment
 * View Profile
+* Edit Profile
 
 ## Dependencies
 
@@ -40,3 +41,6 @@ You can find more detail about the API in the
 
 ### Tweet
 ![Tweet](screenshots/twitter-clone-tweet.png?raw=true "Tweet")
+
+### Comment
+![Comment](screenshots/twitter-clone-comment.png?raw=true "Comment")

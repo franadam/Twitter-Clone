@@ -63,7 +63,7 @@ class NavBar extends React.Component {
       );
     } else {
       return (
-        <div className={classes.links}>
+        <div className={`${classes.links} ${classes.navbar}`}>
           <Link className={`${classes.link} ${classes.signup}`} to={'/signup'}>
             Signup
           </Link>
@@ -77,7 +77,12 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div id="sidebar" className={classes.main}>
+      <div
+        id="sidebar"
+        className={`${classes.main} ${
+          !this.props.loggedIn ? classes.unsigned : ''
+        }`}
+      >
         {this.getLinks()}
       </div>
     );

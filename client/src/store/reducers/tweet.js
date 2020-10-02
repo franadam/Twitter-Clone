@@ -1,11 +1,8 @@
 import { updateObject } from '../../utils/updateObject';
 import {
   FETCH_TWEETS,
-  FETCH_USER_TWEETS,
   CREATE_NEW_TWEET,
   DELETE_TWEET,
-  FETCH_TWEET_COMMENTS,
-  FETCH_TWEET_LIKES,
   LIKE_A_TWEET,
   UNLIKE_A_TWEET,
 } from '../actions/types';
@@ -28,7 +25,6 @@ const likeATweet = (state, action) => {
   const tweets = state.tweets.filter(
     (tweet) => tweet._id !== action.like.tweet
   );
-  console.log('liked', likes);
   tweets.push(newTweet);
   sortByCreatedAt(tweets);
   return updateObject(state, { tweets });
@@ -37,12 +33,10 @@ const likeATweet = (state, action) => {
 const unlikeATweet = (state, action) => {
   const tweet = state.tweets.find((tweet) => tweet._id === action.like.tweet);
   const likes = tweet.likes.filter((l) => l._id !== action.like._id);
-  console.log('unliked', likes);
   const newTweet = updateObject(tweet, { likes });
   const tweets = state.tweets.filter(
     (tweet) => tweet._id !== action.like.tweet
   );
-  console.log('liked', likes);
   tweets.push(newTweet);
   sortByCreatedAt(tweets);
   return updateObject(state, { tweets });

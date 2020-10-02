@@ -1,15 +1,17 @@
 .main {
   display: flex;
-  align-items: flex-start;
   min-height: 100vh;
   width: 100%;
+  position: relative;
 }
 
+.unsigned {
+  flex-direction: column;
+}
 .children {
   flex-grow: 1;
   border-left: 2px solid aliceblue;
 }
-
 
 
 @media screen and (max-width: 700px) {

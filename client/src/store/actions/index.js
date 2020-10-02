@@ -9,7 +9,12 @@ export {
 
 export { logout, signup, login, authCheckState, setAuthToken } from './auth';
 
-export { fetchCurrentUser, fetchUserByName, fetchUsers } from './user';
+export {
+  fetchCurrentUser,
+  fetchUserByName,
+  fetchUsers,
+  updateProfile,
+} from './user';
 
 export {
   fetchTweets,

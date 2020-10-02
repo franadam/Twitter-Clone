@@ -6,11 +6,12 @@ const initialState = {
   token: null,
   userID: null,
   loading: false,
-  error: null,
 };
 
 const authStart = (state) => {
-  return updateObject(state, { error: null, loading: true });
+  return updateObject(state, {
+    loading: true,
+  });
 };
 
 const authSuccess = (state, action) => {
@@ -18,7 +19,6 @@ const authSuccess = (state, action) => {
     userID: action.userID,
     token: action.token || '',
     loading: false,
-    error: null,
   });
 };
 

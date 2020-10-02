@@ -75,10 +75,7 @@ router.post(
   uploadImage.single('media'),
   async (req, res) => {
     try {
-      console.log('req body:>> ', JSON.stringify(req.body));
-      console.log('req headers:>> ', req.headers);
       const { errors, isValid } = validateTweetInput(req.body);
-      console.log('errors, isValid :>> ', errors, isValid);
 
       if (!isValid) {
         console.log('isValid :>> ', isValid);
@@ -87,7 +84,6 @@ router.post(
 
       let buffer = null;
       if (req.file) {
-        console.log('req.file :>> ', req.file);
         buffer = await sharp(req.file.buffer)
           .resize({ width: 300, height: 300 })
           .png()
@@ -111,8 +107,6 @@ router.post(
 
 router.get('/:id/media', async (req, res) => {
   const _id = req.params.id;
-
-  console.log('_id :>> ', _id);
 
   try {
     const tweet = await Tweet.findById(_id);
@@ -172,7 +166,6 @@ router.delete(
         user: req.user.id,
       });
 
-      console.log('delete tweet :>> ', tweet);
       await Like.deleteMany({ tweet: tweet._id });
       await Tweet.deleteMany({ tweet: tweet._id });
       await tweet.deleteOne();
@@ -204,7 +197,6 @@ router.post(
         tweet: req.params.id,
         user: req.user.id,
       });
-      console.log('like :>> ', like);
       if (like) {
         throw new Error('You already like this tweet');
       } else {

@@ -9,37 +9,13 @@ import TweetsList from './TweetsList';
 import classes from './Tweet.module.css';
 
 class Tweet extends React.Component {
-  state = {
-    tweetID: '',
-  };
-
-  componentDidMount() {
-    console.log('this.props :>> ', this.props);
-    console.log('this.state :>> ', this.state);
-    const { tweetID } = this.props.match.params;
-    if (tweetID) {
-      this.setState({ tweetID });
-      //this.getTweet(tweetID);
-    }
-  }
-
-  getTweet = async (tweetID) => {
-    try {
-      const res = await axios.get(`/api/tweets/${tweetID}`);
-      console.log('res :>> ', res);
-      const tweet = res.data;
-      this.setState({ tweet });
-    } catch (error) {
-      console.log('error :>> ', error);
-    }
-  };
-
   render() {
-    //    const { tweetID } = this.props.match.params;
+    const { tweetID } = this.props.match.params;
 
-    const tweet = this.props.tweets.find((tw) => tw._id === this.state.tweetID);
+    const tweet = this.props.tweets.find((tw) => tw._id === tweetID);
 
     if (!tweet) return null;
+
     const tweets = this.props.tweets.filter((tw) => tw.tweet === tweet._id);
 
     return (

@@ -1,4 +1,8 @@
-import { FETCH_USERS, FETCH_USER_BY_NAME } from '../actions/types';
+import {
+  FETCH_USERS,
+  FETCH_USER_BY_NAME,
+  USER_UPDATE_PROFILE,
+} from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
 
@@ -15,7 +19,7 @@ const getUserLikes = (user) => {
   return newUser;
 };
 
-const fetchUserByName = (state, action) => {
+const getUser = (state, action) => {
   const newState = updateObject(state, {
     user: action.user,
   });
@@ -29,7 +33,14 @@ const fetchUsers = (state, action) => {
     users: action.users,
   });
   const users = newState.users.map((user) => getUserLikes(user));
+  //const user = users.find(user => user._id === userID)
+  return updateObject(newState, { users });
+};
 
+const updateProfile = (state, action) => {
+  const newState = getUser(state, action);
+  const users = newState.users.filter((user) => user._id !== action.user._id);
+  users.push(newState.user);
   return updateObject(newState, { users });
 };
 
@@ -38,7 +49,9 @@ export default function (state = initialState, action) {
     case FETCH_USERS:
       return fetchUsers(state, action);
     case FETCH_USER_BY_NAME:
-      return fetchUserByName(state, action);
+      return getUser(state, action);
+    case USER_UPDATE_PROFILE:
+      return updateProfile(state, action);
     default:
       return state;
   }

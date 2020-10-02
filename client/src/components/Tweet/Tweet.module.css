@@ -20,12 +20,11 @@
   justify-content: start;
   align-items: center;
   padding-right: .5rem;
-  background-color:  rgb(25, 97, 143);
   text-decoration: none;
   color: aliceblue;
-  font-size: 1.4rem;
+  font-size: 2rem;
 }
 
-.mainTweet .logo {
-  height: 3rem;
+.mainTweet div {
+  font-size: large;
 }

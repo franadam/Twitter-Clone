@@ -67,11 +67,11 @@ export const login = (credential) => async (dispatch) => {
   try {
     dispatch(authStart());
     const res = await axios.post('/api/users/login', credential);
-    const { token, user } = res.data;
+    const { token, userID } = res.data;
     localStorage.setItem('jwtToken', token);
-    localStorage.setItem('userID', user._id);
+    localStorage.setItem('userID', userID);
     setAuthToken(token);
-    dispatch(authSuccess(user._id, token, true));
+    dispatch(authSuccess(userID, token, true));
     const decoded = jwt_decode(token);
     const expirationTime = decoded.exp - decoded.iat;
     const expirationDate = new Date().getTime() + expirationTime * 1000;

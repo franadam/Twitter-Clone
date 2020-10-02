@@ -1,12 +1,11 @@
 .main {
   display: flex;
-
+  position: relative;
   width: 8rem;  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   color: aliceblue;
   padding: 1rem 2rem;
-  position: relative;
   z-index: 10;
 }
 
@@ -14,7 +13,19 @@
   height: 1.5rem;
 }
 
-.links {
+.unsigned{
+  position: fixed;
+  top: 0;
+  flex-direction: row;
+  align-items: flex-start;
+  height: 5rem;
+  justify-content: center;
+  background:rgb(21, 32, 43);
+  width: 100%;
+  box-shadow: 2px 2px 4px rgb(0, 157, 255) ;
+}
+
+  .links {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -23,8 +34,7 @@
   position: fixed;
   top: 0;
 }
-
-.link,
+  .link,
 .auth {
   text-decoration: none;
   padding: 1rem .5rem;
@@ -61,6 +71,12 @@
   color: aliceblue;
 }
 
+.navbar {
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
 
 @media screen and (max-width: 700px) {
   .main {

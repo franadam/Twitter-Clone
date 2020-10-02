@@ -33,6 +33,23 @@
   height: 100%;
 }
 
+.btns {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: .5rem;
+}
+
+.edit {
+  text-decoration: none;
+  color: rgb(0, 157, 255);
+  border: 2px solid  rgb(0, 157, 255);
+  border-radius: 20px;
+  padding: .5rem;
+}
+
+.edit:hover {
+  background-color: aliceblue;
+}
 .info {
   color: rgba(240, 248, 255, 0.7);
   padding: .5rem;

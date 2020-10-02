@@ -53,7 +53,6 @@ class CreateTweet extends React.Component {
     };
 
     for (let key in tweet) {
-      console.log('key', key, tweet[key]);
       formData.append(key, tweet[key]);
     }
 
@@ -86,9 +85,13 @@ class CreateTweet extends React.Component {
 
   render() {
     const { tweet, newTweet, media } = this.state;
-    const user = tweet
-      ? this.props.users.find((user) => user._id === tweet.user)
-      : {};
+    const { users, userID } = this.props;
+
+    const user = tweet ? users.find((user) => user._id === tweet.user) : {};
+
+    const me = users ? users.find((user) => user._id === userID) : {};
+
+    if (!me) return null;
 
     const form = (
       <form className={classes.form} onSubmit={this.handleSubmit}>
@@ -159,12 +162,8 @@ class CreateTweet extends React.Component {
             </>
           ) : null}
           <div className={classes.compose}>
-            <Link to={`/users/${this.props.userID}`}>
-              <Avatar
-                avatar={this.props.userID}
-                size="4rem"
-                userID={this.props.userID}
-              />
+            <Link to={`/users/${userID}`}>
+              <Avatar avatar={me.avatar} size="4rem" userID={userID} />
             </Link>
             <div className={classes.form}>{form}</div>
           </div>

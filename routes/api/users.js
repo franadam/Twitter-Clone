@@ -92,8 +92,6 @@ router.get('/:username', async (req, res) => {
 router.get('/:id/avatar', async (req, res) => {
   const username = req.params.id;
 
-  console.log('username :>> ', username);
-
   try {
     const user =
       (await User.findOne({ username })) || (await User.findById(username));
@@ -240,30 +238,56 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.patch('/:username', async (req, res) => {
-  const { errors, isValid } = validateRegisterInput(req.body);
+router.patch(
+  '/:username',
+  passport.authenticate('jwt', { session: false }),
+  uploadImage.fields([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'cover', maxCount: 1 },
+  ]),
+  async (req, res) => {
+    //const { errors, isValid } = validateRegisterInput(req.body);
+    const updates = {};
+    const { username } = req.params;
 
-  try {
-    if (!isValid) {
-      throw new Error(JSON.stringify(errors));
+    for (let key in req.body) {
+      if (req.body[key]) {
+        updates[key] = req.body[key];
+      }
     }
-    const user = await User.findOne({ username: req.params.username });
-    if (!user) {
-      errors.username = 'User does not exists';
-      throw new Error(errors.username);
-    } else {
-      user.update({
-        fullname: req.body.fullname,
-        location: req.body.location,
-        website: req.body.website,
-        avatar: req.body.avatar,
-        cover: req.body.cover,
-      });
+    //console.log('req.bodys :>> ', req.body);
+    try {
+      //if (req.user.id === username || req.user.username === username) {} else throw new Error('Unauthorized ');
+
+      const user =
+        (await User.findOneAndUpdate({ username }, updates)) ||
+        (await User.findByIdAndUpdate(username, updates));
+      if (!user) {
+        throw new Error('User does not exists');
+      }
+      let buffer = null;
+
+      if (req.files) {
+        let size;
+        for (let key in req.files) {
+          size =
+            key === 'cover'
+              ? { width: 500, height: 250 }
+              : { width: 300, height: 300 };
+          buffer = await sharp(req.files[key][0].buffer)
+            .resize(size)
+            .png()
+            .toBuffer();
+          req.user[key] = buffer;
+          await req.user.save();
+        }
+      }
+      res.send(user);
+    } catch (error) {
+      res.status(400).json(errors);
     }
-  } catch (error) {
-    res.status(400).json(errors);
   }
-});
+);
 
 router.post('/login', async (req, res) => {
   //console.log('req.body :>> ', JSON.stringify(req.body));
@@ -276,9 +300,7 @@ router.post('/login', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const user = await User.findOne({ email });
-    console.log('user :>> ', user);
     if (!user) {
-      console.log('login user :>> ', user);
       errors.email = 'This user does not exist';
       throw new Error(errors.email);
     }
@@ -293,7 +315,7 @@ router.post('/login', async (req, res) => {
         { expiresIn: 3600 },
         (err, token) => {
           res.json({
-            user,
+            userID: user._id,
             success: true,
             token: 'Bearer ' + token,
           });
@@ -317,7 +339,6 @@ router.get(
   '/current',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    console.log('req :>> ', JSON.stringify(req));
     res.json({
       user: {
         id: req.user.id,
@@ -345,7 +366,6 @@ router.delete(
 
 router.get('/:id/likes', async (req, res) => {
   const username = req.params.id;
-  console.log('_id :>> ', username);
   //{ $match: { id: _id } },
   try {
     const likes = await User.aggregate([
@@ -380,7 +400,6 @@ router.get('/:id/likes', async (req, res) => {
         },
       },
     ]);
-    console.log('likes :>> ', likes);
     res.send(likes);
   } catch (error) {
     res.status(500).send();

@@ -46,7 +46,6 @@ class TweetBox extends Component {
         (like) => like.user === this.props.myID && like.tweet === this.props.id
       );
 
-      console.log('Tweet Box like before click :>> ', like, likes);
       this.setState({
         isLoading: false,
       });
@@ -120,11 +119,9 @@ class TweetBox extends Component {
       if (like) {
         this.props.onUnlikeATweet(this.props.id);
         this.setState({ isLiked: false });
-        console.log('Tweet Box like after click :>> ', likes);
       } else {
         this.props.onLikeATweet(this.props.id);
         this.setState({ isLiked: true });
-        console.log('Tweet Box like after click :>> ', likes);
       }
       //this.getTweetLikes();
     }
@@ -140,28 +137,23 @@ class TweetBox extends Component {
       (like) => like.user === this.props.myID && like.tweet === this.props.id
     );
     const logo = user.avatar ? (
-      <Avatar
-        avatar={this.props.userID}
-        size="4rem"
-        userID={this.props.userID}
-      />
+      <Avatar avatar={user.avatar} size="4rem" userID={this.props.userID} />
     ) : (
       <FaUser color="#f0f8ff" size="2rem" />
     );
 
     const getDate = (date) => {
-      const sec = (-new Date(date).getTime() + new Date().getTime()) / 1000;
+      const sec = Math.ceil(
+        (new Date().getTime() - new Date(date).getTime()) / 1000
+      );
+      const min = Math.ceil(sec / 60);
       const hour = Math.ceil(sec / 3600);
       if (hour >= 24) return dateFormat(new Date(date), 'mmm d');
-      return `${hour}h`;
+      else if (sec < 60 && min < 60 && hour < 24) return `${sec}s`;
+      else if (min < 60 && hour < 24) return `${min}m`;
+      else if (hour < 24) return `${hour}h`;
     };
 
-    const imageForm = (
-      <form className="">
-        <input type="file" id="file-input" name="ImageStyle" />
-        <button>SEND</button>
-      </form>
-    );
     return (
       <>
         <Modal actions={() => this.props.history.go(0)}>
@@ -172,7 +164,11 @@ class TweetBox extends Component {
           onClick={() => this.props.history.push(`/tweets/${this.props.id}`)}
         >
           <Link to={`/users/${user.username}`} className={classes.logo}>
-            {logo}
+            <Avatar
+              avatar={user.avatar}
+              size="4rem"
+              userID={this.props.userID}
+            />
           </Link>
           <div className={classes.wrapper}>
             <div className={classes.identifier}>

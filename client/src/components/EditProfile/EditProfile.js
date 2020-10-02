@@ -7,12 +7,14 @@ import FormField from '../FormFiled/FormField';
 import Modal from '../../hoc/Modal/Modal';
 
 import formStyle from '../FormFiled/FormField.module.css';
-import classes from './Picture.module.css';
+import classes from './EditProfile.module.css';
 
 import validate from '../../utils/validateForm';
-import { signup } from '../../store/actions';
+import { updateProfile } from '../../store/actions';
+import Avatar from '../UI/Avatar/Avatar';
+import Cover from '../UI/Cover/Cover';
 
-class SignUp extends Component {
+class EditProfile extends Component {
   state = {
     currentStep: 1,
     formError: false,
@@ -28,7 +30,7 @@ class SignUp extends Component {
           placeholder: 'Enter your fullname',
         },
         validation: {
-          required: true,
+          required: false,
         },
       },
       bio: {
@@ -147,7 +149,7 @@ class SignUp extends Component {
       }
     }
 
-    if (element.config.type === 'file') {
+    if (newElement.config.type === 'file') {
       if (element.files && element.files[0]) {
         newElement.value = element.files[0];
       }
@@ -188,17 +190,25 @@ class SignUp extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
+    const { formData } = this.state;
+    const formToSubmit = new FormData();
     const dataToSubmit = {};
     let isValid = true;
 
-    for (let key in this.state.formData) {
-      dataToSubmit[key] = this.state.formData[key].value;
-      isValid = isValid && this.state.formData[key].valid;
+    for (let key in formData) {
+      if (formData[key].value) {
+        dataToSubmit[key] = formData[key].value;
+        isValid = isValid && formData[key].valid;
+      }
+    }
+
+    for (let key in dataToSubmit) {
+      formToSubmit.append(key, dataToSubmit[key]);
     }
 
     if (isValid) {
-      this.props.signup(dataToSubmit);
-      this.props.history.push('/signin');
+      this.props.onUpdateProfile(this.props.userID, formToSubmit);
+      this.props.history.push(`users/${this.props.userID}`);
     } else {
       this.setState({ formError: true });
       document.getElementById('myModal').style.display = 'block';
@@ -206,6 +216,12 @@ class SignUp extends Component {
   };
 
   render() {
+    const { userID, match, users } = this.props;
+    const { username } = match.params;
+    const user = users.find(
+      (user) => user._id === username || user.username === username
+    );
+
     const form = (
       <form className={formStyle.form} onSubmit={this.handleSubmit}>
         {this.createForm(this.state.formData)}
@@ -219,11 +235,25 @@ class SignUp extends Component {
       </form>
     );
 
+    if (!user) {
+      return null;
+    }
+
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
           <h1>Edit Profile</h1>
-          {form}
+          <div className={classes.header}>
+            <div className={classes.images}>
+              <Cover cover={user.cover} userID={userID} />{' '}
+              <Avatar
+                avatar={user.avatar}
+                userID={userID}
+                position="absolute"
+              />
+            </div>
+          </div>
+          <div className={classes.form}>{form}</div>
           <Modal>
             {this.state.formError ? (
               <p className={classes.error}>Please fill all fields properly</p>
@@ -235,17 +265,22 @@ class SignUp extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
-  console.log('user :>> ', user);
+const mapStateToProps = ({ error, auth, user }) => {
   return {
-    error: user.error,
+    userID: auth.userID,
+    users: user.users,
+    loggedIn: !!auth.token,
+    error: error.user,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signup: (user) => dispatch(signup(user)),
+    onUpdateProfile: (id, user) => dispatch(updateProfile(id, user)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(EditProfile));

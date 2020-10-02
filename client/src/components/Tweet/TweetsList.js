@@ -5,7 +5,6 @@ import classes from './TweetBox.module.css';
 
 const TweetsList = ({ tweets, message }) => {
   let list = null;
-  console.log('TweetsList tweets :>> ', tweets);
   if (tweets.length === 0) {
     list = <div className={classes.message}>{message}</div>;
   } else {

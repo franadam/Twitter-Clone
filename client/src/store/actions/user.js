@@ -5,7 +5,7 @@ import {
   FETCH_CURRENT_USER,
   FETCH_USERS,
   FETCH_USER_BY_NAME,
-  CLEAR_ERROR,
+  USER_UPDATE_PROFILE,
 } from './types';
 
 const currentUser = (user) => ({
@@ -23,8 +23,9 @@ const getUserByName = (user) => ({
   user,
 });
 
-export const clearUserError = () => ({
-  type: CLEAR_ERROR,
+const updateProfileSuccess = (user) => ({
+  type: USER_UPDATE_PROFILE,
+  user,
 });
 
 export const fetchUserByName = (username) => async (dispatch) => {
@@ -47,6 +48,22 @@ export const fetchUsers = () => async (dispatch) => {
     const res = await axios.get(`/api/users/`);
     dispatch(fetchUsersSuccess(res.data));
   } catch (error) {
+    dispatch(errorUsers(error));
+  }
+};
+
+export const updateProfile = (id, updates) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem('jwtToken');
+    setAuthToken(token);
+    const res = await axios.patch(`/api/users/${id}`, updates, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    dispatch(updateProfileSuccess(res.data));
+  } catch (error) {
+    console.log('user error', error);
     dispatch(errorUsers(error));
   }
 };

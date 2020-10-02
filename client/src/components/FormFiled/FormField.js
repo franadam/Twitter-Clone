@@ -33,6 +33,18 @@ const formField = ({ field, id, change, keyUp, focus, blur }) => {
               {showError()}
             </>
           );
+        } else if (field.config.type === 'file') {
+          formTemplate = (
+            <>
+              <input
+                className={classes.fInput}
+                {...field.config}
+                id={id}
+                onChange={(event) => change({ event, id })}
+              />
+              {showError()}
+            </>
+          );
         } else {
           formTemplate = (
             <>
