@@ -58,7 +58,11 @@ class CreateTweet extends React.Component {
 
     this.props.onCreateNewTweet(formData);
     this.setState({ text: '', newTweet: tweet });
-    this.props.history.goBack();
+    if (this.props.match.url === '/compose/tweet') {
+      this.props.history.goBack();
+    } else {
+      this.props.history.go(0);
+    }
   };
 
   onImageChange = (event) => {

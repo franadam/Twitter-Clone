@@ -8,11 +8,21 @@
 .unsigned {
   flex-direction: column;
 }
+
 .children {
   flex-grow: 1;
-  border-left: 2px solid aliceblue;
+  border-right: 2px solid rgba(240, 248, 255, 0.6);
+  border-left: 2px solid rgba(240, 248, 255, 0.6);
 }
 
+.following {  
+  padding: 2rem;
+  min-width: 20rem; 
+}
+
+.unsigned .children {
+  border: none;
+}
 
 @media screen and (max-width: 700px) {
   .main {
@@ -23,6 +33,9 @@
   width: 100%;
   border: none;
   min-height: 80vh;
+  }
 
+  .following {
+    display: none;
   }
 }

@@ -4,7 +4,10 @@ import classes from './Avatar.module.css';
 
 const Avatar = ({ avatar, userID, size, position }) => {
   let style = {};
-  if (size) style.height = size;
+  if (size) {
+    style.height = size;
+    style.width = size;
+  }
   if (position) style.position = position;
   return avatar ? (
     <div className={classes.avatar} style={style}>
@@ -15,7 +18,12 @@ const Avatar = ({ avatar, userID, size, position }) => {
       />
     </div>
   ) : (
-    <FaUser color="#f0f8ff" size="2rem" />
+    <div
+      className={classes.avatar}
+      style={{ ...style, backgroundColor: '#15202b' }}
+    >
+      <FaUser size={!size ? '6rem' : size} />
+    </div>
   );
 };
 

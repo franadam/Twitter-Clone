@@ -1,0 +1,43 @@
+.main {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: aliceblue;
+  z-index: 10;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: fixed;
+  top: 0;
+  margin-top: 2rem;
+  padding :1rem;
+  border-radius: 5px;
+  background-color: rgba(0, 157, 255, 0.1) ;
+}
+
+.wrapper div {
+  font-size: small;
+}
+.wrapper > div {
+  width: 100%;
+}
+
+.wrapper button {
+  align-self: center;
+  top: .5rem;
+  right: .5rem;
+}
+
+.header {
+  padding: .5rem;
+  font-size: large;
+  font-family: 'Roboto';
+  text-transform: uppercase;
+}
+

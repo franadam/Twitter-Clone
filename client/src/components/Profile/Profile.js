@@ -1,23 +1,60 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import dateFormat from 'dateformat';
-import { FaCalendarAlt, FaUser, FaMapMarkerAlt, FaLink } from 'react-icons/all';
+import { FaCalendarAlt, FaMapMarkerAlt, FaLink } from 'react-icons/all';
 
 import TweetsList from '../Tweet/TweetsList';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../UI/Spinner/Spinner';
 
-import classes from './Profile.module.css';
 import Avatar from '../UI/Avatar/Avatar';
 import Cover from '../UI/Cover/Cover';
 
-class Profile extends React.Component {
+import classes from './Profile.module.css';
+
+import {
+  unfollowUser,
+  followUser,
+  fetchCurrentUser,
+} from '../../store/actions';
+
+class Profile extends Component {
+  state = {
+    isFollowed: false,
+    user: {},
+  };
+
   componentDidMount = () => {
-    const { username } = this.props.match.params;
-    const user = this.props.users.find(
-      (user) => user._id === username || user.username === username
-    );
-    this.setState({ user });
+    console.log('this.props', this.props);
+    const isFollowed = this.checkFollowing();
+    this.setState({ isFollowed });
+  };
+
+  componentWillUnmount = () => {
+    this.setState({ isFollowed: false });
+  };
+
+  checkFollowing = () => {
+    const { me, userID } = this.props;
+    const isFollowed = me.following
+      ? !!me.following.find((follow) => follow.follower === userID)
+      : null;
+    return isFollowed;
+  };
+
+  followHander = () => {
+    const { isFollowed, user } = this.state;
+    if (!this.props.loggedIn) {
+      this.props.history.push('/login');
+    } else {
+      if (isFollowed) {
+        this.props.onUnfollowUser(user._id);
+        this.setState({ isFollowed: false });
+      } else {
+        this.props.onFollowUser(user._id);
+        this.setState({ isFollowed: true });
+      }
+    }
   };
 
   showTab = (event, tab) => {
@@ -40,15 +77,18 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { match, tweets: all, users, userID } = this.props;
+    const { tweets: all, userID, match } = this.props;
     const { username } = match.params;
-    const user = users.find(
+    const user = this.props.users.find(
       (user) => user._id === username || user.username === username
     );
 
+    console.log('user :>> ', user);
     if (!user || !user.createdAt) {
       return <Spinner />;
     }
+
+    //
 
     const { likes: tweetLiked } = user;
     const tweetsAndReplies = all.filter((tweet) => tweet.user === user._id);
@@ -59,31 +99,12 @@ class Profile extends React.Component {
 
     const likes = tweetLiked.map((like) => all.find((l) => like._id === l._id));
 
-    const logo = user.avatar ? (
-      <div className={classes.avatar} href={`/${user.username}/avatar`}>
-        <img src={`/api/users/${user.username}/avatar`} alt="logo" />
-      </div>
-    ) : (
-      <FaUser className={classes.avatar} size="5rem" />
-    );
-    const cover = user.cover ? (
-      <a href={`/api/users/${user.username}/cover`}>
-        <img
-          className={classes.cover}
-          src={`/api/users/${user.username}/cover`}
-          alt="cover"
-        />
-      </a>
-    ) : (
-      <div className={classes.cover}></div>
-    );
-
     const joinedAt = new Date(user.createdAt);
     return (
       <div>
         <div className={classes.header}>
           <div className={classes.images}>
-            <Cover cover={user.cover} userID={user._id} />
+            <Cover cover={user.cover} userID={user._id} myID={userID} />
             <Avatar
               avatar={user.avatar}
               userID={user._id}
@@ -91,8 +112,16 @@ class Profile extends React.Component {
             />
           </div>
           <div className={classes.btns}>
+            {user._id !== userID ? (
+              <button
+                className={classes.btn}
+                onClick={() => this.followHander()}
+              >
+                {this.state.isFollowed ? 'Unfollow' : 'Follow'}
+              </button>
+            ) : null}
             {user._id === userID ? (
-              <Link className={classes.edit} to={`/users/${userID}/edit`}>
+              <Link className={classes.btn} to={`/users/${userID}/edit`}>
                 Edit Profile
               </Link>
             ) : null}
@@ -109,12 +138,25 @@ class Profile extends React.Component {
               ) : null}
               {user.website ? (
                 <p>
-                  <FaLink /> {user.website}
+                  <FaLink />{' '}
+                  <a href={user.website} target="_blank">
+                    {user.website}
+                  </a>
                 </p>
               ) : null}
               <p>
                 <FaCalendarAlt /> Joined {dateFormat(joinedAt, 'mmmm yyyy')}
               </p>
+            </div>
+            <div className={classes.follows}>
+              <Link to={`/users/${userID}/follow`}>
+                <div className={classes.count}>{user.following.length}</div>
+                following
+              </Link>
+              <Link to={`/users/${userID}/follow`}>
+                <div className={classes.count}>{user.followers.length}</div>
+                followers
+              </Link>
             </div>
           </div>
         </div>
@@ -159,18 +201,14 @@ class Profile extends React.Component {
           <TweetsList
             key="tweets_and_replies"
             tweets={tweetsAndReplies || []}
-            message={`${user.fullname} has not liked anything yet`}
+            message={`${user.fullname} has not tweeted or commented yet`}
           />
         </div>
-        <div
-          className={classes.tab__content}
-          style={{ display: 'block' }}
-          id="medias"
-        >
+        <div className={classes.tab__content} id="medias">
           <TweetsList
             key="medias"
             tweets={medias || []}
-            message={`${user.fullname} has not tweeted yet`}
+            message={`${user.fullname} has not tweeted any medias yet`}
           />
         </div>
         <div className={classes.tab__content} id="likes">
@@ -189,9 +227,19 @@ const mapStateToProps = ({ user, tweet, auth }) => {
   return {
     tweets: tweet.tweets,
     users: user.users,
+    me: user.user,
     loggedIn: !!auth.token,
     userID: auth.userID,
   };
 };
 
-export default connect(mapStateToProps)(withRouter(Profile));
+const mapDispatchToProps = (dispatch) => ({
+  onFollowUser: (userID) => dispatch(followUser(userID)),
+  onUnfollowUser: (userID) => dispatch(unfollowUser(userID)),
+  onFetchCurrentUser: (userID) => dispatch(fetchCurrentUser(userID)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Profile));

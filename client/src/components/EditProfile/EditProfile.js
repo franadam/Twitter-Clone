@@ -245,7 +245,7 @@ class EditProfile extends Component {
           <h1>Edit Profile</h1>
           <div className={classes.header}>
             <div className={classes.images}>
-              <Cover cover={user.cover} userID={userID} />{' '}
+              <Cover cover={user.cover} userID={userID} myID={userID} />{' '}
               <Avatar
                 avatar={user.avatar}
                 userID={userID}

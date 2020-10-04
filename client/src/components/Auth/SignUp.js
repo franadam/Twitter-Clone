@@ -12,6 +12,7 @@ import classes from './SignIn.module.css';
 
 import validate from '../../utils/validateForm';
 import { signup } from '../../store/actions';
+import { FaTwitter } from 'react-icons/fa';
 
 class SignUp extends React.Component {
   state = {
@@ -218,7 +219,7 @@ class SignUp extends React.Component {
         {this.createForm(this.state.formData)}
         <ShowPasswordField />
         <button
-          className={formStyle.btn}
+          className={`${formStyle.btn} ${formStyle.submit}`}
           onClick={(event) => this.handleSubmit(event)}
           type="submit"
         >
@@ -230,16 +231,15 @@ class SignUp extends React.Component {
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
-          <h1>Twitter</h1>
+          <h1>
+            <FaTwitter size="4rem" />
+          </h1>
           {form}
           <Modal>
             {this.state.formError ? (
               <p className={classes.error}>Please fill all fields properly</p>
             ) : null}
           </Modal>
-          <Link to="/signin" className={classes.link}>
-            SIGN IN
-          </Link>
         </div>
       </div>
     );

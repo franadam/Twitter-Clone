@@ -7,49 +7,26 @@
   margin-bottom: 3rem;
 }
 
-.cover {
-  height: 250px;
-  max-height: 40vh;
-  background-color: rgb(25, 97, 143);
-  width: 100%;
-}
-
-.avatar {
-  display: flex;
-  position: absolute;
-  bottom: -3rem;
-  height: 8rem;
-  width: 8rem;
-  border-radius: 50%;
-  border: 5px solid #15202b;
-  background-color: aliceblue;
-  overflow: hidden;
-  justify-content: center;
-  align-items: center;
-  color: #15202b;
-}
-
-.avatar img {
-  height: 100%;
-}
-
 .btns {
   display: flex;
   justify-content: flex-end;
   padding-right: .5rem;
 }
 
-.edit {
+.btn {
   text-decoration: none;
   color: rgb(0, 157, 255);
   border: 2px solid  rgb(0, 157, 255);
   border-radius: 20px;
   padding: .5rem;
+  background-color: #15202b;
+  cursor: pointer;
 }
 
-.edit:hover {
+.btn:hover {
   background-color: aliceblue;
 }
+
 .info {
   color: rgba(240, 248, 255, 0.7);
   padding: .5rem;
@@ -77,6 +54,26 @@
 .place p {
   padding: 0 .5rem;
 }
+
+.place a {
+  color: rgb(0, 157, 255);
+  text-decoration: none;
+}
+
+.follows, .follows a {
+  display: flex;
+  justify-content: flex-start;
+  text-transform: capitalize;
+  color: aliceblue;
+  text-decoration: none;
+}
+
+.count {
+  color: aliceblue;
+  font-weight: bold;
+  padding: 0 .5rem;
+}
+
 .tabs {
   display: flex;
   justify-content: space-evenly;

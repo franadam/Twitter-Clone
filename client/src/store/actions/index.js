@@ -14,6 +14,8 @@ export {
   fetchUserByName,
   fetchUsers,
   updateProfile,
+  followUser,
+  unfollowUser,
 } from './user';
 
 export {

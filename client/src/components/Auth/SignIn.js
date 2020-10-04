@@ -153,7 +153,7 @@ class SignIn extends React.Component {
         {this.createForm(this.state.formData)}
         <ShowPasswordField />
         <button
-          className={formStyle.btn}
+          className={`${formStyle.btn} ${formStyle.submit}`}
           onClick={(event) => this.handleSubmit(event)}
           type="submit"
         >
@@ -181,9 +181,6 @@ class SignIn extends React.Component {
               <p className={classes.success}>{this.state.formSuccess}</p>
             ) : null}
           </Modal>
-          <Link to="/signup" className={classes.link}>
-            SIGN UP
-          </Link>
         </div>
       </div>
     );

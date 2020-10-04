@@ -1,0 +1,60 @@
+.main{
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  border: 1px rgba(240, 248, 255, 0.6) solid;
+  padding: .5rem;
+  cursor: pointer;
+  text-decoration: none;
+  width: 100%;
+  color: inherit;
+}
+.main:hover{
+  background-color: hsla(210, 100%, 50%, 0.3);
+}
+.info {
+  color: rgba(240, 248, 255, 0.7);
+  padding: .5rem;
+}
+
+.info__fullname {
+  color:aliceblue ;
+  text-transform: capitalize;
+  margin-bottom: 0;
+}
+
+.info__username {
+  margin-top: 0;
+}
+
+.info__bio {
+  color: aliceblue;
+}
+
+.btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  text-decoration: none;
+  color: rgb(0, 157, 255);
+  border: 2px solid  rgb(0, 157, 255);
+  border-radius: 20px;
+  padding: .8rem;
+  background-color: #15202b;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: aliceblue;
+}
+
+.logo {
+  align-self: flex-start;
+  height: 2rem;
+}
+
+.logo img {
+  height: 100%;
+  background-color: aliceblue;
+  border-radius: 50%;
+}

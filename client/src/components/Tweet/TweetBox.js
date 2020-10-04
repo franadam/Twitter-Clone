@@ -11,7 +11,7 @@ import {
   FaTrashAlt,
 } from 'react-icons/all';
 import classes from './TweetBox.module.css';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../UI/Spinner/Spinner';
 import Modal from '../../hoc/Modal/Modal';
 
 import {
@@ -26,61 +26,9 @@ import Avatar from '../UI/Avatar/Avatar';
 
 class TweetBox extends Component {
   state = {
-    user: null,
     isLiked: false,
     isCommented: false,
     isLoading: true,
-  };
-
-  componentDidMount = () => {
-    //this.getTweetLikes();
-    //this.getTweetComments();
-    this.getUserById();
-    //console.log('this.props :>> ', this.props);
-  };
-
-  getTweetLikes = async () => {
-    try {
-      const { likes } = this.props;
-      const like = likes.filter(
-        (like) => like.user === this.props.myID && like.tweet === this.props.id
-      );
-
-      this.setState({
-        isLoading: false,
-      });
-      this.setState({ isLiked: like.length !== 0 });
-    } catch (error) {
-      //console.log('error :>> ', error);
-    }
-  };
-
-  getTweetComments = async () => {
-    try {
-      const res = await axios.get(`/api/tweets/${this.props.id}/comments`);
-      const comments = res.data;
-      this.setState({ comments });
-      const comment = comments.filter(
-        (comment) =>
-          comment.user === this.props.myID && comment.tweet === this.props.id
-      );
-      this.setState({ isCommented: comment.length !== 0 });
-    } catch (error) {
-      console.log('error :>> ', error);
-    }
-  };
-
-  getUserById = async () => {
-    try {
-      //const res = await axios.get(`/api/users/${this.props.userID}`);
-      //const user = res.data;
-      const user = this.props.users.find(
-        (user) => user._id === this.props.userID
-      );
-      this.setState({ user });
-    } catch (error) {
-      console.log('error :>> ', error);
-    }
   };
 
   addComment = (event) => {
@@ -128,14 +76,18 @@ class TweetBox extends Component {
   };
 
   render() {
-    const { isCommented, isLiked, user } = this.state;
-    const { text, date, media, myID, likes, comments } = this.props;
-    if (!likes || !user) {
+    const { isCommented, isLiked } = this.state;
+    const { text, users, date, media, myID, likes, comments } = this.props;
+
+    const user = users.find((user) => user._id === this.props.userID);
+
+    if (!user) {
       return <Spinner />;
     }
-    const like = likes.find(
-      (like) => like.user === this.props.myID && like.tweet === this.props.id
-    );
+    const like =
+      likes.find(
+        (like) => like.user === this.props.myID && like.tweet === this.props.id
+      ) || [];
     const logo = user.avatar ? (
       <Avatar avatar={user.avatar} size="4rem" userID={this.props.userID} />
     ) : (

@@ -13,17 +13,13 @@ import Profile from './Profile/Profile';
 import CreateTweet from './Tweet/CreateTweet';
 import Layout from '../hoc/Layout/Layout';
 import EditProfile from './EditProfile/EditProfile';
+import Follows from './Follows/Follows';
 
 export class App extends Component {
   componentDidMount = () => {
     this.props.authCheckState();
     this.props.fetchTweets();
     this.props.fetchUsers();
-    this.intervalID = setInterval(this.fetchTweets, 5000);
-  };
-
-  componentWillUnmount = () => {
-    clearInterval(this.intervalID);
   };
 
   render() {
@@ -45,6 +41,7 @@ export class App extends Component {
           <Route path="/tweets/:tweetID" component={Tweet} />
           <Route path="/compose/tweet" component={CreateTweet} />
           <Route exact path="/users/:username/edit" component={EditProfile} />
+          <Route exact path="/users/:username/follow" component={Follows} />
           <Route path="/setting" component={SignIn} />
           <Route exact path="/home" component={Home} />
           <Redirect to="/home" />

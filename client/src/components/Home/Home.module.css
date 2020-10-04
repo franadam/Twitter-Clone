@@ -13,7 +13,9 @@
   border-radius: 50%;
   background-color: aliceblue;
 }
-
+.main input {
+  background-color: rgb(21, 32, 43);
+}
 .compose {
   display: block;
   border-top: 1px solid rgba(240, 248, 255, 0.6) ;

@@ -2,6 +2,9 @@ import {
   FETCH_USERS,
   FETCH_USER_BY_NAME,
   USER_UPDATE_PROFILE,
+  FETCH_CURRENT_USER,
+  FOLLOW_USER,
+  UNFOLLOW_USER,
 } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
@@ -44,6 +47,32 @@ const updateProfile = (state, action) => {
   return updateObject(newState, { users });
 };
 
+const fetchCurrentUser = (state, { user }) => {
+  console.log('reducer user :>> ', user.createdAt);
+  return updateObject(state, { user });
+};
+
+const followUser = (state, { follow }) => {
+  console.log('user follow :>> ', follow);
+  const following = state.user.following.splice();
+  following.push(follow);
+  following.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  console.log('user following :>> ', following);
+  const user = updateObject(state.user, { following });
+  return updateObject(state, { user });
+};
+
+const unfollowUser = (state, { follow }) => {
+  console.log('user follow :>> ', follow);
+  const following = state.user.following.filter(
+    (follower) => follower._id !== follow._id
+  );
+  following.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  console.log('user following :>> ', following);
+  const user = updateObject(state.user, { following });
+  return updateObject(state, { user });
+};
+
 export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_USERS:
@@ -52,6 +81,12 @@ export default function (state = initialState, action) {
       return getUser(state, action);
     case USER_UPDATE_PROFILE:
       return updateProfile(state, action);
+    case FETCH_CURRENT_USER:
+      return fetchCurrentUser(state, action);
+    case FOLLOW_USER:
+      return followUser(state, action);
+    case UNFOLLOW_USER:
+      return unfollowUser(state, action);
     default:
       return state;
   }

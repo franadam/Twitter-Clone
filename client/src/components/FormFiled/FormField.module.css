@@ -24,9 +24,14 @@
   background-color: rgb(0, 157, 255);
 }
 
+.submit {
+  float: right;
+}
+
 .field {
   background-color: rgb(42, 63, 83);
   margin: 1rem 0;
+  border-bottom: 2px solid #0091ff;
 }
 
 .field:hover .fInput::placeholder,
@@ -46,8 +51,8 @@
   display: block;
   width: 100%;
   border: none;
+  background-color: rgb(42, 63, 83);
   border-radius: 5px;
-  background-color: rgb(21, 32, 43);
   outline: none;
   font-size: 1.3rem;
 }

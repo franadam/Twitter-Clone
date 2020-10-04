@@ -12,12 +12,19 @@ const Like = require('../../models/Like');
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 const uploadImage = require('../../services/loader');
+const Follow = require('../../models/Follow');
 const router = express.Router();
 
 router.get('/:username', async (req, res) => {
-  const username = req.params.username;
   try {
+    const { username } = req.params;
+    let _id;
+    const isValidObjectId = mongoose.isValidObjectId(username);
+    if (isValidObjectId) {
+      _id = mongoose.Types.ObjectId(username);
+    }
     const users = await User.aggregate([
+      { $match: { $or: [{ username }, { _id }] } },
       {
         $lookup: {
           from: 'likes',
@@ -60,41 +67,41 @@ router.get('/:username', async (req, res) => {
           as: 'tweets',
         },
       },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'follower',
+          as: 'following',
+        },
+      },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'followed',
+          as: 'followers',
+        },
+      },
+      { $project: { password: 0, birth_date: 0 } },
     ]);
 
-    let user;
-    if (mongoose.isValidObjectId(username)) {
-      user = users.find((u) => u._id == username);
-    } else {
-      user = users.find((u) => u.username === username);
-    }
-    //console.log('user', user);
-    res.send(user);
+    res.send(users[0]);
   } catch (error) {
     res.status(500).send(error);
   }
-  /*
-  const user =
-    (await User.findOne({ username: req.params.username })) ||
-    (await User.findById(req.params.username));
-  const { _id, fullname, username, avatar, cover, createdAt } = user;
-  res.json({
-    _id,
-    fullname,
-    username,
-    avatar,
-    cover,
-    createdAt,
-  });
-  */
 });
 
-router.get('/:id/avatar', async (req, res) => {
-  const username = req.params.id;
+router.get('/:username/avatar', async (req, res) => {
+  const { username } = req.params;
+  let _id;
+  const isValidObjectId = mongoose.isValidObjectId(username);
+  if (isValidObjectId) {
+    _id = mongoose.Types.ObjectId(username);
+  }
 
   try {
-    const user =
-      (await User.findOne({ username })) || (await User.findById(username));
+    const user = await User.findOne({ $or: [{ username }, { _id }] });
 
     if (!user || !user.avatar) {
       throw new Error();
@@ -139,11 +146,16 @@ router.delete(
   }
 );
 
-router.get('/:id/cover', async (req, res) => {
-  const username = req.params.id;
+router.get('/:username/cover', async (req, res) => {
+  const { username } = req.params;
+  let _id;
+  const isValidObjectId = mongoose.isValidObjectId(username);
+  if (isValidObjectId) {
+    _id = mongoose.Types.ObjectId(username);
+  }
+
   try {
-    const user =
-      (await User.findOne({ username })) || (await User.findById(username));
+    const user = await User.findOne({ $or: [{ username }, { _id }] });
 
     if (!user || !user.cover) {
       throw new Error();
@@ -249,6 +261,11 @@ router.patch(
     //const { errors, isValid } = validateRegisterInput(req.body);
     const updates = {};
     const { username } = req.params;
+    let _id;
+    const isValidObjectId = mongoose.isValidObjectId(username);
+    if (isValidObjectId) {
+      _id = mongoose.Types.ObjectId(username);
+    }
 
     for (let key in req.body) {
       if (req.body[key]) {
@@ -259,9 +276,11 @@ router.patch(
     try {
       //if (req.user.id === username || req.user.username === username) {} else throw new Error('Unauthorized ');
 
-      const user =
-        (await User.findOneAndUpdate({ username }, updates)) ||
-        (await User.findByIdAndUpdate(username, updates));
+      const user = await User.findOneAndUpdate(
+        { $or: [{ username }, { _id }] },
+        updates
+      );
+
       if (!user) {
         throw new Error('User does not exists');
       }
@@ -284,7 +303,7 @@ router.patch(
       }
       res.send(user);
     } catch (error) {
-      res.status(400).json(errors);
+      res.status(400).send({ error: error.message });
     }
   }
 );
@@ -335,21 +354,83 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get(
-  '/current',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json({
-      user: {
-        id: req.user.id,
-        fullname: req.user.fullname,
-        username: req.user.username,
-        email: req.user.email,
-        birth_date: req.user.birth_date,
+router.get('/current', async (req, res) => {
+  console.log('req.user.id :>> ', req.user.id);
+  try {
+    const _id = mongoose.Types.ObjectId(req.user.id);
+    const users = await User.aggregate([
+      { $match: { _id } },
+      {
+        $lookup: {
+          from: 'likes',
+          let: { userID: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$userID', '$user'] } } },
+            {
+              $lookup: {
+                from: 'tweets',
+                let: { tweet: '$tweet' },
+                pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$tweet'] } } }],
+                as: 'tweets',
+              },
+            },
+            { $unwind: '$tweets' },
+            { $project: { _id: 0, tweets: 1 } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'likes',
+        },
       },
-    });
+      {
+        $lookup: {
+          from: 'tweets',
+          let: { userID: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$$userID', '$user'] } } },
+            {
+              $lookup: {
+                from: 'tweets',
+                let: { tweetID: '$_id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$tweet', '$$tweetID'] } } },
+                ],
+                as: 'comments',
+              },
+            },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: 'tweets',
+        },
+      },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'follower',
+          as: 'following',
+        },
+      },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'followed',
+          as: 'followers',
+        },
+      },
+      { $project: { password: 0, birth_date: 0 } },
+    ]);
+
+    const user = users[0];
+    if (!user) throw new Error('not found');
+    await user.save();
+
+    res.send(user);
+  } catch (error) {
+    console.log('error :>> ', error);
+    res.status(400).send(error.message);
   }
-);
+});
 
 router.delete(
   '/current',
@@ -451,6 +532,22 @@ router.get('/', async (req, res) => {
           as: 'tweets',
         },
       },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'follower',
+          as: 'following',
+        },
+      },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'followed',
+          as: 'followers',
+        },
+      },
       { $project: { password: 0, birth_date: 0 } },
     ]);
 
@@ -459,5 +556,88 @@ router.get('/', async (req, res) => {
     res.status(500).send();
   }
 });
+
+router.get('/:username/follows', async (req, res) => {
+  try {
+    const { username } = req.params;
+    let _id;
+    const isValidObjectId = mongoose.isValidObjectId(username);
+    if (isValidObjectId) {
+      _id = mongoose.Types.ObjectId(username);
+    }
+    const followers = await User.aggregate([
+      { $match: { $or: [{ username }, { _id }] } },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'follower',
+          as: 'following',
+        },
+      },
+      {
+        $lookup: {
+          from: 'follows',
+          localField: '_id',
+          foreignField: 'followed',
+          as: 'followers',
+        },
+      },
+      { $project: { _id: 1, username: 1, followers: 1, following: 1 } },
+    ]).sort({ updatedAt: -1 });
+    res.send(followers[0]);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
+router.post(
+  '/:id/follows',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    try {
+      console.log('req.params.id, :>> ', req.params.id, req.user.id);
+      if (req.params.id === req.user.id) {
+        console.log('req.params.id === req.user.id');
+        throw new Error("You can't follow yourself");
+      }
+      const following = await Follow.findOne({
+        followed: req.params.id,
+        follower: req.user.id,
+      });
+      if (following) {
+        throw new Error('You already followed this person');
+      } else {
+        const newFollowing = new Follow({
+          followed: req.params.id,
+          follower: req.user.id,
+        });
+
+        await newFollowing.save();
+
+        res.send(newFollowing);
+      }
+    } catch (error) {
+      console.log('error :>> ', error);
+      res.status(500).send({ error: error.message });
+    }
+  }
+);
+
+router.delete(
+  '/:id/follows',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    try {
+      const following = await Follow.findOneAndDelete({
+        followed: req.params.id,
+        follower: req.user.id,
+      });
+      res.send(following);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
 
 module.exports = router;

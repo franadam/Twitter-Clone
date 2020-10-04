@@ -1,36 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
-import TweetBox from '../Tweet/TweetBox';
 
-import { fetchTweets, fetchCurrentUser } from '../../store/actions';
+import { fetchCurrentUser } from '../../store/actions';
 import CreateTweet from '../Tweet/CreateTweet';
-import { FaUser } from 'react-icons/all';
 
 import classes from './Home.module.css';
 import TweetsList from '../Tweet/TweetsList';
-class Tweet extends React.Component {
-  state = {
-    tweets: [],
-  };
 
+class Home extends Component {
   componentDidMount() {
-    //this.props.fetchTweets();
-    //    this.props.fetchCurrentUser();
+    this.props.onFetchCurrentUser(this.props.userID);
   }
 
+  getTweets = () => {
+    const { tweets, me, userID } = this.props;
+    if (tweets && me.following) {
+      const follows = me.following.map((follow) => follow.followed);
+      const newTweets = tweets.filter(
+        (tweet) => follows.includes(tweet.user) || tweet.user === userID
+      );
+      return newTweets;
+    }
+    return [];
+  };
+
   render() {
-    const { user, userID, tweets } = this.props;
-    if (!user || !tweets) return null;
-    const logo = user.avatar ? (
-      <img
-        className={classes.avatar}
-        src={`/api/users/${userID}/avatar`}
-        alt="logo"
-      />
-    ) : (
-      <FaUser size="3rem" />
-    );
+    const { tweets } = this.props;
+    if (!tweets) return null;
 
     return (
       <div className={classes.main}>
@@ -38,21 +34,25 @@ class Tweet extends React.Component {
         <div className={classes.compose}>
           <CreateTweet />
         </div>
-        <TweetsList tweets={tweets} message={'Nobody has Tweeted yet !'} />
+        <TweetsList
+          tweets={this.getTweets()}
+          message={'Nobody has Tweeted yet !'}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ tweet, user, auth }) => {
+const mapStateToProps = ({ tweet, auth, user }) => {
   return {
     tweets: tweet.tweets,
-    user: user.user,
-    users: user.users,
     userID: auth.userID,
+    me: user.user,
   };
 };
 
-export default connect(mapStateToProps, { fetchTweets, fetchCurrentUser })(
-  Tweet
-);
+const mapDispatchToProps = (dispatch) => ({
+  onFetchCurrentUser: (userID) => dispatch(fetchCurrentUser(userID)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

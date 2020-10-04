@@ -13,4 +13,10 @@
 
 .avatar img {
   height: 100%;
+  
+}
+
+.avatar svg {
+ background-color: #15202b;
+ color: aliceblue;
 }

@@ -9,6 +9,7 @@ The app is deployed on
 
 * User authentification: sign up and log in
 * Tweet
+* Follow
 * Like / Unlike 
 * Comment
 * View Profile
@@ -44,3 +45,6 @@ You can find more detail about the API in the
 
 ### Comment
 ![Comment](screenshots/twitter-clone-comment.png?raw=true "Comment")
+
+### Follow
+![Follow](screenshots/twitter-clone-follows.png?raw=true "Follow")

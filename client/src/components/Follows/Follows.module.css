@@ -1,0 +1,31 @@
+
+.tabs {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.tweet {
+  border: 1px aliceblue solid;
+}
+
+.tab__header{
+  width: 100%;
+  margin: 0;
+  padding: 1.3rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tab__header:hover  {
+  background-color:  rgba(0, 157, 255, 0.2);
+  color:  rgb(0, 157, 255);
+}
+
+.tab__header__active {
+  color:  rgb(0, 157, 255);
+  border-bottom: 3px solid rgb(0, 157, 255);
+}
+
+.tab__content {
+  display: none;
+}

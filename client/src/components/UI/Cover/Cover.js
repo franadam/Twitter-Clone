@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Cover.module.css';
 
-const Cover = ({ cover, userID }) => {
+const Cover = ({ cover, userID, myID }) => {
   return cover ? (
     <div className={classes.cover}>
       <img
@@ -11,7 +11,14 @@ const Cover = ({ cover, userID }) => {
       />
     </div>
   ) : (
-    <div className={classes.cover}></div>
+    <div className={classes.cover}>
+      {userID === myID ? (
+        <>
+          <p>Update your profile</p>
+          <p>Add a cover</p>
+        </>
+      ) : null}
+    </div>
   );
 };
 

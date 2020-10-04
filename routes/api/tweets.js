@@ -37,10 +37,15 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/user/:username', async (req, res) => {
+  const { username } = req.params;
+  let _id;
+  const isValidObjectId = mongoose.isValidObjectId(username);
+  if (isValidObjectId) {
+    _id = mongoose.Types.ObjectId(username);
+  }
+
   try {
-    const user =
-      (await User.findOne({ username: req.params.username })) ||
-      (await User.findById(req.params.username));
+    const user = await User.findOne({ $or: [{ username }, { _id }] });
 
     const tweets = await Tweet.find({ user: user._id }).sort({ updatedAt: -1 });
     res.json(tweets);
