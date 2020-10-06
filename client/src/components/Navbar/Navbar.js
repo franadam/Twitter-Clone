@@ -9,14 +9,14 @@ import {
   FaBars,
 } from 'react-icons/all';
 
-import { logout } from '../../store/actions';
+import { logout, login } from '../../store/actions';
 
 import classes from './Navbar.module.css';
 
 class NavBar extends React.Component {
   logoutUser = (event) => {
     event.preventDefault();
-    this.props.logout();
+    this.props.onLogout();
   };
 
   activateLink = (event) => {
@@ -63,13 +63,31 @@ class NavBar extends React.Component {
       );
     } else {
       return (
-        <div className={`${classes.links} ${classes.navbar}`}>
-          <Link className={`${classes.link} ${classes.signup}`} to={'/signup'}>
-            Signup
-          </Link>
-          <Link className={`${classes.link} ${classes.signin}`} to={'/login'}>
-            Login
-          </Link>
+        <div className={classes.wrapper}>
+          <div className={`${classes.links} ${classes.navbar}`}>
+            <Link
+              className={`${classes.link} ${classes.signup}`}
+              to={'/signup'}
+            >
+              Signup
+            </Link>
+            <Link className={`${classes.link} ${classes.signin}`} to={'/login'}>
+              Login
+            </Link>
+          </div>
+
+          <button
+            className={`${classes.link} ${classes.demo}`}
+            onClick={() =>
+              this.props.onLogin({
+                email: 'guest@gmail.com',
+                password: 'Guest123.',
+              })
+            }
+            type="submit"
+          >
+            DEMO LOGIN
+          </button>
         </div>
       );
     }
@@ -94,4 +112,11 @@ const mapStateToProps = ({ auth }) => ({
   loggedIn: !!auth.token,
 });
 
-export default connect(mapStateToProps, { logout })(NavBar);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onLogout: () => dispatch(logout()),
+    onLogin: (user) => dispatch(login(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

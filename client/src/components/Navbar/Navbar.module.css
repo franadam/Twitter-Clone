@@ -9,7 +9,7 @@
   z-index: 10;
 }
 
-.main button {
+.main form button {
   height: 1.5rem;
 }
 
@@ -25,16 +25,25 @@
   box-shadow: 2px 2px 4px rgb(0, 157, 255) ;
 }
 
+.wrapper {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  text-align: center;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
   .links {
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
   justify-content: flex-start;
-  position: fixed;
-  top: 0;
 }
-  .link,
+
+
+.link,
 .auth {
   text-decoration: none;
   padding: 1rem .5rem;
@@ -60,6 +69,23 @@
   color:  rgb(0, 157, 255);
 }
 
+
+.demo {
+  max-width: max-content;
+  border: none;
+  height: unset;
+  padding:1rem;
+  color: aliceblue;
+  cursor: pointer;
+  margin: 0;
+  background-color: rgb(114, 180, 70);
+  font-weight: bold;
+}
+
+.demo:hover {
+  color: rgb(114, 180, 70);
+  background-color: aliceblue;
+}
 .signin {
   color :rgb(0, 157, 255);
   background-color: aliceblue;
