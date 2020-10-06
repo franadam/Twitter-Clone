@@ -60,7 +60,7 @@ class TweetBox extends Component {
     const like = likes.find(
       (like) => like.user === this.props.myID && like.tweet === this.props.id
     );
-    //console.log('likeHandler');
+    console.log('likeHandler, like, likes', like, likes);
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
     } else {
@@ -84,15 +84,14 @@ class TweetBox extends Component {
     if (!user) {
       return <Spinner />;
     }
-    const like =
+
+    const myLike =
       likes.find(
         (like) => like.user === this.props.myID && like.tweet === this.props.id
-      ) || [];
-    const logo = user.avatar ? (
-      <Avatar avatar={user.avatar} size="4rem" userID={this.props.userID} />
-    ) : (
-      <FaUser color="#f0f8ff" size="2rem" />
-    );
+      ) || {};
+
+    const myComment =
+      comments.find((comment) => comment.user === this.props.myID) || {};
 
     const getDate = (date) => {
       const sec = Math.ceil(
@@ -151,7 +150,7 @@ class TweetBox extends Component {
                 onClick={(event) => this.addComment(event)}
               >
                 <div className={classes.icon}>
-                  {isCommented ? (
+                  {isCommented || myComment._id ? (
                     <FaComment className={classes.commented} />
                   ) : (
                     <FaRegComment />
@@ -165,7 +164,7 @@ class TweetBox extends Component {
                 onClick={(event) => this.likeHandler(event)}
               >
                 <div className={classes.icon}>
-                  {isLiked || like ? (
+                  {isLiked || myLike._id ? (
                     <FaHeart className={classes.liked} />
                   ) : (
                     <FaRegHeart />

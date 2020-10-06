@@ -26,7 +26,6 @@ class Home extends Component {
 
   render() {
     const { tweets } = this.props;
-    if (!tweets) return null;
 
     return (
       <div className={classes.main}>
@@ -34,10 +33,12 @@ class Home extends Component {
         <div className={classes.compose}>
           <CreateTweet />
         </div>
-        <TweetsList
-          tweets={this.getTweets()}
-          message={'Nobody has Tweeted yet !'}
-        />
+        {!tweets ? null : (
+          <TweetsList
+            tweets={this.getTweets()}
+            message={'Nobody has Tweeted yet !'}
+          />
+        )}
       </div>
     );
   }

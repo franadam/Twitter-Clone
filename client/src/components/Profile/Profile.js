@@ -37,7 +37,7 @@ class Profile extends Component {
   checkFollowing = () => {
     const { me, userID } = this.props;
     const isFollowed = me.following
-      ? !!me.following.find((follow) => follow.follower === userID)
+      ? !!me.following.find((follow) => follow.followed === userID)
       : null;
     return isFollowed;
   };
@@ -83,10 +83,10 @@ class Profile extends Component {
       (user) => user._id === username || user.username === username
     );
 
-    console.log('user :>> ', user);
     if (!user || !user.createdAt) {
       return <Spinner />;
     }
+    console.log('user :>> ', user._id, user.likes, user.username);
 
     //
 

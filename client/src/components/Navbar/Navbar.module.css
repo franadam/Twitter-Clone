@@ -19,6 +19,7 @@
   flex-direction: row;
   align-items: flex-start;
   height: 5rem;
+  padding: 0;
   justify-content: center;
   background:rgb(21, 32, 43);
   width: 100%;
