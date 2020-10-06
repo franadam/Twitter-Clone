@@ -77,6 +77,9 @@ input[type='checkbox'] {
   background-color: rgb(255, 221, 221);
 }
 
+.empty .label {
+  color: red;
+}
 
 .empty::placeholder {
   color: red;

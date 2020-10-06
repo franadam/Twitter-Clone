@@ -135,9 +135,7 @@ class SignUp extends React.Component {
     const newFormData = { ...this.state.formData };
     const newElement = { ...newFormData[id] };
 
-    newElement.value = event.target.value;
-
-    const element = event.target;
+    const element = event.currentTarget;
 
     newElement.value = element.value;
 
@@ -145,10 +143,15 @@ class SignUp extends React.Component {
     newElement.valid = valid;
     newElement.validationMessage = validationMessage;
 
-    if (element.value === '') {
+    if (
+      (event.target.value === '' && newElement.validation.required) ||
+      (newElement.validation && !newElement.valid)
+    ) {
       element.classList.add(formStyle.empty);
+      element.parentElement.classList.add(formStyle.empty);
     } else {
       element.classList.remove(formStyle.empty);
+      element.parentElement.classList.remove(formStyle.empty);
     }
 
     if (id === 'password_confirmation') {
