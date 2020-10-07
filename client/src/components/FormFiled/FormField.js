@@ -1,17 +1,17 @@
 import React from 'react';
 import classes from './FormField.module.css';
+import PropTypes from 'prop-types';
 
-const formField = ({ field, id, change, keyUp, focus, blur }) => {
+function formField({ field, id, change, keyUp, focus, blur }) {
   const renderTemplate = () => {
     let formTemplate = null;
 
     const showError = () => {
-      let errorMessage = (
+      const errorMessage = (
         <div className={classes.error}>
           {field.validation && !field.valid ? field.validationMessage : null}
         </div>
       );
-
       return errorMessage;
     };
 
@@ -23,12 +23,12 @@ const formField = ({ field, id, change, keyUp, focus, blur }) => {
               <input
                 className={classes.fInput}
                 {...field.config}
-                value={field.value}
                 id={id}
-                onChange={(event) => change({ event, id })}
-                onKeyUp={(event) => keyUp(event)}
-                onFocus={(event) => focus(event)}
                 onBlur={(event) => blur(event)}
+                onChange={(event) => change({ event, id })}
+                onFocus={(event) => focus(event)}
+                onKeyUp={(event) => keyUp(event)}
+                value={field.value}
               />
               {showError()}
             </>
@@ -51,9 +51,9 @@ const formField = ({ field, id, change, keyUp, focus, blur }) => {
               <input
                 className={classes.fInput}
                 {...field.config}
-                value={field.value}
                 id={id}
                 onChange={(event) => change({ event, id })}
+                value={field.value}
               />
               {showError()}
             </>
@@ -66,8 +66,8 @@ const formField = ({ field, id, change, keyUp, focus, blur }) => {
           <>
             <select
               className={classes.fInput}
-              value={field.value}
               onChange={(event) => change({ event, id })}
+              value={field.value}
             >
               <option>Select One</option>
               {field.config.options.map((e) => (
@@ -88,6 +88,16 @@ const formField = ({ field, id, change, keyUp, focus, blur }) => {
   };
 
   return <>{renderTemplate()}</>;
+}
+
+formField.propTypes = {
+  field: PropTypes.object,
+  id: PropTypes.string,
+  blur: PropTypes.func,
+  change: PropTypes.func,
+  submit: PropTypes.func,
+  focus: PropTypes.func,
+  keyUp: PropTypes.func,
 };
 
 export default formField;

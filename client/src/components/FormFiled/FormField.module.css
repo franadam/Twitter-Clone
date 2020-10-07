@@ -7,16 +7,16 @@
 }
 
 .btn {
-  background-color: rgb(25, 97, 143);
+  width: fit-content;
+  margin: 1rem 0;
+  padding: 1rem;
   color: aliceblue;
+  font-weight: bold;
+  font-size: 1.2rem;
+  background-color: rgb(25, 97, 143);
+  border: none;
   border-radius: 40px;
   outline: none;
-  border:none;
-  width: fit-content;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 1rem;
-  margin: 1rem 0;
   cursor: pointer;
 }
 
@@ -29,66 +29,66 @@
 }
 
 .field {
-  background-color: rgb(42, 63, 83);
   margin: 1rem 0;
+  background-color: rgb(42, 63, 83);
   border-bottom: 2px solid #0091ff;
 }
 
 .field.empty {
-  border-bottom: 2px solid #ff0000;
-}
-
-.field:hover .fInput::placeholder,
-.field:hover .label  {
-  color: #0091ff;
+  border-bottom: 2px solid #f00;
 }
 
 .label {
-  padding: .5rem;
+  padding: 0.5rem;
   color: #c5e0f5;
   text-transform: capitalize;
-}
-
-.fInput, input {
-  padding: .5rem;
-  color: #ffffff;
-  display: block;
-  width: 100%;
-  border: none;
-  background-color: rgb(42, 63, 83);
-  border-radius: 5px;
-  outline: none;
-  font-size: 1.3rem;
-}
-
-.fInput::placeholder {
-  color: #c5e0f5;
-}
-
-input[type='textarea'] {
-  height: 100px;
-}
-input[type='checkbox'] {
-  width: initial;
-}
-.error {
-  color: #ff9d9d;
-  padding: .5rem;
-  font-style: italic;
 }
 
 .empty {
   background-color: rgb(255, 221, 221);
 }
 
-.empty .label {
-  color: red;
-}
-
+.empty .label,
 .empty::placeholder {
   color: red;
 }
 
-.show_password_label{
+.fInput::placeholder {
+  color: #c5e0f5;
+}
+
+.field:hover .fInput::placeholder,
+.field:hover .label {
+  color: #0091ff;
+}
+
+.fInput,
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  color: #fff;
+  font-size: 1.3rem;
+  background-color: rgb(42, 63, 83);
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+input[type="textarea"] {
+  height: 100px;
+}
+
+input[type="checkbox"] {
+  width: initial;
+}
+
+.error {
+  padding: 0.5rem;
+  color: #ff9d9d;
+  font-style: italic;
+}
+
+.show_password_label {
   display: flex;
 }

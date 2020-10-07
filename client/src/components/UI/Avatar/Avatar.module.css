@@ -1,22 +1,21 @@
 .avatar {
-  display: flex;
   bottom: -3rem;
-  height: 6rem;
-  border-radius: 50%;
-  border: 5px solid #15202b;
-  background-color: aliceblue;
-  overflow: hidden;
-  justify-content: center;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  height: 6rem;
+  overflow: hidden;
   color: #15202b;
+  background-color: aliceblue;
+  border: 5px solid #15202b;
+  border-radius: 50%;
 }
 
 .avatar img {
   height: 100%;
-  
 }
 
 .avatar svg {
- background-color: #15202b;
- color: aliceblue;
+  color: aliceblue;
+  background-color: #15202b;
 }

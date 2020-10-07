@@ -1,77 +1,70 @@
 import {
+  FETCH_CURRENT_USER,
   FETCH_USERS,
   FETCH_USER_BY_NAME,
-  USER_UPDATE_PROFILE,
-  FETCH_CURRENT_USER,
   FOLLOW_USER,
   UNFOLLOW_USER,
+  USER_UPDATE_PROFILE,
 } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
 
 const initialState = {
-  users: [],
-  user: {},
-};
+    users: [],
+    user: {},
+  },
+  getUserLikes = (user) => {
+    const likes = user.likes.map((like) => like.tweets);
+    likes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const newUser = updateObject(user, { likes });
 
-const getUserLikes = (user) => {
-  const likes = user.likes.map((like) => like.tweets);
-  likes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  const newUser = updateObject(user, { likes });
+    return newUser;
+  },
+  getUser = (state, action) => {
+    const newState = updateObject(state, {
+        user: action.user,
+      }),
+      user = getUserLikes(newState.user);
 
-  return newUser;
-};
-
-const getUser = (state, action) => {
-  const newState = updateObject(state, {
-    user: action.user,
-  });
-  const user = getUserLikes(newState.user);
-
-  return updateObject(newState, { user });
-};
-
-const fetchUsers = (state, action) => {
-  const newState = updateObject(state, {
-    users: action.users,
-  });
-  const users = newState.users.map((user) => getUserLikes(user));
-  //const user = users.find(user => user._id === userID)
-  return updateObject(newState, { users });
-};
-
-const updateProfile = (state, action) => {
-  const newState = getUser(state, action);
-  const users = newState.users.filter((user) => user._id !== action.user._id);
-  users.push(newState.user);
-  return updateObject(newState, { users });
-};
-
-const fetchCurrentUser = (state, { user }) => {
-  console.log('reducer user :>> ', user.createdAt);
-  return updateObject(state, { user });
-};
-
-const followUser = (state, { follow }) => {
-  console.log('user follow :>> ', follow);
-  const following = state.user.following.splice();
-  following.push(follow);
-  following.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  console.log('user following :>> ', following);
-  const user = updateObject(state.user, { following });
-  return updateObject(state, { user });
-};
-
-const unfollowUser = (state, { follow }) => {
-  console.log('user follow :>> ', follow);
-  const following = state.user.following.filter(
-    (follower) => follower._id !== follow._id
-  );
-  following.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  console.log('user following :>> ', following);
-  const user = updateObject(state.user, { following });
-  return updateObject(state, { user });
-};
+    return updateObject(newState, { user });
+  },
+  fetchUsers = (state, action) => {
+    const newState = updateObject(state, {
+        users: action.users,
+      }),
+      users = newState.users.map((user) => getUserLikes(user));
+    // Const user = users.find(user => user._id === userID)
+    return updateObject(newState, { users });
+  },
+  updateProfile = (state, action) => {
+    const newState = getUser(state, action),
+      users = newState.users.filter((user) => user._id !== action.user._id);
+    users.push(newState.user);
+    return updateObject(newState, { users });
+  },
+  fetchCurrentUser = (state, { user }) => {
+    console.log('reducer user :>> ', user.createdAt);
+    return updateObject(state, { user });
+  },
+  followUser = (state, { follow }) => {
+    console.log('user follow :>> ', follow);
+    const following = state.user.following.splice();
+    following.push(follow);
+    following.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    console.log('user following :>> ', following);
+    const user = updateObject(state.user, { following });
+    return updateObject(state, { user });
+  },
+  unfollowUser = (state, { follow }) => {
+    console.log('user follow :>> ', follow);
+    const following = state.user.following.filter(
+      (follower) => follower._id !== follow._id
+    );
+    following.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    console.log('user following :>> ', following);
+    const user = updateObject(state.user, { following });
+    return updateObject(state, { user });
+  };
 
 export default function (state = initialState, action) {
   switch (action.type) {

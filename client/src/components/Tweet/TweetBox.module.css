@@ -1,11 +1,11 @@
 .main {
-  color: #f0f8ff;
   display: flex;
-  border-top: 1px aliceblue solid;
   align-items: center;
-  padding: .5rem;
-  cursor: pointer;
   width: 100%;
+  padding: 0.5rem;
+  color: #f0f8ff;
+  border-top: 1px aliceblue solid;
+  cursor: pointer;
 }
 
 .logo {
@@ -23,143 +23,130 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem;
   width: 100%;
+  padding: 1rem;
 }
 
 .message {
   padding: 5rem 0;
-  text-align: center;
   font-size: 2rem;
+  text-align: center;
 }
 
-
-.identifier{
+.identifier {
   display: flex;
   align-items: center;
 }
 
 .name {
   display: flex;
-  justify-content: start;
   align-items: center;
-  padding-right: .5rem;
-  text-decoration: none;
+  justify-content: start;
+  padding-right: 0.5rem;
   color: aliceblue;
+  text-decoration: none;
 }
 
-.fullname{
+.fullname {
   font-weight: bold;
   text-transform: capitalize;
 }
 
 .username {
-  padding-left: .5rem;
-  font-size: .8rem;
+  padding-left: 0.5rem;
   color: rgba(240, 248, 255, 0.7);
+  font-size: 0.8rem;
 }
 
 .date {
-color: rgba(240, 248, 255, 0.7);
-font-size: .8rem;
+  color: rgba(240, 248, 255, 0.7);
+  font-size: 0.8rem;
 }
 
 .text {
+  padding: 0.5rem;
   font-size: 1.1rem;
-  padding: .5rem;
 }
 
 .media {
-  align-self: center;display: flex;
+  display: flex;
+  align-self: center;
   justify-content: center;
-  width: 70vw;
 }
+
 .media img {
-  border-radius: 10px;
   max-width: 100%;
+  border-radius: 10px;
 }
+
 .activity {
   display: flex;
-  justify-content: space-evenly;
-  font-size: .9rem;
   align-items: center;
+  justify-content: space-evenly;
+  font-size: 0.9rem;
 }
 
 .comment {
-cursor: pointer;
-display: flex;
-justify-content: space-evenly;
-color: rgba(240, 248, 255, 0.7);
-z-index: 5;
+  z-index: 5;
+  display: flex;
+  justify-content: space-evenly;
+  color: rgba(240, 248, 255, 0.7);
+  cursor: pointer;
 }
 
 .like {
-display: flex;
-cursor: pointer;
-color: rgba(240, 248, 255, 0.7);
-z-index: 5;
-}
-
-.comment:hover {
-  color: rgb(0, 162, 255);
+  z-index: 5;
+  display: flex;
+  color: rgba(240, 248, 255, 0.7);
+  cursor: pointer;
 }
 
 .comment:hover,
-.comment:hover svg {
-  color: rgb(0, 162, 255);
-} 
-.icon {
-  padding: .5rem;
-}
-.comment:hover .icon {
-  background-color:  rgba(0, 157, 255, 0.3);
-  border-radius: 50%;
-}
+.comment:hover svg,
 .commented {
   color: rgb(0, 162, 255);
 }
-.like:hover,
-.like:hover svg {
-  color: red;
+
+.icon,
+.count {
+  padding: 0.5rem;
 }
-.liked {
-  color: red;
-}
-.like:hover  .icon{
-  background-color:  rgba(255, 0, 0, 0.3);
+
+.comment:hover .icon {
+  background-color: rgba(0, 157, 255, 0.3);
   border-radius: 50%;
 }
 
-.count {
-  padding: .5rem;
-}
-
+.like:hover,
+.like:hover svg,
+.liked,
 .delete:hover,
 .delete:hover svg {
   color: red;
 }
 
-.delete:hover  .icon{
-  background-color:  rgba(255, 0, 0, 0.3);
+.like:hover .icon,
+.delete:hover .icon {
+  background-color: rgba(255, 0, 0, 0.3);
   border-radius: 50%;
 }
 
 .link {
   color: rgb(25, 97, 143);
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .btn_danger {
+  align-self: flex-end;
   padding: 1rem;
-  border: none;
-  border-radius: 20px;
   color: aliceblue;
   background-color: brown;
-  align-self: flex-end;
+  border: none;
+  border-radius: 20px;
 }
 
 .btn_danger:hover {
-  background-color: rgb(255, 128, 128);
   color: blue;
+  background-color: rgb(255, 128, 128);
 }

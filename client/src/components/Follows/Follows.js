@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Spinner from '../UI/Spinner/Spinner';
 import Badge from '../UI/Badge/Badge';
@@ -15,8 +16,8 @@ class Follows extends Component {
   };
 
   showTab = (event, tab) => {
-    const tabs = document.getElementsByClassName(`${classes.tab__header}`);
-    const contents = document.getElementsByClassName(`${classes.tab__content}`);
+    const tabs = document.getElementsByClassName(`${classes.tab__header}`),
+      contents = document.getElementsByClassName(`${classes.tab__content}`);
 
     if (!this.props.loggedIn) {
       this.props.history.push('/login');
@@ -34,7 +35,7 @@ class Follows extends Component {
   };
 
   getFollowers = () => {
-    const { users, me, userID } = this.props;
+    const { users, me } = this.props;
     if (users && me.followers) {
       const follows = me.followers.map((follow) => follow.follower);
       console.log('follows :>> ', follows);
@@ -46,7 +47,7 @@ class Follows extends Component {
   };
 
   getFollowing = () => {
-    const { users, me, userID } = this.props;
+    const { users, me } = this.props;
     if (users && me.following) {
       const follows = me.following.map((follow) => follow.followed);
       console.log('follows :>> ', follows);
@@ -65,8 +66,8 @@ class Follows extends Component {
       return <Spinner />;
     }
 
-    const followers = this.getFollowers();
-    const following = this.getFollowing();
+    const followers = this.getFollowers(),
+      following = this.getFollowing();
 
     console.log('following :>> ', following);
     console.log('followers :>> ', followers);
@@ -75,8 +76,8 @@ class Follows extends Component {
       <div className={classes.header}>
         <div className={classes.header}>
           <div className={classes.images}>
-            <Cover cover={me.cover} userID={userID} myID={userID} />{' '}
-            <Avatar avatar={me.avatar} userID={userID} position="absolute" />
+            <Cover cover={me.cover} myID={userID} userID={userID} />{' '}
+            <Avatar avatar={me.avatar} position="absolute" userID={userID} />
           </div>
         </div>
 
@@ -96,14 +97,14 @@ class Follows extends Component {
         </div>
         <div
           className={classes.tab__content}
-          style={{ display: 'block' }}
           id="followers"
+          style={{ display: 'block' }}
         >
           {followers.map((follow) => (
             <Badge
               key={`${follow._id}${(Math.random() * 100).toFixed(0)}`}
-              user={follow}
               me={this.props.me || {}}
+              user={follow}
             />
           ))}
         </div>
@@ -111,8 +112,8 @@ class Follows extends Component {
           {following.map((follow) => (
             <Badge
               key={`${follow._id}${(Math.random() * 100).toFixed(0)}`}
-              user={follow}
               me={this.props.me || {}}
+              user={follow}
             />
           ))}
         </div>
@@ -121,13 +122,20 @@ class Follows extends Component {
   }
 }
 
-const mapStateToProps = ({ user, tweet, auth }) => {
-  return {
-    users: user.users,
-    me: user.user,
-    loggedIn: !!auth.token,
-    userID: auth.userID,
-  };
+const mapStateToProps = ({ user, auth }) => ({
+  users: user.users,
+  me: user.user,
+  loggedIn: Boolean(auth.token),
+  userID: auth.userID,
+});
+
+Follows.propTypes = {
+  me: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.object,
+  userID: PropTypes.string,
+  loggedIn: PropTypes.bool,
+  users: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default connect(mapStateToProps)(withRouter(Follows));

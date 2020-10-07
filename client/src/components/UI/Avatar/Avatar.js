@@ -1,20 +1,24 @@
 import React from 'react';
 import { FaUser } from 'react-icons/fa';
+import PropTypes from 'prop-types';
+
 import classes from './Avatar.module.css';
 
-const Avatar = ({ avatar, userID, size, position }) => {
-  let style = {};
+function Avatar({ avatar, userID, size, position }) {
+  const style = {};
   if (size) {
     style.height = size;
     style.width = size;
   }
-  if (position) style.position = position;
+  if (position) {
+    style.position = position;
+  }
   return avatar ? (
     <div className={classes.avatar} style={style}>
       <img
-        src={`/api/users/${userID}/avatar`}
         alt="logo"
         onClick={(event) => event.stopPropagation()}
+        src={`/api/users/${userID}/avatar`}
       />
     </div>
   ) : (
@@ -25,6 +29,13 @@ const Avatar = ({ avatar, userID, size, position }) => {
       <FaUser size={!size ? '6rem' : size} />
     </div>
   );
+}
+
+Avatar.propTypes = {
+  avatar: PropTypes.string,
+  userID: PropTypes.string,
+  position: PropTypes.string,
+  size: PropTypes.string,
 };
 
 export default Avatar;

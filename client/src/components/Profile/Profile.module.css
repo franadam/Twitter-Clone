@@ -4,22 +4,22 @@
 
 .images {
   position: relative;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .btns {
   display: flex;
   justify-content: flex-end;
-  padding-right: .5rem;
+  padding-right: 0.5rem;
 }
 
 .btn {
-  text-decoration: none;
+  padding: 0.5rem;
   color: rgb(0, 157, 255);
-  border: 2px solid  rgb(0, 157, 255);
-  border-radius: 20px;
-  padding: .5rem;
+  text-decoration: none;
   background-color: #15202b;
+  border: 2px solid rgb(0, 157, 255);
+  border-radius: 20px;
   cursor: pointer;
 }
 
@@ -28,14 +28,14 @@
 }
 
 .info {
+  padding: 0.5rem;
   color: rgba(240, 248, 255, 0.7);
-  padding: .5rem;
 }
 
 .info__fullname {
-  color:aliceblue ;
-  text-transform: capitalize;
   margin-bottom: 0;
+  color: aliceblue;
+  text-transform: capitalize;
 }
 
 .info__username {
@@ -52,7 +52,7 @@
 }
 
 .place p {
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
 }
 
 .place a {
@@ -60,18 +60,23 @@
   text-decoration: none;
 }
 
-.follows, .follows a {
+.follows,
+.follows a {
   display: flex;
   justify-content: flex-start;
-  text-transform: capitalize;
   color: aliceblue;
+  text-transform: capitalize;
   text-decoration: none;
 }
 
+.follow:hover {
+  text-decoration: underline;
+}
+
 .count {
+  padding: 0 0.5rem;
   color: aliceblue;
   font-weight: bold;
-  padding: 0 .5rem;
 }
 
 .tabs {
@@ -83,22 +88,22 @@
   border: 1px aliceblue solid;
 }
 
-.tab__header{
+.tab__header {
   width: 100%;
   margin: 0;
   padding: 1.3rem;
+  font-size: inherit;
   text-align: center;
   cursor: pointer;
-  font-size: inherit;
 }
 
-.tab__header:hover  {
-  background-color:  rgba(0, 157, 255, 0.2);
-  color:  rgb(0, 157, 255);
+.tab__header:hover {
+  color: rgb(0, 157, 255);
+  background-color: rgba(0, 157, 255, 0.2);
 }
 
 .tab__header__active {
-  color:  rgb(0, 157, 255);
+  color: rgb(0, 157, 255);
   border-bottom: 3px solid rgb(0, 157, 255);
 }
 

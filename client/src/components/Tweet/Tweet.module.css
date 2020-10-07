@@ -1,28 +1,28 @@
 .main {
-  color: #f0f8ff;
   display: flex;
-  border-top: 1px aliceblue solid;
   align-items: center;
-  padding: .5rem;
   width: 100%;
+  padding: 0.5rem;
+  color: #f0f8ff;
+  border-top: 1px aliceblue solid;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem;
   width: 100%;
+  padding: 1rem;
 }
 
 .mainTweet {
   display: block;
-  justify-content: start;
   align-items: center;
-  padding-right: .5rem;
-  text-decoration: none;
+  justify-content: start;
+  padding-right: 0.5rem;
   color: aliceblue;
   font-size: 2rem;
+  text-decoration: none;
 }
 
 .mainTweet div {

@@ -1,56 +1,57 @@
 .main {
-  display: flex;
   position: relative;
-  width: 8rem;  flex-direction: column;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  color: aliceblue;
+  width: 8rem;
   padding: 2rem 3rem;
-  z-index: 10;
+  color: aliceblue;
 }
 
 .main form button {
   height: 1.5rem;
 }
 
-.unsigned{
+.unsigned {
   position: fixed;
   top: 0;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0;
   justify-content: center;
-  background:rgb(21, 32, 43);
   width: 100%;
-  box-shadow: 2px 2px 8px rgb(0, 157, 255) ;
+  padding: 0;
+  background: rgb(21, 32, 43);
+  box-shadow: 2px 2px 8px rgb(0, 157, 255);
 }
 
 .wrapper {
-  display: flex;
   position: relative;
+  display: flex;
   flex-direction: row;
-  text-align: center;
-  width: 100%;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  text-align: center;
 }
 
 .links {
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;justify-content: space-between;
   position: fixed;
-  padding: 2rem 0;
   top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 2rem 0;
+  text-align: center;
 }
 
-.links__profile{
+.links__profile {
   display: flex;
   flex-direction: column;
 }
-
 
 .unsigned .links {
   position: unset;
@@ -59,95 +60,92 @@
 
 .link,
 .auth {
-  text-decoration: none;
-  padding: 1rem .5rem;
   width: 100%;
-  margin: .5rem;
-  border-radius: 30px;
+  margin: 0.5rem;
+  padding: 1rem 0.5rem;
   text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 30px;
 }
 
-.link:hover  {
-  background-color:  rgba(0, 157, 255, 0.3);
+.link:hover {
+  background-color: rgba(0, 157, 255, 0.3);
 }
 
 .link svg {
   color: aliceblue;
 }
 
-.link:hover svg {
-  color:  rgb(0, 157, 255);
-}
-
+.link:hover svg,
 .link svg.active {
-  color:  rgb(0, 157, 255);
+  color: rgb(0, 157, 255);
 }
-
 
 .demo {
   max-width: max-content;
-  border: none;
   height: unset;
-  padding:1rem;
-  color: aliceblue;
-  cursor: pointer;
   margin: 0;
-  background-color: rgb(114, 180, 70);
+  padding: 1rem;
+  color: aliceblue;
   font-weight: bold;
+  background-color: rgb(114, 180, 70);
+  border: none;
+  cursor: pointer;
 }
 
 .demo:hover {
   color: rgb(114, 180, 70);
   background-color: aliceblue;
 }
+
 .signin {
-  color :rgb(0, 157, 255);
+  color: rgb(0, 157, 255);
   background-color: aliceblue;
 }
 
 .signup {
-  background-color :rgb(0, 157, 255);
   color: aliceblue;
+  background-color: rgb(0, 157, 255);
 }
 
 .navbar {
   flex-direction: row;
-  text-align: center;
   align-items: center;
   justify-content: space-evenly;
+  text-align: center;
 }
 
 @media screen and (max-width: 700px) {
   .main {
-    width: 100%;
-    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    flex-direction: row;
     align-items: center;
-  z-index: 10;
-  height: 5rem;
-  box-shadow: 2px 2px 4px #86c2ff;
-  position: fixed;
-  top: 0;
-  flex-direction: row;
-    background-color: rgb(21, 32, 43);;
-  padding: 0;
+    justify-content: space-between;
+    width: 100%;
+    height: 5rem;
+    padding: 0;
+    background-color: rgb(21, 32, 43);
+    box-shadow: 2px 2px 4px #86c2ff;
   }
 
   .links {
-    height: unset;
-    width: 100%;
-
     flex-direction: row;
+    width: 100%;
+    height: unset;
     padding: 0 1rem;
   }
-  
-  .links__profile{
+
+  .links__profile {
     flex-direction: row;
   }
-  
+
   .link {
     width: auto;
   }
+
   .demo {
-    padding: .5rem;
+    padding: 0.5rem;
   }
 }

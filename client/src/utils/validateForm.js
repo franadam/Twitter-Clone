@@ -4,30 +4,30 @@ const validate = (element) => {
   let error = [true, ''];
 
   if (element.validation.email) {
-    const valid = validator.isEmail(element.value);
-    const message = `${!valid ? 'Please enter a valid email' : ''}`;
+    const valid = validator.isEmail(element.value),
+      message = `${!valid ? 'Please enter a valid email' : ''}`;
     error = !valid ? [valid, message] : error;
   }
 
   if (element.validation.required) {
-    const valid = element.value.trim() !== '';
-    const message = `${
-      !valid ? `The ${element.config.name} field is required` : ''
-    }`;
+    const valid = element.value.trim() !== '',
+      message = `${
+        !valid ? `The ${element.config.name} field is required` : ''
+      }`;
     error = !valid ? [valid, message] : error;
   }
 
   if (element.config.name === 'password') {
-    let valid, message;
+    let message, valid;
 
-    const value = element.value.trim();
-    const {
-      minLength,
-      hasUpperCase,
-      hasLowerCase,
-      hasSpecialChar,
-      hasNumber,
-    } = element.validation;
+    const value = element.value.trim(),
+      {
+        minLength,
+        hasUpperCase,
+        hasLowerCase,
+        hasSpecialChar,
+        hasNumber,
+      } = element.validation;
     if (minLength[0]) {
       valid = value.length >= minLength[1];
       console.log('minLength', valid);

@@ -15,5 +15,4 @@ const root = (
     </BrowserRouter>
   </Provider>
 );
-
 ReactDOM.render(root, document.getElementById('root'));

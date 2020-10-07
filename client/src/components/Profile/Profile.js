@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import dateFormat from 'dateformat';
-import { FaCalendarAlt, FaMapMarkerAlt, FaLink } from 'react-icons/all';
+import { FaCalendarAlt, FaLink, FaMapMarkerAlt } from 'react-icons/all';
 
 import TweetsList from '../Tweet/TweetsList';
 import Spinner from '../UI/Spinner/Spinner';
@@ -13,9 +14,9 @@ import Cover from '../UI/Cover/Cover';
 import classes from './Profile.module.css';
 
 import {
-  unfollowUser,
-  followUser,
   fetchCurrentUser,
+  followUser,
+  unfollowUser,
 } from '../../store/actions';
 
 class Profile extends Component {
@@ -35,10 +36,10 @@ class Profile extends Component {
   };
 
   checkFollowing = () => {
-    const { me, userID } = this.props;
-    const isFollowed = me.following
-      ? !!me.following.find((follow) => follow.followed === userID)
-      : null;
+    const { me, userID } = this.props,
+      isFollowed = me.following
+        ? Boolean(me.following.find((follow) => follow.followed === userID))
+        : null;
     return isFollowed;
   };
 
@@ -46,20 +47,18 @@ class Profile extends Component {
     const { isFollowed, user } = this.state;
     if (!this.props.loggedIn) {
       this.props.history.push('/login');
+    } else if (isFollowed) {
+      this.props.onUnfollowUser(user._id);
+      this.setState({ isFollowed: false });
     } else {
-      if (isFollowed) {
-        this.props.onUnfollowUser(user._id);
-        this.setState({ isFollowed: false });
-      } else {
-        this.props.onFollowUser(user._id);
-        this.setState({ isFollowed: true });
-      }
+      this.props.onFollowUser(user._id);
+      this.setState({ isFollowed: true });
     }
   };
 
   showTab = (event, tab) => {
-    const tabs = document.getElementsByClassName(`${classes.tab__header}`);
-    const contents = document.getElementsByClassName(`${classes.tab__content}`);
+    const tabs = document.getElementsByClassName(`${classes.tab__header}`),
+      contents = document.getElementsByClassName(`${classes.tab__content}`);
 
     if (!this.props.loggedIn) {
       this.props.history.push('/login');
@@ -77,38 +76,32 @@ class Profile extends Component {
   };
 
   render() {
-    const { tweets: all, userID, match } = this.props;
-    const { username } = match.params;
-    const user = this.props.users.find(
-      (user) => user._id === username || user.username === username
-    );
+    const { tweets: all, userID, match } = this.props,
+      { username } = match.params,
+      user = this.props.users.find(
+        (user) => user._id === username || user.username === username
+      );
 
     if (!user || !user.createdAt) {
       return <Spinner />;
     }
     console.log('user :>> ', user._id, user.likes, user.username);
 
-    //
-
-    const { likes: tweetLiked } = user;
-    const tweetsAndReplies = all.filter((tweet) => tweet.user === user._id);
-
-    const tweets = tweetsAndReplies.filter((tweet) => tweet.tweet === null);
-
-    const medias = tweets.filter((tweet) => tweet.media);
-
-    const likes = tweetLiked.map((like) => all.find((l) => like._id === l._id));
-
-    const joinedAt = new Date(user.createdAt);
+    const { likes: tweetLiked } = user,
+      tweetsAndReplies = all.filter((tweet) => tweet.user === user._id),
+      tweets = tweetsAndReplies.filter((tweet) => tweet.tweet === null),
+      medias = tweets.filter((tweet) => tweet.media),
+      likes = tweetLiked.map((like) => all.find((l) => like._id === l._id)),
+      joinedAt = new Date(user.createdAt);
     return (
       <div>
         <div className={classes.header}>
           <div className={classes.images}>
-            <Cover cover={user.cover} userID={user._id} myID={userID} />
+            <Cover cover={user.cover} myID={userID} userID={user._id} />
             <Avatar
               avatar={user.avatar}
-              userID={user._id}
               position="absolute"
+              userID={user._id}
             />
           </div>
           <div className={classes.btns}>
@@ -139,21 +132,26 @@ class Profile extends Component {
               {user.website ? (
                 <p>
                   <FaLink />{' '}
-                  <a href={user.website} target="_blank">
+                  <a
+                    href={user.website}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     {user.website}
                   </a>
                 </p>
               ) : null}
               <p>
-                <FaCalendarAlt /> Joined {dateFormat(joinedAt, 'mmmm yyyy')}
+                <FaCalendarAlt /> Joined
+                {dateFormat(joinedAt, 'mmmm yyyy')}
               </p>
             </div>
             <div className={classes.follows}>
-              <Link to={`/users/${userID}/follow`}>
+              <Link className={classes.follow} to={`/users/${user._id}/follow`}>
                 <div className={classes.count}>{user.following.length}</div>
                 following
               </Link>
-              <Link to={`/users/${userID}/follow`}>
+              <Link className={classes.follow} to={`/users/${user._id}/follow`}>
                 <div className={classes.count}>{user.followers.length}</div>
                 followers
               </Link>
@@ -188,34 +186,34 @@ class Profile extends Component {
         </div>
         <div
           className={classes.tab__content}
-          style={{ display: 'block' }}
           id="tweets"
+          style={{ display: 'block' }}
         >
           <TweetsList
             key="tweet"
-            tweets={tweets || []}
             message={`${user.fullname} has not tweeted yet`}
+            tweets={tweets || []}
           />
         </div>
         <div className={classes.tab__content} id="tweets_and_replies">
           <TweetsList
             key="tweets_and_replies"
-            tweets={tweetsAndReplies || []}
             message={`${user.fullname} has not tweeted or commented yet`}
+            tweets={tweetsAndReplies || []}
           />
         </div>
         <div className={classes.tab__content} id="medias">
           <TweetsList
             key="medias"
-            tweets={medias || []}
             message={`${user.fullname} has not tweeted any medias yet`}
+            tweets={medias || []}
           />
         </div>
         <div className={classes.tab__content} id="likes">
           <TweetsList
             key="like"
-            tweets={likes || []}
             message={`${user.fullname} has not liked anything yet`}
+            tweets={likes || []}
           />
         </div>
       </div>
@@ -223,21 +221,31 @@ class Profile extends Component {
   }
 }
 
-const mapStateToProps = ({ user, tweet, auth }) => {
-  return {
+const mapStateToProps = ({ user, tweet, auth }) => ({
     tweets: tweet.tweets,
     users: user.users,
     me: user.user,
-    loggedIn: !!auth.token,
+    loggedIn: Boolean(auth.token),
     userID: auth.userID,
-  };
-};
+  }),
+  mapDispatchToProps = (dispatch) => ({
+    onFollowUser: (userID) => dispatch(followUser(userID)),
+    onUnfollowUser: (userID) => dispatch(unfollowUser(userID)),
+    onFetchCurrentUser: (userID) => dispatch(fetchCurrentUser(userID)),
+  });
 
-const mapDispatchToProps = (dispatch) => ({
-  onFollowUser: (userID) => dispatch(followUser(userID)),
-  onUnfollowUser: (userID) => dispatch(unfollowUser(userID)),
-  onFetchCurrentUser: (userID) => dispatch(fetchCurrentUser(userID)),
-});
+Profile.propTypes = {
+  me: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.object,
+  userID: PropTypes.string,
+  loggedIn: PropTypes.bool,
+  tweets: PropTypes.arrayOf(PropTypes.object),
+  users: PropTypes.arrayOf(PropTypes.object),
+  onFollowUser: PropTypes.func,
+  onUnfollowUser: PropTypes.func,
+  onFetchCurrentUser: PropTypes.func,
+};
 
 export default connect(
   mapStateToProps,

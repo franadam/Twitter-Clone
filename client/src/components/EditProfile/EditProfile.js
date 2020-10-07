@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import FormField from '../FormFiled/FormField';
 import Modal from '../../hoc/Modal/Modal';
@@ -98,7 +98,7 @@ class EditProfile extends Component {
 
   createForm = (formData) => {
     const formElementsArray = [];
-    for (let key in formData) {
+    for (const key in formData) {
       formElementsArray.push({
         id: key,
         config: formData[key],
@@ -111,9 +111,9 @@ class EditProfile extends Component {
           {elem.id.replace('_', ' ')}
         </label>
         <FormField
-          id={elem.id}
-          field={elem.config}
           change={(event) => this.formFieldHandler(event)}
+          field={elem.config}
+          id={elem.id}
         />
       </div>
     ));
@@ -122,10 +122,9 @@ class EditProfile extends Component {
   };
 
   formFieldHandler = ({ event, id }) => {
-    const newFormData = { ...this.state.formData };
-    const newElement = { ...newFormData[id] };
-
-    const element = event.currentTarget;
+    const newFormData = { ...this.state.formData },
+      newElement = { ...newFormData[id] },
+      element = event.currentTarget;
 
     newElement.value = element.value;
 
@@ -171,7 +170,7 @@ class EditProfile extends Component {
   formSuccesManager = (type) => {
     const newFormData = { ...this.state.formData };
 
-    for (let key in newFormData) {
+    for (const key in newFormData) {
       newFormData[key].value = '';
       newFormData[key].valid = false;
       newFormData[key].validationMessage = '';
@@ -195,19 +194,19 @@ class EditProfile extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const { formData } = this.state;
-    const formToSubmit = new FormData();
-    const dataToSubmit = {};
+    const { formData } = this.state,
+      formToSubmit = new FormData(),
+      dataToSubmit = {};
     let isValid = true;
 
-    for (let key in formData) {
+    for (const key in formData) {
       if (formData[key].value) {
         dataToSubmit[key] = formData[key].value;
         isValid = isValid && formData[key].valid;
       }
     }
 
-    for (let key in dataToSubmit) {
+    for (const key in dataToSubmit) {
       formToSubmit.append(key, dataToSubmit[key]);
     }
 
@@ -221,25 +220,23 @@ class EditProfile extends Component {
   };
 
   render() {
-    const { userID, match, users } = this.props;
-    const { username } = match.params;
-    const user = users.find(
-      (user) => user._id === username || user.username === username
-    );
-
-    const form = (
-      <form className={formStyle.form} onSubmit={this.handleSubmit}>
-        {this.createForm(this.state.formData)}
-        <button
-          className={formStyle.btn}
-          onClick={(event) => this.handleSubmit(event)}
-          type="submit"
-        >
-          UPDATE
-        </button>
-      </form>
-    );
-
+    const { userID, match, users } = this.props,
+      { username } = match.params,
+      user = users.find(
+        (user) => user._id === username || user.username === username
+      ),
+      form = (
+        <form className={formStyle.form} onSubmit={this.handleSubmit}>
+          {this.createForm(this.state.formData)}
+          <button
+            className={formStyle.btn}
+            onClick={(event) => this.handleSubmit(event)}
+            type="submit"
+          >
+            UPDATE
+          </button>
+        </form>
+      );
     if (!user) {
       return null;
     }
@@ -250,11 +247,11 @@ class EditProfile extends Component {
           <h1>Edit Profile</h1>
           <div className={classes.header}>
             <div className={classes.images}>
-              <Cover cover={user.cover} userID={userID} myID={userID} />{' '}
+              <Cover cover={user.cover} myID={userID} userID={userID} />{' '}
               <Avatar
                 avatar={user.avatar}
-                userID={userID}
                 position="absolute"
+                userID={userID}
               />
             </div>
           </div>
@@ -270,19 +267,24 @@ class EditProfile extends Component {
   }
 }
 
-const mapStateToProps = ({ error, auth, user }) => {
-  return {
+const mapStateToProps = ({ error, auth, user }) => ({
     userID: auth.userID,
     users: user.users,
-    loggedIn: !!auth.token,
+    loggedIn: Boolean(auth.token),
     error: error.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
+  }),
+  mapDispatchToProps = (dispatch) => ({
     onUpdateProfile: (id, user) => dispatch(updateProfile(id, user)),
-  };
+  });
+
+EditProfile.propTypes = {
+  error: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.object,
+  userID: PropTypes.string,
+  loggedIn: PropTypes.bool,
+  users: PropTypes.arrayOf(PropTypes.object),
+  onUpdateProfile: PropTypes.func,
 };
 
 export default connect(

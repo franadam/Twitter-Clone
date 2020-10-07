@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { FaTwitter } from 'react-icons/all';
 
 import formStyle from '../FormFiled/FormField.module.css';
@@ -49,12 +49,14 @@ class SignIn extends React.Component {
   };
 
   componentDidMount = () => {
-    if (this.props.token) this.props.history.push('/home');
+    if (this.props.token) {
+      this.props.history.push('/home');
+    }
   };
 
   createForm = (formData) => {
     const formElementsArray = [];
-    for (let key in formData) {
+    for (const key in formData) {
       formElementsArray.push({
         id: key,
         config: formData[key],
@@ -67,9 +69,9 @@ class SignIn extends React.Component {
           {elem.id.replace('_', ' ')}
         </label>
         <FormField
-          id={elem.id}
-          field={elem.config}
           change={(event) => this.formFieldHandler(event)}
+          field={elem.config}
+          id={elem.id}
         />
       </div>
     ));
@@ -78,10 +80,9 @@ class SignIn extends React.Component {
   };
 
   formFieldHandler = ({ event, id }) => {
-    const newFormData = { ...this.state.formData };
-    const newElement = { ...newFormData[id] };
-
-    const element = event.currentTarget;
+    const newFormData = { ...this.state.formData },
+      newElement = { ...newFormData[id] },
+      element = event.currentTarget;
 
     newElement.value = element.value;
 
@@ -111,7 +112,7 @@ class SignIn extends React.Component {
   formSuccesManager = (type) => {
     const newFormData = { ...this.state.formData };
 
-    for (let key in newFormData) {
+    for (const key in newFormData) {
       newFormData[key].value = '';
       newFormData[key].valid = false;
       newFormData[key].validationMessage = '';
@@ -138,7 +139,7 @@ class SignIn extends React.Component {
     const dataToSubmit = {};
     let isValid = true;
 
-    for (let key in this.state.formData) {
+    for (const key in this.state.formData) {
       dataToSubmit[key] = this.state.formData[key].value;
       isValid = isValid && this.state.formData[key].valid;
     }
@@ -164,7 +165,6 @@ class SignIn extends React.Component {
         </button>
       </form>
     );
-
     if (this.props.error) {
       document.getElementById('myModal').style.display = 'block';
     }
@@ -177,10 +177,10 @@ class SignIn extends React.Component {
           </h1>
           {form}
           <Modal>
-            {!!this.props.error ? (
+            {this.props.error ? (
               <p className={classes.error}>{this.props.error.message}</p>
             ) : null}
-            {!!this.state.formSuccess ? (
+            {this.state.formSuccess ? (
               <p className={classes.success}>{this.state.formSuccess}</p>
             ) : null}
           </Modal>
@@ -190,17 +190,19 @@ class SignIn extends React.Component {
   }
 }
 
-const mapStateToProps = ({ auth, error }) => {
-  return {
+const mapStateToProps = ({ auth, error }) => ({
     error: error.auth,
     token: auth.token,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
+  }),
+  mapDispatchToProps = (dispatch) => ({
     onLogin: (user) => dispatch(login(user)),
-  };
+  });
+
+SignIn.propTypes = {
+  error: PropTypes.object,
+  history: PropTypes.object,
+  token: PropTypes.string,
+  onLogin: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignIn));

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import FormField from '../FormFiled/FormField';
 import ShowPasswordField from '../FormFiled/ShowPasswordField';
@@ -108,7 +108,7 @@ class SignUp extends React.Component {
 
   createForm = (formData) => {
     const formElementsArray = [];
-    for (let key in formData) {
+    for (const key in formData) {
       formElementsArray.push({
         id: key,
         config: formData[key],
@@ -121,9 +121,9 @@ class SignUp extends React.Component {
           {elem.id.replace('_', ' ')}
         </label>
         <FormField
-          id={elem.id}
-          field={elem.config}
           change={(event) => this.formFieldHandler(event)}
+          field={elem.config}
+          id={elem.id}
         />
       </div>
     ));
@@ -132,10 +132,9 @@ class SignUp extends React.Component {
   };
 
   formFieldHandler = ({ event, id }) => {
-    const newFormData = { ...this.state.formData };
-    const newElement = { ...newFormData[id] };
-
-    const element = event.currentTarget;
+    const newFormData = { ...this.state.formData },
+      newElement = { ...newFormData[id] },
+      element = event.currentTarget;
 
     newElement.value = element.value;
 
@@ -175,7 +174,7 @@ class SignUp extends React.Component {
   formSuccesManager = (type) => {
     const newFormData = { ...this.state.formData };
 
-    for (let key in newFormData) {
+    for (const key in newFormData) {
       newFormData[key].value = '';
       newFormData[key].valid = false;
       newFormData[key].validationMessage = '';
@@ -202,7 +201,7 @@ class SignUp extends React.Component {
     const dataToSubmit = {};
     let isValid = true;
 
-    for (let key in this.state.formData) {
+    for (const key in this.state.formData) {
       dataToSubmit[key] = this.state.formData[key].value;
       isValid = isValid && this.state.formData[key].valid;
     }
@@ -230,7 +229,6 @@ class SignUp extends React.Component {
         </button>
       </form>
     );
-
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
@@ -249,16 +247,17 @@ class SignUp extends React.Component {
   }
 }
 
-const mapStateToProps = ({ error }) => {
-  return {
+const mapStateToProps = ({ error }) => ({
     error: error.auth,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
+  }),
+  mapDispatchToProps = (dispatch) => ({
     onSignup: (credential) => dispatch(signup(credential)),
-  };
+  });
+
+SignUp.propTypes = {
+  error: PropTypes.object,
+  history: PropTypes.object,
+  onSignup: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));

@@ -1,20 +1,20 @@
 .main {
-  color: aliceblue;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   margin-top: 5rem;
+  color: aliceblue;
 }
 
 .wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: 500px;
   padding: 1rem;
-  position: relative;
 }
 
 h1 svg {
@@ -23,12 +23,12 @@ h1 svg {
 
 .link {
   color: rgb(25, 97, 143);
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
 }
 
-.error{
+.error {
   color: brown;
-  text-align: center;
   font-size: 1.3rem;
+  text-align: center;
 }

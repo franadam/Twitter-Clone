@@ -1,26 +1,28 @@
-.main{
+.main {
+  position: relative;
   display: flex;
   justify-content: flex-start;
-  position: relative;
-  border: 1px rgba(240, 248, 255, 0.6) solid;
-  padding: .5rem;
-  cursor: pointer;
-  text-decoration: none;
   width: 100%;
+  padding: 0.5rem;
   color: inherit;
+  text-decoration: none;
+  border: 1px rgba(240, 248, 255, 0.6) solid;
+  cursor: pointer;
 }
-.main:hover{
+
+.main:hover {
   background-color: hsla(210, 100%, 50%, 0.3);
 }
+
 .info {
+  padding: 0.5rem;
   color: rgba(240, 248, 255, 0.7);
-  padding: .5rem;
 }
 
 .info__fullname {
-  color:aliceblue ;
-  text-transform: capitalize;
   margin-bottom: 0;
+  color: aliceblue;
+  text-transform: capitalize;
 }
 
 .info__username {
@@ -35,12 +37,12 @@
   position: absolute;
   top: 2rem;
   right: 2rem;
-  text-decoration: none;
+  padding: 0.8rem;
   color: rgb(0, 157, 255);
-  border: 2px solid  rgb(0, 157, 255);
-  border-radius: 20px;
-  padding: .8rem;
+  text-decoration: none;
   background-color: #15202b;
+  border: 2px solid rgb(0, 157, 255);
+  border-radius: 20px;
   cursor: pointer;
 }
 

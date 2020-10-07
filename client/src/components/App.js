@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { authCheckState, fetchTweets, fetchUsers } from '../store/actions';
 
@@ -27,12 +28,11 @@ export class App extends Component {
       <Switch>
         <Route exact path="/signup" component={SignUp} />
         <Route path="/login" component={SignIn} />
-        <Route path="/users/:username" component={Profile} />
+        <Route exact path="/users/:username" component={Profile} />
         <Route path="/tweets/:tweetID" component={Tweet} />
         <Redirect to="/login" />
       </Switch>
     );
-
     if (this.props.isAuthenticated) {
       //
       routes = (
@@ -52,11 +52,15 @@ export class App extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return {
-    isAuthenticated: !!auth.token,
-    token: auth.token,
-  };
+const mapStateToProps = ({ auth }) => ({
+  isAuthenticated: Boolean(auth.token),
+});
+
+App.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  authCheckState: PropTypes.func,
+  fetchTweets: PropTypes.func,
+  fetchUsers: PropTypes.func,
 };
 
 export default connect(mapStateToProps, {

@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import classes from './Cover.module.css';
 
-const Cover = ({ cover, userID, myID }) => {
+function Cover({ cover, userID, myID }) {
   return cover ? (
     <div className={classes.cover}>
       <img
+        alt="cover"
         className={classes.cover}
         src={`/api/users/${userID}/cover`}
-        alt="cover"
       />
     </div>
   ) : (
@@ -20,6 +22,12 @@ const Cover = ({ cover, userID, myID }) => {
       ) : null}
     </div>
   );
+}
+
+Cover.propTypes = {
+  cover: PropTypes.string,
+  userID: PropTypes.string,
+  myID: PropTypes.string,
 };
 
 export default Cover;

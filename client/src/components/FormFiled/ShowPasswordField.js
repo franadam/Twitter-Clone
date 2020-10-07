@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './FormField.module.css';
 import { showPassword } from '../../utils/validateForm';
 
-const showPasswordField = () => {
+function showPasswordField() {
   return (
     <div className={classes.show_password}>
       <label
@@ -15,6 +15,6 @@ const showPasswordField = () => {
       </label>
     </div>
   );
-};
+}
 
 export default showPasswordField;

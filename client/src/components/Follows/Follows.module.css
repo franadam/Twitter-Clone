@@ -4,8 +4,8 @@
 
 .header {
   position: relative;
-  padding-bottom: 1rem;
   margin-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
 .tabs {
@@ -17,7 +17,7 @@
   border: 1px aliceblue solid;
 }
 
-.tab__header{
+.tab__header {
   width: 100%;
   margin: 0;
   padding: 1.3rem;
@@ -25,13 +25,13 @@
   cursor: pointer;
 }
 
-.tab__header:hover  {
-  background-color:  rgba(0, 157, 255, 0.2);
-  color:  rgb(0, 157, 255);
+.tab__header:hover {
+  color: rgb(0, 157, 255);
+  background-color: rgba(0, 157, 255, 0.2);
 }
 
 .tab__header__active {
-  color:  rgb(0, 157, 255);
+  color: rgb(0, 157, 255);
   border-bottom: 3px solid rgb(0, 157, 255);
 }
 

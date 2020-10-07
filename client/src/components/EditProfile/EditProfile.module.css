@@ -1,15 +1,15 @@
 .main {
-  color: aliceblue;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  color: aliceblue;
 }
 
 .wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  position: relative;
 }
 
 .header {

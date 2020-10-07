@@ -1,39 +1,35 @@
 import axios from 'axios';
 
 import {
-  FETCH_TWEETS,
   CREATE_NEW_TWEET,
   DELETE_TWEET,
+  FETCH_TWEETS,
   LIKE_A_TWEET,
   UNLIKE_A_TWEET,
 } from './types';
 
-import { setAuthToken, errorTweets, errorLikes, errorComments } from './';
+import { errorLikes, errorTweets, setAuthToken } from './';
 
 const getTweets = (tweets) => ({
-  type: FETCH_TWEETS,
-  tweets,
-});
-
-const postLike = (like) => ({
-  type: LIKE_A_TWEET,
-  like,
-});
-
-const deleteLike = (like) => ({
-  type: UNLIKE_A_TWEET,
-  like,
-});
-
-const delTweet = (tweet) => ({
-  type: DELETE_TWEET,
-  tweet,
-});
-
-const postNewTweet = (tweet) => ({
-  type: CREATE_NEW_TWEET,
-  tweet,
-});
+    type: FETCH_TWEETS,
+    tweets,
+  }),
+  postLike = (like) => ({
+    type: LIKE_A_TWEET,
+    like,
+  }),
+  deleteLike = (like) => ({
+    type: UNLIKE_A_TWEET,
+    like,
+  }),
+  delTweet = (tweet) => ({
+    type: DELETE_TWEET,
+    tweet,
+  }),
+  postNewTweet = (tweet) => ({
+    type: CREATE_NEW_TWEET,
+    tweet,
+  });
 
 export const deleteTweet = (id) => async (dispatch) => {
   try {

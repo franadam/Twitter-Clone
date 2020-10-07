@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import TweetBox from './TweetBox';
+import { FaImage } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
 import axios from 'axios';
 
 import { createNewTweet } from '../../store/actions';
 
-import classes from './CreateTweet.module.css';
-import formStyle from '../FormFiled/FormField.module.css';
+import TweetBox from './TweetBox';
 import Avatar from '../UI/Avatar/Avatar';
-import { FaImage } from 'react-icons/fa';
+
+import classes from './CreateTweet.module.css';
 
 class CreateTweet extends React.Component {
   state = {
@@ -24,17 +25,17 @@ class CreateTweet extends React.Component {
   componentDidMount = () => {
     const { state } = this.props.location;
     if (state) {
-      const { tweet: tweetID } = state;
-      const tweet = this.props.tweets.find((tweet) => tweet._id === tweetID);
+      const { tweet: tweetID } = state,
+        tweet = this.props.tweets.find((tweet) => tweet._id === tweetID);
       this.setState({ tweetID, tweet });
-      //this.getTweet(tweetID);
+      // This.getTweet(tweetID);
     }
   };
 
   getTweet = async (tweetID) => {
     try {
-      const res = await axios.get(`/api/tweets/${tweetID}`);
-      const tweet = res.data;
+      const res = await axios.get(`/api/tweets/${tweetID}`),
+        tweet = res.data;
       this.setState({ tweet });
     } catch (error) {
       console.log('error :>> ', error);
@@ -43,16 +44,15 @@ class CreateTweet extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
+    const formData = new FormData(),
+      tweet = {
+        media: this.state.media || null,
+        tweet: this.state.tweetID,
+        text: this.state.text,
+        user: this.props.userID,
+      };
 
-    const tweet = {
-      media: this.state.media || null,
-      tweet: this.state.tweetID,
-      text: this.state.text,
-      user: this.props.userID,
-    };
-
-    for (let key in tweet) {
+    for (const key in tweet) {
       formData.append(key, tweet[key]);
     }
 
@@ -88,22 +88,22 @@ class CreateTweet extends React.Component {
   };
 
   render() {
-    const { tweet, newTweet, media } = this.state;
-    const { users, userID } = this.props;
+    const { tweet, newTweet, media } = this.state,
+      { users, userID } = this.props,
+      user = tweet ? users.find((user) => user._id === tweet.user) : {},
+      me = users ? users.find((user) => user._id === userID) : {};
 
-    const user = tweet ? users.find((user) => user._id === tweet.user) : {};
-
-    const me = users ? users.find((user) => user._id === userID) : {};
-
-    if (!me) return null;
+    if (!me) {
+      return null;
+    }
 
     const form = (
       <form className={classes.form} onSubmit={this.handleSubmit}>
         <input
-          type="textarea"
-          value={this.state.text}
           onChange={(event) => this.changeHandler(event)}
           placeholder="What's happening ?"
+          type="textarea"
+          value={this.state.text}
         />
         {media ? (
           <div
@@ -121,17 +121,17 @@ class CreateTweet extends React.Component {
             <div>
               <div
                 className={classes.btns_picture}
-                role="button"
                 onClick={() => document.getElementById('picture_input').click()}
+                role="button"
               >
                 <FaImage size="2rem" />
               </div>
               <input
                 className={classes.picture__input}
-                type="file"
                 id="picture_input"
                 name="picture_input"
                 onChange={(event) => this.onImageChange(event)}
+                type="file"
               />
             </div>
           </div>
@@ -144,20 +144,19 @@ class CreateTweet extends React.Component {
         {this.state.error ? this.renderError() : null}
       </form>
     );
-
     return (
       <div className={classes.main}>
         <div className={classes.wrapper}>
           {tweet ? (
             <>
               <TweetBox
+                comments={tweet.comments || []}
+                date={tweet.updatedAt || ''}
                 id={tweet._id}
-                userID={tweet.user}
+                likes={tweet.likes || []}
                 media={tweet.media}
                 text={tweet.text}
-                date={tweet.updatedAt || ''}
-                likes={tweet.likes || []}
-                comments={tweet.comments || []}
+                userID={tweet.user}
               />
               <div className={classes.reply}>
                 Reply to
@@ -173,14 +172,14 @@ class CreateTweet extends React.Component {
           </div>
           {newTweet._id ? (
             <TweetBox
-              key={newTweet._id}
+              comments={newTweet.comments || []}
+              date={newTweet.updatedAt || ''}
               id={newTweet._id}
-              userID={newTweet.user}
+              key={newTweet._id}
+              likes={newTweet.likes || []}
               media={newTweet.media || ''}
               text={newTweet.text}
-              date={newTweet.updatedAt || ''}
-              likes={newTweet.likes || []}
-              comments={newTweet.comments || []}
+              userID={newTweet.user}
             />
           ) : null}
         </div>
@@ -189,20 +188,27 @@ class CreateTweet extends React.Component {
   }
 }
 
-const mapStateToProps = ({ tweet, auth, user, error }) => {
-  return {
+const mapStateToProps = ({ tweet, auth, user, error }) => ({
     userID: auth.userID,
     tweets: tweet.tweets,
     newTweet: tweet.new,
     users: user.users,
     error: error.tweet,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
+  }),
+  mapDispatchToProps = (dispatch) => ({
     onCreateNewTweet: (data) => dispatch(createNewTweet(data)),
-  };
+  });
+
+CreateTweet.propTypes = {
+  userID: PropTypes.string,
+  history: PropTypes.object,
+  match: PropTypes.object,
+  location: PropTypes.object,
+  error: PropTypes.object,
+  newTweet: PropTypes.object,
+  tweets: PropTypes.arrayOf(PropTypes.object),
+  users: PropTypes.arrayOf(PropTypes.object),
+  onCreateNewTweet: PropTypes.func,
 };
 
 export default connect(

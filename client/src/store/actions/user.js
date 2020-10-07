@@ -1,44 +1,39 @@
 import axios from 'axios';
-import { setAuthToken, errorUsers } from './';
+import { errorUsers, setAuthToken } from './';
 
 import {
   FETCH_CURRENT_USER,
   FETCH_USERS,
+  FETCH_USER_BY_NAME,
   FOLLOW_USER,
   UNFOLLOW_USER,
-  FETCH_USER_BY_NAME,
   USER_UPDATE_PROFILE,
 } from './types';
 
 const currentUser = (user) => ({
-  type: FETCH_CURRENT_USER,
-  user,
-});
-
-const fetchUsersSuccess = (users) => ({
-  type: FETCH_USERS,
-  users,
-});
-
-const getUserByName = (user) => ({
-  type: FETCH_USER_BY_NAME,
-  user,
-});
-
-const updateProfileSuccess = (user) => ({
-  type: USER_UPDATE_PROFILE,
-  user,
-});
-
-const followUserSuccess = (follow) => ({
-  type: FOLLOW_USER,
-  follow,
-});
-
-const unfollowUserSuccess = (follow) => ({
-  type: UNFOLLOW_USER,
-  follow,
-});
+    type: FETCH_CURRENT_USER,
+    user,
+  }),
+  fetchUsersSuccess = (users) => ({
+    type: FETCH_USERS,
+    users,
+  }),
+  getUserByName = (user) => ({
+    type: FETCH_USER_BY_NAME,
+    user,
+  }),
+  updateProfileSuccess = (user) => ({
+    type: USER_UPDATE_PROFILE,
+    user,
+  }),
+  followUserSuccess = (follow) => ({
+    type: FOLLOW_USER,
+    follow,
+  }),
+  unfollowUserSuccess = (follow) => ({
+    type: UNFOLLOW_USER,
+    follow,
+  });
 
 export const fetchUserByName = (username) => async (dispatch) => {
   try {
@@ -57,7 +52,7 @@ export const fetchUserByName = (username) => async (dispatch) => {
 
 export const fetchUsers = () => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/users/`);
+    const res = await axios.get('/api/users/');
     dispatch(fetchUsersSuccess(res.data));
   } catch (error) {
     dispatch(errorUsers(error));

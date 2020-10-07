@@ -1,10 +1,10 @@
 import {
-  ERROR_AUTH,
-  ERROR_USERS,
-  ERROR_TWEETS,
-  ERROR_LIKES,
-  ERROR_COMMENTS,
   CLEAR_ERROR,
+  ERROR_AUTH,
+  ERROR_COMMENTS,
+  ERROR_LIKES,
+  ERROR_TWEETS,
+  ERROR_USERS,
 } from './types';
 
 export const errorAuth = (error) => ({

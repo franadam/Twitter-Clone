@@ -1,32 +1,26 @@
-import { AUTH_SUCCESS, AUTH_START, AUTH_LOGOUT } from '../actions/types';
+import { AUTH_LOGOUT, AUTH_START, AUTH_SUCCESS } from '../actions/types';
 
 import { updateObject } from '../../utils/updateObject';
 
 const initialState = {
-  token: null,
-  userID: null,
-  loading: false,
-};
-
-const authStart = (state) => {
-  return updateObject(state, {
-    loading: true,
-  });
-};
-
-const authSuccess = (state, action) => {
-  return updateObject(state, {
-    userID: action.userID,
-    token: action.token || '',
+    token: null,
+    userID: null,
     loading: false,
-  });
-};
-
-const authLogout = (state) => {
-  return updateObject(state, {
-    ...initialState,
-  });
-};
+  },
+  authStart = (state) =>
+    updateObject(state, {
+      loading: true,
+    }),
+  authSuccess = (state, action) =>
+    updateObject(state, {
+      userID: action.userID,
+      token: action.token || '',
+      loading: false,
+    }),
+  authLogout = (state) =>
+    updateObject(state, {
+      ...initialState,
+    });
 
 export default function (state = initialState, action) {
   switch (action.type) {

@@ -1,32 +1,34 @@
 .main {
-  color: aliceblue;
   display: flex;
-  align-items: center;;
+  align-items: center;
+  color: aliceblue;
 }
 
 .wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-  position: relative;
   width: 100%;
+  padding: 1rem;
 }
 
 .link {
   color: rgb(25, 97, 143);
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .btns_container {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid aliceblue;padding-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid aliceblue;
 }
 
 .btns_picture {
@@ -34,17 +36,18 @@
   padding: 1rem;
   cursor: pointer;
 }
-.btns_picture:hover  {
-  background-color:  rgba(0, 157, 255, 0.3);
+
+.btns_picture:hover {
+  background-color: rgba(0, 157, 255, 0.3);
   border-radius: 50%;
 }
-.btns_picture:hover svg {
-  color:  rgb(0, 157, 255);
-}
-
 
 .btns_picture svg {
   color: rgb(25, 97, 143);
+}
+
+.btns_picture:hover svg {
+  color: rgb(0, 157, 255);
 }
 
 .btns_submit {
@@ -52,71 +55,72 @@
 }
 
 .picture__input {
+  z-index: -1;
   width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    z-index: -1;}
-
-    .media {
-      align-self: center;
-      position: relative;
-      max-width: 300px;
-      padding: .5rem;
-    }
-    .media img {
-      border-radius: 10px;
-      width: 100%;
-    }
-
-    .close {
-      position: absolute;
-      top: -1rem;
-      right: 1rem;
-      color: #aaa;
-      float: right;
-      font-size: 4rem;
-      font-weight: bold;
-    }
-    
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .reply {
-      display: flex;
-      padding-left: 3rem;
-      margin-left: 3rem;
-      color: rgba(240, 248, 255, 0.7);
-    }
-    .reply a {
-      padding-left: .5rem;
-      color: rgb(48, 134, 187);
-      text-decoration: none;
-    }
-.compose {
-  display: flex;
-      padding-left: .5rem;
-      padding-top: 1rem;
+  height: 0.1px;
+  opacity: 0;
 }
 
-.form {
-  flex-grow: 1;
+.media {
+  position: relative;
+  align-self: center;
+  max-width: 300px;
+  padding: 0.5rem;
+}
+
+.media img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.close {
+  position: absolute;
+  top: -1rem;
+  right: 1rem;
+  float: right;
+  color: #aaa;
+  font-weight: bold;
+  font-size: 4rem;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.reply {
+  display: flex;
+  margin-left: 3rem;
+  padding-left: 3rem;
+  color: rgba(240, 248, 255, 0.7);
+}
+
+.reply a {
+  padding-left: 0.5rem;
+  color: rgb(48, 134, 187);
+  text-decoration: none;
+}
+
+.compose {
+  display: flex;
+  padding-top: 1rem;
+  padding-left: 0.5rem;
 }
 
 .btn {
   padding: 1rem;
 }
+
 .btn button {
-  background-color: rgb(25, 97, 143);
+  width: fit-content;
+  padding: 0.8rem;
   color: aliceblue;
+  background-color: rgb(25, 97, 143);
+  border: none;
   border-radius: 40px;
   outline: none;
-  border:none;
-  width: fit-content;
-  padding: .8rem;
   cursor: pointer;
 }
 
