@@ -70,10 +70,13 @@ font-size: .8rem;
 }
 
 .media {
-  align-self: center;
+  align-self: center;display: flex;
+  justify-content: center;
+  width: 70vw;
 }
 .media img {
   border-radius: 10px;
+  max-width: 100%;
 }
 .activity {
   display: flex;

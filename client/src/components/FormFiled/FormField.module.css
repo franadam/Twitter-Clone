@@ -34,6 +34,10 @@
   border-bottom: 2px solid #0091ff;
 }
 
+.field.empty {
+  border-bottom: 2px solid #ff0000;
+}
+
 .field:hover .fInput::placeholder,
 .field:hover .label  {
   color: #0091ff;

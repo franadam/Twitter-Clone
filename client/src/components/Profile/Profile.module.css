@@ -89,6 +89,7 @@
   padding: 1.3rem;
   text-align: center;
   cursor: pointer;
+  font-size: inherit;
 }
 
 .tab__header:hover  {

@@ -32,33 +32,39 @@ class NavBar extends React.Component {
     if (this.props.loggedIn) {
       return (
         <div className={classes.links}>
-          <Link className={`${classes.link}`} to={'/home'}>
-            <FaTwitter
-              className={classes.active}
-              onClick={(event) => this.activateLink(event)}
-              size="2rem"
-            />
-          </Link>
-          <Link
-            className={classes.link}
-            to={{
-              key: Math.random(),
-              pathname: `/users/${this.props.userID}`,
-              state: { fromDashboard: true },
-            }}
-          >
-            <FaRegUser
-              size="2rem"
-              onClick={(event) => this.activateLink(event)}
-            />
-          </Link>
-          <Link className={classes.link} to={'/compose/tweet'}>
-            <FaFeatherAlt
-              size="2rem"
-              onClick={(event) => this.activateLink(event)}
-            />
-          </Link>
-          <FaDoorOpen size="2rem" color="red" onClick={this.logoutUser} />
+          <div>
+            <Link className={`${classes.link}`} to={'/home'}>
+              <FaTwitter
+                className={classes.active}
+                onClick={(event) => this.activateLink(event)}
+                size="2rem"
+              />
+            </Link>
+          </div>
+          <div className={classes.links__profile}>
+            <Link
+              className={classes.link}
+              to={{
+                key: Math.random(),
+                pathname: `/users/${this.props.userID}`,
+                state: { fromDashboard: true },
+              }}
+            >
+              <FaRegUser
+                size="2rem"
+                onClick={(event) => this.activateLink(event)}
+              />
+            </Link>
+            <Link className={classes.link} to={'/compose/tweet'}>
+              <FaFeatherAlt
+                size="2rem"
+                onClick={(event) => this.activateLink(event)}
+              />
+            </Link>
+          </div>
+          <div>
+            <FaDoorOpen size="2rem" color="red" onClick={this.logoutUser} />
+          </div>
         </div>
       );
     } else {

@@ -6,6 +6,8 @@ import Spinner from '../UI/Spinner/Spinner';
 import Badge from '../UI/Badge/Badge';
 
 import classes from './Follows.module.css';
+import Cover from '../UI/Cover/Cover';
+import Avatar from '../UI/Avatar/Avatar';
 
 class Follows extends Component {
   componentDidMount = () => {
@@ -56,7 +58,7 @@ class Follows extends Component {
   };
 
   render() {
-    const { userID, users } = this.props;
+    const { userID, users, me } = this.props;
 
     console.log('user :>> ', users);
     if (!users) {
@@ -70,8 +72,14 @@ class Follows extends Component {
     console.log('followers :>> ', followers);
 
     return (
-      <div>
-        <div className={classes.header}></div>
+      <div className={classes.header}>
+        <div className={classes.header}>
+          <div className={classes.images}>
+            <Cover cover={me.cover} userID={userID} myID={userID} />{' '}
+            <Avatar avatar={me.avatar} userID={userID} position="absolute" />
+          </div>
+        </div>
+
         <div className={classes.tabs}>
           <h2
             className={`${classes.tab__header} ${classes.tab__header__active}`}

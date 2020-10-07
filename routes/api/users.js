@@ -301,7 +301,7 @@ router.patch(
           await req.user.save();
         }
       }
-      res.send(user);
+      res.send(req.user);
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
